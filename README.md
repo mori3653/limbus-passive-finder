@@ -6,4 +6,4 @@
 - 키워드 툴팁 및 아이콘
 - 덱 빌더 (인격/에고/스킬 보유수 편성, 발동 가능 패시브 계산)
 
-GitHub Pages: https://yejunsong3653-design.github.io/limbus-passive-finder/
+GitHub Pages: https://mori3653.github.io/limbus-passive-finder/
