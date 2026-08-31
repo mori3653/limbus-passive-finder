@@ -404,8 +404,8 @@
 
   /* ---------- view tabs ---------- */
   .view-tabs{ display:flex; gap:4px; background:var(--surface-2); border:1px solid var(--border); border-radius:8px; padding:3px; }
-  .skill-sin-mode-tabs{ width:fit-content; margin-bottom:8px; }
-  .skill-sin-mode-tabs .view-tab{ padding:5px 12px; font-size:11.5px; }
+  .mini-tabs{ width:fit-content; margin-bottom:8px; }
+  .mini-tabs .view-tab{ padding:5px 12px; font-size:11.5px; }
   .view-tab{
     border:0; background:transparent; color:var(--text-muted);
     font-size:12.5px; font-weight:600; padding:6px 13px; border-radius:6px; cursor:pointer;
@@ -667,6 +667,10 @@
   <aside class="filters">
     <div class="filter-group">
       <h2>수감자</h2>
+      <div class="view-tabs mini-tabs" role="tablist">
+        <button type="button" class="view-tab" id="sinnerModeInclude" aria-pressed="true">포함</button>
+        <button type="button" class="view-tab" id="sinnerModeExclude" aria-pressed="false">제외</button>
+      </div>
       <div class="chip-grid" id="sinnerChips"></div>
     </div>
     <div class="filter-group">
@@ -679,12 +683,12 @@
     </div>
     <div class="filter-group">
       <h2>보유 스킬 속성</h2>
-      <div class="chip-grid" id="skillPositionChips"></div>
-      <div class="bundle-sep"></div>
-      <div class="view-tabs skill-sin-mode-tabs" role="tablist">
+      <div class="view-tabs mini-tabs" role="tablist">
         <button type="button" class="view-tab" id="skillSinModeOr" aria-pressed="true">OR</button>
         <button type="button" class="view-tab" id="skillSinModeAnd" aria-pressed="false">AND</button>
       </div>
+      <div class="chip-grid" id="skillPositionChips"></div>
+      <div class="bundle-sep"></div>
       <div class="chip-grid" id="skillSinChips"></div>
     </div>
     <div class="filter-group">
@@ -4053,6 +4057,7 @@ const RARITIES = ["0","00","000","0000"].filter(r => DATA.some(d => d.rarity ===
 const state = {
   q: "",
   sinners: new Set(),
+  sinnerMode: "include", // "include" | "exclude"
   rarities: new Set(),
   sins: new Set(),
   activations: new Set(),
@@ -4152,7 +4157,10 @@ function passesFilters(d){
     const terms = state.q.toLowerCase().split(/\s+/).filter(Boolean);
     if (!terms.every(t => d.searchBlob.includes(t) || d.searchBlobNoSpace.includes(t))) return false;
   }
-  if (state.sinners.size && !state.sinners.has(d.sinner)) return false;
+  if (state.sinners.size){
+    const inSet = state.sinners.has(d.sinner);
+    if (state.sinnerMode === "exclude" ? inSet : !inSet) return false;
+  }
   if (state.rarities.size && !state.rarities.has(d.rarity)) return false;
   if (state.sins.size && ![...state.sins].every(s => d.sins.includes(s))) return false;
   if (state.activations.size && !state.activations.has(d.condLabel)) return false;
@@ -4178,7 +4186,7 @@ function renderActivePills(){
   const wrap = document.getElementById("activePills");
   wrap.innerHTML = "";
   const pills = [];
-  state.sinners.forEach(v => pills.push({label:v, clear:() => state.sinners.delete(v)}));
+  state.sinners.forEach(v => pills.push({label: state.sinnerMode === "exclude" ? `제외:${v}` : v, clear:() => state.sinners.delete(v)}));
   state.rarities.forEach(v => pills.push({label:v, clear:() => state.rarities.delete(v)}));
   state.sins.forEach(v => pills.push({label:v, icon:sinBadgeSVG(v,14), clear:() => state.sins.delete(v)}));
   state.activations.forEach(v => pills.push({label:v, clear:() => state.activations.delete(v)}));
@@ -4349,11 +4357,20 @@ function setSkillSinMode(mode){
 }
 document.getElementById("skillSinModeOr").addEventListener("click", () => setSkillSinMode("or"));
 document.getElementById("skillSinModeAnd").addEventListener("click", () => setSkillSinMode("and"));
+function setSinnerMode(mode){
+  state.sinnerMode = mode;
+  document.getElementById("sinnerModeInclude").setAttribute("aria-pressed", String(mode === "include"));
+  document.getElementById("sinnerModeExclude").setAttribute("aria-pressed", String(mode === "exclude"));
+  render();
+}
+document.getElementById("sinnerModeInclude").addEventListener("click", () => setSinnerMode("include"));
+document.getElementById("sinnerModeExclude").addEventListener("click", () => setSinnerMode("exclude"));
 document.getElementById("resetAll").addEventListener("click", () => {
   state.q=""; searchInput.value="";
   state.sinners.clear(); state.rarities.clear(); state.sins.clear(); state.activations.clear(); state.identityKw.clear(); state.cats.clear();
   state.skillSins.clear(); state.skillPositions.clear();
   setSkillSinMode("or");
+  setSinnerMode("include");
 });
 
 const kwTooltip = document.getElementById("kwTooltip");
