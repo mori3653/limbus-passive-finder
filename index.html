@@ -559,6 +559,10 @@
     border:1px solid var(--border); border-radius:8px; padding:3px; width:fit-content;
   }
   @media (max-width:1228px){ .picker-subtabs{ margin-left:24px; margin-right:24px; } }
+  #ownedView .picker-subtabs{
+    position:sticky; top:var(--header-h, 96px); z-index:8;
+    box-shadow:var(--shadow);
+  }
   #pickerTabIdentity[hidden], #pickerTabEgo[hidden], #pickerTabSkill[hidden]{ display:none; }
 
   .ego-picker-wrap, .skill-picker-wrap{ max-width:1180px; margin:0 auto; padding:18px 24px 60px; }
@@ -620,40 +624,40 @@
   .owned-sinner-label span{ font-size:11px; color:var(--text-muted); font-weight:600; }
   .owned-chip-grid{ display:flex; flex-wrap:wrap; gap:10px; }
   .owned-card{
-    position:relative; flex:none; width:78px; border:0; background:transparent; padding:0; cursor:pointer;
+    position:relative; flex:none; width:98px; border:0; background:transparent; padding:0; cursor:pointer;
     display:flex; flex-direction:column; align-items:center; gap:4px;
   }
   .owned-card-img-wrap{
-    position:relative; width:78px; aspect-ratio:3/4; border-radius:8px; overflow:hidden;
+    position:relative; width:98px; aspect-ratio:3/4; border-radius:9px; overflow:hidden;
     border:2px solid var(--border-strong); transition:border-color .12s, opacity .12s;
   }
   .owned-card:not(.is-owned) .owned-card-img-wrap{ opacity:0.35; }
   .owned-card.is-owned .owned-card-img-wrap{ border-color:var(--accent); }
   .owned-card img{ width:100%; height:100%; object-fit:cover; display:block; }
   .owned-card-check{
-    position:absolute; top:3px; right:3px; width:18px; height:18px; border-radius:50%;
+    position:absolute; top:3px; right:3px; width:20px; height:20px; border-radius:50%;
     background:var(--accent); color:var(--bg); display:flex; align-items:center; justify-content:center;
     font-size:11px; font-weight:700; box-shadow:0 1px 4px rgba(0,0,0,0.4);
   }
-  .owned-card-label{ font-size:9.5px; color:var(--text-muted); text-align:center; line-height:1.25; max-width:78px; }
+  .owned-card-label{ font-size:10.5px; color:var(--text-muted); text-align:center; line-height:1.25; max-width:98px; }
   .owned-ego-card{
-    position:relative; flex:none; width:64px; border:0; background:transparent; padding:0; cursor:pointer;
+    position:relative; flex:none; width:82px; border:0; background:transparent; padding:0; cursor:pointer;
     display:flex; flex-direction:column; align-items:center; gap:4px;
   }
   .owned-ego-card-img-wrap{
-    position:relative; width:64px; height:64px; border-radius:50%; overflow:hidden; border:3px solid var(--border-strong);
+    position:relative; width:82px; height:82px; border-radius:50%; overflow:hidden; border:3px solid var(--border-strong);
     transition:border-color .12s, opacity .12s, box-shadow .12s;
   }
   .owned-ego-card:not(.is-owned) .owned-ego-card-img-wrap{ opacity:0.35; }
   .owned-ego-card.is-owned .owned-ego-card-img-wrap{ box-shadow:0 0 0 2px var(--bg), 0 0 0 4px var(--accent); }
   .owned-ego-card img{ width:100%; height:100%; object-fit:cover; display:block; }
   .owned-ego-card-check{
-    position:absolute; top:-2px; right:-2px; width:16px; height:16px; border-radius:50%;
+    position:absolute; top:-2px; right:-2px; width:18px; height:18px; border-radius:50%;
     background:var(--accent); color:var(--bg); display:flex; align-items:center; justify-content:center;
     font-size:10px; font-weight:700; box-shadow:0 1px 4px rgba(0,0,0,0.4);
   }
-  .owned-ego-card-label{ font-size:9px; color:var(--text-muted); text-align:center; line-height:1.25; max-width:72px; }
-  .owned-ego-card-grade{ font-size:8px; color:var(--text-faint); letter-spacing:0.03em; }
+  .owned-ego-card-label{ font-size:10px; color:var(--text-muted); text-align:center; line-height:1.25; max-width:88px; }
+  .owned-ego-card-grade{ font-size:9px; color:var(--text-faint); letter-spacing:0.03em; }
 
   .picker-card-grid{
     display:grid; grid-template-columns:repeat(auto-fill, minmax(120px,1fr)); gap:10px;
@@ -5084,6 +5088,7 @@ function pickerPassesFilters(d){
   if (p.activations.size && !p.activations.has(d.condLabel)) return false;
   if (p.identityKw.size && ![...p.identityKw].every(k => effectiveKeywords(d).includes(k))) return false;
   if (p.cats.size && ![...p.cats].some(c => d.cats.includes(c))) return false;
+  if (state.ownedOnly && !isIdentityOwned(d.sinner, d.identity)) return false;
   return true;
 }
 function pickerCountFor(filterFn){ return pickerPool().filter(filterFn).length; }
@@ -5181,6 +5186,10 @@ function fixSkillCountIfInvalid(sinner){
 }
 
 /* ---- 에고 편성 탭 ---- */
+// EGO 표시명에서 뒤에 붙은 수감자 이름을 뗀다 (예: "오감도 이상" -> "오감도")
+function egoShortTitle(info){
+  return info.title.replace(new RegExp(`\\s*${info.sinner}$`), "");
+}
 function renderEgoPicker(){
   const sinner = deckState.picker.sinner;
   const wrap = document.getElementById("egoPickerWrap");
@@ -5202,10 +5211,10 @@ function renderEgoPicker(){
     const itemsHTML = items.map(e => `
       <div class="ego-icon-item">
         <button type="button" class="ego-icon-btn${selected === e.slug ? " is-selected" : ""}" data-grade="${grade}" data-slug="${e.slug}"
-          style="border-color:${SIN_COLOR[e.sin] || "var(--border-strong)"}" title="${e.title} (${e.sin})">
-          <img src="${EGO_ICON_DATA[e.slug]}" alt="${e.title}" loading="lazy">
+          style="border-color:${SIN_COLOR[e.sin] || "var(--border-strong)"}" title="${egoShortTitle(e)} (${e.sin})">
+          <img src="${EGO_ICON_DATA[e.slug]}" alt="${egoShortTitle(e)}" loading="lazy">
         </button>
-        <div class="ego-icon-label">${e.title}</div>
+        <div class="ego-icon-label">${egoShortTitle(e)}</div>
       </div>`).join("");
     return `<div class="ego-grade-row"><h3>${grade}</h3><div class="ego-icon-grid">${noneBtn}${itemsHTML}</div></div>`;
   }).join("");
@@ -5347,16 +5356,18 @@ function renderOwnedIdentityTab(){
 function renderOwnedEgoTab(){
   const wrap = document.getElementById("ownedEgoWrap");
   wrap.innerHTML = SINNER_ORDER.map((sinner, i) => {
-    const egos = Object.entries(EGO_DATA).filter(([,info]) => info.sinner === sinner);
+    const egos = Object.entries(EGO_DATA).filter(([,info]) => info.sinner === sinner)
+      .sort((a,b) => EGO_GRADES.indexOf(a[1].grade) - EGO_GRADES.indexOf(b[1].grade));
     const cardsHTML = egos.map(([slug, info]) => {
       const owned = isEgoOwned(slug);
-      return `<button type="button" class="owned-ego-card${owned ? " is-owned" : ""}" data-slug="${slug}" title="${info.title}">
+      const shortTitle = egoShortTitle(info);
+      return `<button type="button" class="owned-ego-card${owned ? " is-owned" : ""}" data-slug="${slug}" title="${shortTitle}">
         <div class="owned-ego-card-img-wrap" style="border-color:${SIN_COLOR[info.sin] || "var(--border-strong)"}">
-          <img src="${EGO_ICON_DATA[slug]}" alt="${info.title}" loading="lazy">
+          <img src="${EGO_ICON_DATA[slug]}" alt="${shortTitle}" loading="lazy">
           ${owned ? `<span class="owned-ego-card-check">✓</span>` : ""}
         </div>
         <span class="owned-ego-card-grade">${info.grade}</span>
-        <span class="owned-ego-card-label">${info.title}</span>
+        <span class="owned-ego-card-label">${shortTitle}</span>
       </button>`;
     }).join("");
     const sep = i > 0 ? `<div class="owned-sinner-sep"></div>` : "";
@@ -5396,6 +5407,11 @@ document.getElementById("ownedTabBtnIdentity").addEventListener("click", () => s
 document.getElementById("ownedTabBtnEgo").addEventListener("click", () => setOwnedTab("ego"));
 
 const ownedView = document.getElementById("ownedView");
+function updateHeaderHeightVar(){
+  const header = document.querySelector("header.top");
+  if (header) document.documentElement.style.setProperty("--header-h", header.offsetHeight + "px");
+}
+window.addEventListener("resize", updateHeaderHeightVar);
 function openOwnedView(){
   document.getElementById("searchView").hidden = true;
   document.getElementById("searchRow").hidden = true;
@@ -5404,6 +5420,7 @@ function openOwnedView(){
   pickerView.hidden = true;
   ownedView.hidden = false;
   setOwnedTab(ownedTab);
+  updateHeaderHeightVar();
 }
 function closeOwnedView(){
   ownedView.hidden = true;
@@ -5443,6 +5460,7 @@ tabSearch.addEventListener("click", showSearchView);
 tabDeck.addEventListener("click", showDeckView);
 
 renderPartyGrid();
+updateHeaderHeightVar();
 </script>
 
 </body></html>
