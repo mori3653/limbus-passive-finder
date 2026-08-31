@@ -676,6 +676,10 @@
       <div class="chip-grid" id="sinChips"></div>
     </div>
     <div class="filter-group">
+      <h2>보유 스킬 속성</h2>
+      <div class="chip-grid" id="skillSinChips"></div>
+    </div>
+    <div class="filter-group">
       <h2>발동 방식</h2>
       <div class="chip-grid" id="activationChips"></div>
     </div>
@@ -4015,6 +4019,14 @@ function computeMeta(entry){
   const t = entry.supportPassiveEffect;
   entry.cats = CATEGORY_DEFS.filter(([,re]) => re.test(t)).map(([label]) => label);
   entry.identityKeywords = IDENTITY_KEYWORDS_DATA[`${entry.sinner}|${entry.identity}`] || [];
+  entry.skillSins = (() => {
+    const prof = IDENTITY_SKILL_PROFILE[`${entry.sinner}|${entry.identity}`];
+    if (!prof) return [];
+    const set = new Set();
+    prof.skills.forEach(s => { if (s.sin) set.add(s.sin); });
+    prof.defense.forEach(s => { if (s.sin) set.add(s.sin); });
+    return [...set];
+  })();
   entry.egoConditional = EGO_CONDITIONAL_DATA[`${entry.sinner}|${entry.identity}`] || [];
   entry.abbrevs = ABBREV_DATA[`${entry.sinner}|${entry.identity}`] || [];
   const searchFields = [entry.sinner, entry.identity, entry.supportPassiveName, entry.supportPassiveEffect, entry.condition, ...entry.abbrevs];
@@ -4034,6 +4046,7 @@ const state = {
   activations: new Set(),
   identityKw: new Set(),
   cats: new Set(),
+  skillSins: new Set(),
   syncMode: "gacksung",
   includeEgoKw: false,
 };
@@ -4131,6 +4144,7 @@ function passesFilters(d){
   if (state.activations.size && !state.activations.has(d.condLabel)) return false;
   if (state.identityKw.size && ![...state.identityKw].every(k => effectiveKeywords(d).includes(k))) return false;
   if (state.cats.size && ![...state.cats].some(c => d.cats.includes(c))) return false;
+  if (state.skillSins.size && ![...state.skillSins].some(s => d.skillSins.includes(s))) return false;
   return true;
 }
 
@@ -4144,6 +4158,7 @@ function renderActivePills(){
   state.activations.forEach(v => pills.push({label:v, clear:() => state.activations.delete(v)}));
   state.identityKw.forEach(v => pills.push({label:v, icon:identityKwIcon(v,14), clear:() => state.identityKw.delete(v)}));
   state.cats.forEach(v => pills.push({label:v, clear:() => state.cats.delete(v)}));
+  state.skillSins.forEach(v => pills.push({label:`보유 스킬:${v}`, icon:sinBadgeSVG(v,14), clear:() => state.skillSins.delete(v)}));
   pills.forEach(p => {
     const el = document.createElement("span");
     el.className = "active-pill";
@@ -4250,6 +4265,11 @@ function render(){
     getKey:s=>s, getLabel:s=>s, getCount:s=>countFor(d=>d.sins.includes(s)), selectedSet: state.sins,
     iconFor: s => sinBadgeSVG(s, 18)
   });
+  const skillSinsWithCount = SINS.filter(s => countFor(d=>d.skillSins.includes(s)) > 0);
+  buildChips(document.getElementById("skillSinChips"), skillSinsWithCount, {
+    getKey:s=>s, getLabel:s=>s, getCount:s=>countFor(d=>d.skillSins.includes(s)), selectedSet: state.skillSins,
+    iconFor: s => sinBadgeSVG(s, 18)
+  });
   const activationsWithCount = ACTIVATIONS.filter(a => countFor(d=>d.condLabel===a) > 0);
   buildChips(document.getElementById("activationChips"), activationsWithCount, {
     getKey:a=>a, getLabel:a=>a, getCount:a=>countFor(d=>d.condLabel===a), selectedSet: state.activations
@@ -4290,7 +4310,7 @@ egoKwToggle.addEventListener("change", e => setIncludeEgoKw(e.target.checked));
 egoKwTogglePicker.addEventListener("change", e => setIncludeEgoKw(e.target.checked));
 document.getElementById("resetAll").addEventListener("click", () => {
   state.q=""; searchInput.value="";
-  state.sinners.clear(); state.rarities.clear(); state.sins.clear(); state.activations.clear(); state.identityKw.clear(); state.cats.clear();
+  state.sinners.clear(); state.rarities.clear(); state.sins.clear(); state.activations.clear(); state.identityKw.clear(); state.cats.clear(); state.skillSins.clear();
   render();
 });
 
