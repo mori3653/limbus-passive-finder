@@ -414,7 +414,44 @@
 
   /* ---------- deck builder ---------- */
   .deck-layout{ max-width:1180px; margin:0 auto; padding:22px 24px 60px; display:flex; flex-direction:column; gap:22px; }
-  #searchView[hidden], #deckView[hidden], .search-row[hidden], footer.note[hidden]{ display:none !important; }
+  #searchView[hidden], #deckView[hidden], #skillSetView[hidden], .search-row[hidden], footer.note[hidden]{ display:none !important; }
+
+  /* ---------- 스킬셋 ---------- */
+  .skillset-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fill, minmax(230px,1fr));
+    gap:12px;
+  }
+  .skillset-card{
+    background:var(--surface);
+    border:1px solid var(--border);
+    border-radius:10px;
+    box-shadow:var(--shadow);
+    padding:12px 14px 14px;
+    display:flex; flex-direction:column; gap:10px;
+  }
+  .skillset-card-head{ display:flex; align-items:center; gap:8px; }
+  .skillset-card-portrait{
+    flex:none; width:34px; height:34px; border-radius:8px;
+    object-fit:cover; object-position:top center;
+    border:1px solid var(--border-strong);
+    background:var(--surface-2);
+  }
+  .skillset-card-names{ display:flex; flex-direction:column; gap:1px; min-width:0; }
+  .skillset-card-sinner{ font-size:10.5px; color:var(--text-faint); font-weight:600; }
+  .skillset-card-identity{
+    font-size:13px; font-weight:600; color:var(--text);
+    overflow:hidden; text-overflow:ellipsis; white-space:nowrap;
+  }
+  .skillset-skill-row{ display:grid; grid-template-columns:repeat(4,1fr); gap:6px; }
+  .skillset-slot-btn{
+    display:flex; flex-direction:column; align-items:center; gap:5px;
+    border:1px solid var(--border-strong); background:var(--surface-2);
+    border-radius:8px; padding:6px 4px 7px; cursor:pointer;
+  }
+  .skillset-slot-btn:hover{ border-color:var(--text-faint); }
+  .skillset-slot-label{ font-size:9.5px; font-weight:700; color:var(--text-faint); letter-spacing:0.02em; }
+  .skillset-slot-empty{ width:22px; height:22px; border-radius:50%; border:1.5px dashed var(--border-strong); }
   .deck-toolbar{ display:flex; align-items:flex-start; justify-content:space-between; gap:16px; flex-wrap:wrap; }
   .deck-title{ font-size:16px; font-weight:700; margin:0 0 4px; }
   .deck-hint{ margin:0; font-size:12.5px; color:var(--text-muted); max-width:520px; word-break:keep-all; }

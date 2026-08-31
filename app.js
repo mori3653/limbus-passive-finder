@@ -2371,8 +2371,9 @@ function identityKwIcon(term, size){
 
 function countFor(filterFn){ return DATA.filter(filterFn).length; }
 
-function buildChips(container, items, {getKey, getLabel, getCount, selectedSet, iconFor}){
+function buildChips(container, items, {getKey, getLabel, getCount, selectedSet, iconFor, onChange}){
   container.innerHTML = "";
+  const rerender = onChange || render;
   items.forEach(item => {
     const key = getKey(item);
     const btn = document.createElement("button");
@@ -2383,7 +2384,7 @@ function buildChips(container, items, {getKey, getLabel, getCount, selectedSet, 
       `<span>${getLabel(item)}</span><span class="count">${getCount(item)}</span>`;
     btn.addEventListener("click", () => {
       if (selectedSet.has(key)) selectedSet.delete(key); else selectedSet.add(key);
-      render();
+      rerender();
     });
     container.appendChild(btn);
   });
@@ -2439,8 +2440,16 @@ function passesFilters(d){
   if (state.rarities.size && !state.rarities.has(d.rarity)) return false;
   if (state.sins.size && ![...state.sins].every(s => d.sins.includes(s))) return false;
   if (state.activations.size && !state.activations.has(d.condLabel)) return false;
-  if (state.identityKw.size && ![...state.identityKw].every(k => effectiveKeywords(d).includes(k))) return false;
   if (state.cats.size && ![...state.cats].some(c => d.cats.includes(c))) return false;
+  if (state.ownedOnly && !isIdentityOwned(d.sinner, d.identity)) return false;
+  return true;
+}
+function skillSetPassesFilters(d){
+  if (state.sinners.size){
+    const inSet = state.sinners.has(d.sinner);
+    if (state.sinnerMode === "exclude" ? inSet : !inSet) return false;
+  }
+  if (state.identityKw.size && ![...state.identityKw].every(k => effectiveKeywords(d).includes(k))) return false;
   if (state.skillSins.size && !skillFilterPasses(d, state.skillPositions, state.skillPositionMode, state.skillSins, state.skillSinMode)) return false;
   if (state.ownedOnly && !isIdentityOwned(d.sinner, d.identity)) return false;
   return true;
@@ -2471,13 +2480,7 @@ function renderActivePills(){
   state.rarities.forEach(v => pills.push({label:v, clear:() => state.rarities.delete(v)}));
   state.sins.forEach(v => pills.push({label:v, icon:sinBadgeSVG(v,14), clear:() => state.sins.delete(v)}));
   state.activations.forEach(v => pills.push({label:v, clear:() => state.activations.delete(v)}));
-  state.identityKw.forEach(v => pills.push({label:v, icon:identityKwIcon(v,14), clear:() => state.identityKw.delete(v)}));
   state.cats.forEach(v => pills.push({label:v, clear:() => state.cats.delete(v)}));
-  state.skillSins.forEach(v => pills.push({label:`보유 스킬:${v}`, icon:sinBadgeSVG(v,14), clear:() => state.skillSins.delete(v)}));
-  state.skillPositions.forEach(v => {
-    const p = SKILL_POSITIONS.find(sp => sp.key === v);
-    pills.push({label:`보유 스킬 범위:${p ? p.label : v}`, clear:() => state.skillPositions.delete(v)});
-  });
   pills.forEach(p => {
     const el = document.createElement("span");
     el.className = "active-pill";
@@ -2485,7 +2488,30 @@ function renderActivePills(){
     const btn = document.createElement("button");
     btn.setAttribute("aria-label", `${p.label} 필터 해제`);
     btn.innerHTML = `<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg>`;
-    btn.addEventListener("click", () => { p.clear(); render(); });
+    btn.addEventListener("click", () => { p.clear(); renderBoth(); });
+    el.appendChild(btn);
+    wrap.appendChild(el);
+  });
+}
+function renderSkillSetActivePills(){
+  const wrap = document.getElementById("skillSetActivePills");
+  wrap.innerHTML = "";
+  const pills = [];
+  state.sinners.forEach(v => pills.push({label: state.sinnerMode === "exclude" ? `제외:${v}` : v, clear:() => state.sinners.delete(v)}));
+  state.skillSins.forEach(v => pills.push({label:`보유 스킬:${v}`, icon:sinBadgeSVG(v,14), clear:() => state.skillSins.delete(v)}));
+  state.skillPositions.forEach(v => {
+    const p = SKILL_POSITIONS.find(sp => sp.key === v);
+    pills.push({label:`보유 스킬 범위:${p ? p.label : v}`, clear:() => state.skillPositions.delete(v)});
+  });
+  state.identityKw.forEach(v => pills.push({label:v, icon:identityKwIcon(v,14), clear:() => state.identityKw.delete(v)}));
+  pills.forEach(p => {
+    const el = document.createElement("span");
+    el.className = "active-pill";
+    el.innerHTML = `${p.icon || ""}<span>${p.label}</span>`;
+    const btn = document.createElement("button");
+    btn.setAttribute("aria-label", `${p.label} 필터 해제`);
+    btn.innerHTML = `<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg>`;
+    btn.addEventListener("click", () => { p.clear(); renderBoth(); });
     el.appendChild(btn);
     wrap.appendChild(el);
   });
@@ -2511,28 +2537,6 @@ function effectHTML(d){
   }).join("");
 }
 
-function egoConditionalHTML(d){
-  if (!d.egoConditional.length) return "";
-  return d.egoConditional.map(e => {
-    const verb = e.type === "gift" ? "장착 시" : "사용 시";
-    const nameHTML = e.type === "gift"
-      ? `${GIFT_ICON_DATA[e.name] ? `<img class="gift-icon" src="${GIFT_ICON_DATA[e.name]}" alt="">` : ""}'${e.name}' 기프트`
-      : `'${e.name}' E.G.O`;
-    return `<span class="ego-cond-tag">(${nameHTML} ${verb} ${identityKwIcon(e.sin,12)}${e.sin} 판정)</span>`;
-  }).join("");
-}
-
-function identityKeywordsHTML(d){
-  const kwHTML = d.identityKeywords.length
-    ? `<div class="identity-kw-tags">${d.identityKeywords.map(k =>
-        `<span class="identity-kw-tag">${identityKwIcon(k, 12)}${k}</span>`
-      ).join(`<span class="identity-kw-sep">·</span>`)}</div>`
-    : "";
-  const egoHTML = egoConditionalHTML(d);
-  if (!kwHTML && !egoHTML) return "";
-  return `${kwHTML}${egoHTML}`;
-}
-
 function cardHTML(d){
   const tagsHTML = d.cats.slice(0,5).map(c => `<span class="tag">${c}</span>`).join("");
   const bannerKey = `${d.sinner}|${d.identity}`;
@@ -2551,7 +2555,6 @@ function cardHTML(d){
             ${iconHTML}<span class="card-sinner">${d.sinner}</span>
           </div>
           <span class="card-identity">${d.identity}</span>
-          ${identityKeywordsHTML(d)}
         </div>
         <div class="passive-name">${d.supportPassiveName}</div>
         ${conditionRowHTML(d)}
@@ -2577,35 +2580,91 @@ function render(){
 
   buildChips(document.getElementById("sinnerChips"), SINNERS, {
     getKey:s=>s, getLabel:s=>s, getCount:s=>countFor(d=>d.sinner===s), selectedSet: state.sinners,
-    iconFor: s => SINNER_ICON_DATA[s] ? `<img class="sinner-icon" src="${SINNER_ICON_DATA[s]}" alt="" loading="lazy">` : ""
+    iconFor: s => SINNER_ICON_DATA[s] ? `<img class="sinner-icon" src="${SINNER_ICON_DATA[s]}" alt="" loading="lazy">` : "",
+    onChange: renderBoth
   });
   buildRarityChips();
   buildChips(document.getElementById("sinChips"), SINS, {
     getKey:s=>s, getLabel:s=>s, getCount:s=>countFor(d=>d.sins.includes(s)), selectedSet: state.sins,
     iconFor: s => sinBadgeSVG(s, 18)
   });
-  const skillSinsWithCount = SINS.filter(s => countFor(d=>d.skillSins.includes(s)) > 0);
-  buildChips(document.getElementById("skillSinChips"), skillSinsWithCount, {
-    getKey:s=>s, getLabel:s=>s, getCount:s=>countFor(d=>d.skillSins.includes(s)), selectedSet: state.skillSins,
-    iconFor: s => sinBadgeSVG(s, 18)
-  });
-  buildChips(document.getElementById("skillPositionChips"), SKILL_POSITIONS, {
-    getKey:p=>p.key, getLabel:p=>p.label, getCount:p=>countFor(d=>!!d.skillSinsByPos[p.key]), selectedSet: state.skillPositions
-  });
   const activationsWithCount = ACTIVATIONS.filter(a => countFor(d=>d.condLabel===a) > 0);
   buildChips(document.getElementById("activationChips"), activationsWithCount, {
     getKey:a=>a, getLabel:a=>a, getCount:a=>countFor(d=>d.condLabel===a), selectedSet: state.activations
-  });
-  const identityKwWithCount = IDENTITY_KW_LIST.filter(k => countFor(d=>effectiveKeywords(d).includes(k)) > 0);
-  buildChips(document.getElementById("identityKwChips"), identityKwWithCount, {
-    getKey:k=>k, getLabel:k=>k, getCount:k=>countFor(d=>effectiveKeywords(d).includes(k)), selectedSet: state.identityKw,
-    iconFor: k => identityKwIcon(k, 16)
   });
   const catsWithCount = CATEGORY_DEFS.map(([label]) => label).filter(label => countFor(d=>d.cats.includes(label)) > 0);
   buildChips(document.getElementById("categoryChips"), catsWithCount, {
     getKey:c=>c, getLabel:c=>c, getCount:c=>countFor(d=>d.cats.includes(c)), selectedSet: state.cats
   });
   buildBundleChips("categoryBundleChips", state.cats, render);
+}
+
+function renderBoth(){ render(); renderSkillSet(); }
+
+function skillSetCardHTML(d){
+  const prof = IDENTITY_SKILL_PROFILE[`${d.sinner}|${d.identity}`];
+  const iconSrc = SINNER_ICON_DATA[d.sinner];
+  const iconHTML = iconSrc ? `<img class="sinner-icon-inline" src="${iconSrc}" alt="" loading="lazy">` : "";
+  const slots = [
+    {label:"Skill 1", num:"1", info: prof && prof.skills[0]},
+    {label:"Skill 2", num:"2", info: prof && prof.skills[1]},
+    {label:"Skill 3", num:"3", info: prof && prof.skills[2]},
+    {label:"DEF", num:"def", info: prof && prof.defense && prof.defense[0]},
+  ];
+  const slotsHTML = slots.map(s => {
+    const sin = s.info && s.info.sin;
+    const iconOrEmpty = sin ? sinBadgeSVG(sin, 26) : `<span class="skillset-slot-empty"></span>`;
+    return `<button type="button" class="skillset-slot-btn" data-sinner="${d.sinner.replace(/"/g,"&quot;")}" data-identity="${d.identity.replace(/"/g,"&quot;")}" data-num="${s.num}">
+      <span class="skillset-slot-label">${s.label}</span>
+      ${iconOrEmpty}
+    </button>`;
+  }).join("");
+  return `
+    <article class="skillset-card">
+      <div class="skillset-card-head">
+        <img class="skillset-card-portrait" src="${portraitSrc(d)}" alt="" loading="lazy">
+        <div class="skillset-card-names">
+          <span class="skillset-card-sinner">${iconHTML}${d.sinner}</span>
+          <span class="skillset-card-identity" title="${d.identity}">${d.identity}</span>
+        </div>
+      </div>
+      <div class="skillset-skill-row">${slotsHTML}</div>
+    </article>`;
+}
+
+function renderSkillSet(){
+  const filtered = DATA.filter(skillSetPassesFilters);
+  document.getElementById("skillSetShownCount").textContent = filtered.length;
+  const grid = document.getElementById("skillSetGrid");
+  const empty = document.getElementById("skillSetEmptyState");
+  if (filtered.length === 0){
+    grid.innerHTML = "";
+    empty.hidden = false;
+  } else {
+    empty.hidden = true;
+    grid.innerHTML = filtered.map(skillSetCardHTML).join("");
+  }
+  renderSkillSetActivePills();
+
+  buildChips(document.getElementById("ssSinnerChips"), SINNERS, {
+    getKey:s=>s, getLabel:s=>s, getCount:s=>countFor(d=>d.sinner===s), selectedSet: state.sinners,
+    iconFor: s => SINNER_ICON_DATA[s] ? `<img class="sinner-icon" src="${SINNER_ICON_DATA[s]}" alt="" loading="lazy">` : "",
+    onChange: renderBoth
+  });
+  const skillSinsWithCount = SINS.filter(s => countFor(d=>d.skillSins.includes(s)) > 0);
+  buildChips(document.getElementById("skillSinChips"), skillSinsWithCount, {
+    getKey:s=>s, getLabel:s=>s, getCount:s=>countFor(d=>d.skillSins.includes(s)), selectedSet: state.skillSins,
+    iconFor: s => sinBadgeSVG(s, 18), onChange: renderSkillSet
+  });
+  buildChips(document.getElementById("skillPositionChips"), SKILL_POSITIONS, {
+    getKey:p=>p.key, getLabel:p=>p.label, getCount:p=>countFor(d=>!!d.skillSinsByPos[p.key]), selectedSet: state.skillPositions,
+    onChange: renderSkillSet
+  });
+  const identityKwWithCount = IDENTITY_KW_LIST.filter(k => countFor(d=>effectiveKeywords(d).includes(k)) > 0);
+  buildChips(document.getElementById("identityKwChips"), identityKwWithCount, {
+    getKey:k=>k, getLabel:k=>k, getCount:k=>countFor(d=>effectiveKeywords(d).includes(k)), selectedSet: state.identityKw,
+    iconFor: k => identityKwIcon(k, 16), onChange: renderSkillSet
+  });
 }
 
 
@@ -2625,7 +2684,7 @@ function setIncludeEgoKw(val){
   state.includeEgoKw = val;
   egoKwToggle.checked = val;
   egoKwTogglePicker.checked = val;
-  render();
+  renderSkillSet();
   if (!pickerView.hidden) renderPicker();
 }
 egoKwToggle.addEventListener("change", e => setIncludeEgoKw(e.target.checked));
@@ -2634,13 +2693,13 @@ function setSkillSinMode(mode){
   state.skillSinMode = mode;
   document.getElementById("skillSinModeOr").setAttribute("aria-pressed", String(mode === "or"));
   document.getElementById("skillSinModeAnd").setAttribute("aria-pressed", String(mode === "and"));
-  render();
+  renderSkillSet();
 }
 function setSkillPositionMode(mode){
   state.skillPositionMode = mode;
   document.getElementById("skillPosModeOr").setAttribute("aria-pressed", String(mode === "or"));
   document.getElementById("skillPosModeAnd").setAttribute("aria-pressed", String(mode === "and"));
-  render();
+  renderSkillSet();
 }
 document.getElementById("skillPosModeOr").addEventListener("click", () => setSkillPositionMode("or"));
 document.getElementById("skillPosModeAnd").addEventListener("click", () => setSkillPositionMode("and"));
@@ -2650,14 +2709,22 @@ function setSinnerMode(mode){
   state.sinnerMode = mode;
   document.getElementById("sinnerModeInclude").setAttribute("aria-pressed", String(mode === "include"));
   document.getElementById("sinnerModeExclude").setAttribute("aria-pressed", String(mode === "exclude"));
-  render();
+  document.getElementById("ssSinnerModeInclude").setAttribute("aria-pressed", String(mode === "include"));
+  document.getElementById("ssSinnerModeExclude").setAttribute("aria-pressed", String(mode === "exclude"));
+  renderBoth();
 }
 document.getElementById("sinnerModeInclude").addEventListener("click", () => setSinnerMode("include"));
 document.getElementById("sinnerModeExclude").addEventListener("click", () => setSinnerMode("exclude"));
+document.getElementById("ssSinnerModeInclude").addEventListener("click", () => setSinnerMode("include"));
+document.getElementById("ssSinnerModeExclude").addEventListener("click", () => setSinnerMode("exclude"));
 document.getElementById("resetAll").addEventListener("click", () => {
   state.q=""; searchInput.value="";
-  state.sinners.clear(); state.rarities.clear(); state.sins.clear(); state.activations.clear(); state.identityKw.clear(); state.cats.clear();
-  state.skillSins.clear(); state.skillPositions.clear();
+  state.rarities.clear(); state.sins.clear(); state.activations.clear(); state.cats.clear();
+  state.sinners.clear();
+  setSinnerMode("include");
+});
+document.getElementById("skillSetResetAll").addEventListener("click", () => {
+  state.sinners.clear(); state.skillSins.clear(); state.skillPositions.clear(); state.identityKw.clear();
   setSkillSinMode("or");
   setSkillPositionMode("or");
   setSinnerMode("include");
@@ -2667,9 +2734,7 @@ const kwTooltip = document.getElementById("kwTooltip");
 const kwTooltipTerm = kwTooltip.querySelector(".kw-tooltip-term");
 const kwTooltipDef = kwTooltip.querySelector(".kw-tooltip-def");
 function hideKwTooltip(){ kwTooltip.hidden = true; }
-function showKwTooltip(term, anchorEl){
-  const def = KEYWORD_DEFS[term];
-  if (!def) return;
+function showTooltipAt(term, def, anchorEl){
   kwTooltipTerm.textContent = term;
   kwTooltipDef.textContent = def;
   kwTooltip.hidden = false;
@@ -2682,6 +2747,16 @@ function showKwTooltip(term, anchorEl){
   kwTooltip.style.left = `${left}px`;
   kwTooltip.style.top = `${top}px`;
 }
+function showKwTooltip(term, anchorEl){
+  const def = KEYWORD_DEFS[term];
+  if (!def) return;
+  showTooltipAt(term, def, anchorEl);
+}
+function skillSlotInfo(sinner, identity, num){
+  const prof = IDENTITY_SKILL_PROFILE[`${sinner}|${identity}`];
+  if (!prof) return null;
+  return num === "def" ? (prof.defense && prof.defense[0]) : prof.skills[Number(num)-1];
+}
 document.body.addEventListener("click", e => {
   const term = e.target.closest(".kw-term");
   if (term){
@@ -2689,6 +2764,21 @@ document.body.addEventListener("click", e => {
     if (isSame){ hideKwTooltip(); kwTooltip.dataset.openFor = ""; return; }
     kwTooltip.dataset.openFor = term.dataset.kw;
     showKwTooltip(term.dataset.kw, term);
+    e.stopPropagation();
+    return;
+  }
+  const slotBtn = e.target.closest(".skillset-slot-btn");
+  if (slotBtn){
+    const { sinner, identity, num } = slotBtn.dataset;
+    const openKey = `slot:${sinner}|${identity}|${num}`;
+    const isSame = kwTooltip.dataset.openFor === openKey && !kwTooltip.hidden;
+    if (isSame){ hideKwTooltip(); kwTooltip.dataset.openFor = ""; return; }
+    kwTooltip.dataset.openFor = openKey;
+    const label = num === "def" ? "DEF" : `Skill ${num}`;
+    const info = skillSlotInfo(sinner, identity, num);
+    const holdText = num === "def" ? "" : ` · 기본 보유 ${SKILL_RULE_DEFAULT.defaultSplit[num]}개`;
+    const def = info && info.sin ? `${info.sin} 속성${holdText}` : `속성 없음${holdText}`;
+    showTooltipAt(label, def, slotBtn);
     e.stopPropagation();
     return;
   }
@@ -3612,6 +3702,7 @@ function openOwnedView(){
   document.getElementById("searchView").hidden = true;
   document.getElementById("searchRow").hidden = true;
   document.getElementById("searchFooter").hidden = true;
+  document.getElementById("skillSetView").hidden = true;
   document.getElementById("deckView").hidden = true;
   pickerView.hidden = true;
   ownedView.hidden = false;
@@ -3620,37 +3711,57 @@ function openOwnedView(){
 }
 function closeOwnedView(){
   ownedView.hidden = true;
-  if (tabDeck.getAttribute("aria-pressed") === "true") showDeckView(); else showSearchView();
-  render();
+  if (tabDeck.getAttribute("aria-pressed") === "true") showDeckView();
+  else if (tabSkillSet.getAttribute("aria-pressed") === "true") showSkillSetView();
+  else showSearchView();
+  renderBoth();
 }
 document.getElementById("ownedSettingsBtn").addEventListener("click", openOwnedView);
 document.getElementById("ownedBack").addEventListener("click", closeOwnedView);
 document.addEventListener("keydown", e => { if (e.key === "Escape" && !ownedView.hidden) closeOwnedView(); });
 document.getElementById("ownedOnlyToggle").addEventListener("change", e => {
   state.ownedOnly = e.target.checked;
-  render();
+  renderBoth();
   if (!pickerView.hidden){
     if (deckState.picker.tab === "ego") renderEgoPicker();
     else renderPicker();
   }
 });
 
+const tabSkillSet = document.getElementById("tabSkillSet");
 function showSearchView(){
   tabSearch.setAttribute("aria-pressed","true");
   tabDeck.setAttribute("aria-pressed","false");
+  tabSkillSet.setAttribute("aria-pressed","false");
   document.getElementById("searchView").hidden = false;
   document.getElementById("searchRow").hidden = false;
   document.getElementById("searchFooter").hidden = false;
+  document.getElementById("skillSetView").hidden = true;
   document.getElementById("deckView").hidden = true;
   pickerView.hidden = true;
   ownedView.hidden = true;
 }
-function showDeckView(){
+function showSkillSetView(){
   tabSearch.setAttribute("aria-pressed","false");
-  tabDeck.setAttribute("aria-pressed","true");
+  tabDeck.setAttribute("aria-pressed","false");
+  tabSkillSet.setAttribute("aria-pressed","true");
   document.getElementById("searchView").hidden = true;
   document.getElementById("searchRow").hidden = true;
   document.getElementById("searchFooter").hidden = true;
+  document.getElementById("skillSetView").hidden = false;
+  document.getElementById("deckView").hidden = true;
+  pickerView.hidden = true;
+  ownedView.hidden = true;
+  renderSkillSet();
+}
+function showDeckView(){
+  tabSearch.setAttribute("aria-pressed","false");
+  tabDeck.setAttribute("aria-pressed","true");
+  tabSkillSet.setAttribute("aria-pressed","false");
+  document.getElementById("searchView").hidden = true;
+  document.getElementById("searchRow").hidden = true;
+  document.getElementById("searchFooter").hidden = true;
+  document.getElementById("skillSetView").hidden = true;
   document.getElementById("deckView").hidden = false;
   pickerView.hidden = true;
   ownedView.hidden = true;
@@ -3658,6 +3769,7 @@ function showDeckView(){
 }
 tabSearch.addEventListener("click", showSearchView);
 tabDeck.addEventListener("click", showDeckView);
+tabSkillSet.addEventListener("click", showSkillSetView);
 
-renderPartyGrid();
+showDeckView();
 updateHeaderHeightVar();

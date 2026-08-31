@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>림버스 서포트 패시브 검색기</title>
+<title>림버스 덱 빌더</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
@@ -13,10 +13,11 @@
 <header class="top">
   <div class="top-inner">
     <div class="title-row">
-      <h1>림버스 서포트 패시브 검색기</h1>
+      <h1>림버스 덱 빌더</h1>
       <div class="view-tabs" role="tablist">
-        <button class="view-tab" id="tabSearch" aria-pressed="true">검색</button>
-        <button class="view-tab" id="tabDeck" aria-pressed="false">덱 빌더</button>
+        <button class="view-tab" id="tabDeck" aria-pressed="true">덱 빌더</button>
+        <button class="view-tab" id="tabSkillSet" aria-pressed="false">스킬셋</button>
+        <button class="view-tab" id="tabSearch" aria-pressed="false">서폿패</button>
       </div>
       <div class="owned-controls">
         <label class="ego-kw-toggle owned-only-toggle">
@@ -27,7 +28,7 @@
         <button type="button" class="reset-all" id="ownedSettingsBtn">보유 설정</button>
       </div>
     </div>
-    <div class="search-row" id="searchRow">
+    <div class="search-row" id="searchRow" hidden>
       <div class="search-box">
         <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>
         <input id="searchInput" type="text" placeholder="인격, 패시브 이름, 효과 키워드로 검색 (예: 신속, 화상, 검계 살수)" autocomplete="off">
@@ -47,7 +48,7 @@
   </div>
 </header>
 
-<div class="layout" id="searchView">
+<div class="layout" id="searchView" hidden>
   <aside class="filters">
     <div class="filter-group">
       <h2>수감자</h2>
@@ -66,37 +67,8 @@
       <div class="chip-grid" id="sinChips"></div>
     </div>
     <div class="filter-group">
-      <h2>보유 스킬 속성</h2>
-      <div class="skill-filter-subhead">
-        <span class="skill-filter-subhead-label">스킬 범위</span>
-        <div class="view-tabs mini-tabs" role="tablist">
-          <button type="button" class="view-tab" id="skillPosModeOr" aria-pressed="true">OR</button>
-          <button type="button" class="view-tab" id="skillPosModeAnd" aria-pressed="false">AND</button>
-        </div>
-      </div>
-      <div class="chip-grid" id="skillPositionChips"></div>
-      <div class="bundle-sep"></div>
-      <div class="skill-filter-subhead">
-        <span class="skill-filter-subhead-label">스킬 속성</span>
-        <div class="view-tabs mini-tabs" role="tablist">
-          <button type="button" class="view-tab" id="skillSinModeOr" aria-pressed="true">OR</button>
-          <button type="button" class="view-tab" id="skillSinModeAnd" aria-pressed="false">AND</button>
-        </div>
-      </div>
-      <div class="chip-grid" id="skillSinChips"></div>
-    </div>
-    <div class="filter-group">
       <h2>발동 방식</h2>
       <div class="chip-grid" id="activationChips"></div>
-    </div>
-    <div class="filter-group">
-      <h2>인격 키워드</h2>
-      <label class="ego-kw-toggle">
-        <input type="checkbox" id="egoKwToggle">
-        <span class="toggle-track"></span>
-        <span>에고/기프트 조건부 판정 포함</span>
-      </label>
-      <div class="chip-grid" id="identityKwChips"></div>
     </div>
     <div class="filter-group">
       <h2>효과 유형</h2>
@@ -119,7 +91,62 @@
   </main>
 </div>
 
-<div class="deck-layout" id="deckView" hidden>
+<div class="layout" id="skillSetView" hidden>
+  <aside class="filters">
+    <div class="filter-group">
+      <h2>수감자</h2>
+      <div class="view-tabs mini-tabs" role="tablist">
+        <button type="button" class="view-tab" id="ssSinnerModeInclude" aria-pressed="true">포함</button>
+        <button type="button" class="view-tab" id="ssSinnerModeExclude" aria-pressed="false">제외</button>
+      </div>
+      <div class="chip-grid" id="ssSinnerChips"></div>
+    </div>
+    <div class="filter-group">
+      <h2>보유 스킬 속성</h2>
+      <div class="skill-filter-subhead">
+        <span class="skill-filter-subhead-label">스킬 범위</span>
+        <div class="view-tabs mini-tabs" role="tablist">
+          <button type="button" class="view-tab" id="skillPosModeOr" aria-pressed="true">OR</button>
+          <button type="button" class="view-tab" id="skillPosModeAnd" aria-pressed="false">AND</button>
+        </div>
+      </div>
+      <div class="chip-grid" id="skillPositionChips"></div>
+      <div class="bundle-sep"></div>
+      <div class="skill-filter-subhead">
+        <span class="skill-filter-subhead-label">스킬 속성</span>
+        <div class="view-tabs mini-tabs" role="tablist">
+          <button type="button" class="view-tab" id="skillSinModeOr" aria-pressed="true">OR</button>
+          <button type="button" class="view-tab" id="skillSinModeAnd" aria-pressed="false">AND</button>
+        </div>
+      </div>
+      <div class="chip-grid" id="skillSinChips"></div>
+    </div>
+    <div class="filter-group">
+      <h2>인격 키워드</h2>
+      <label class="ego-kw-toggle">
+        <input type="checkbox" id="egoKwToggle">
+        <span class="toggle-track"></span>
+        <span>에고/기프트 조건부 판정 포함</span>
+      </label>
+      <div class="chip-grid" id="identityKwChips"></div>
+    </div>
+    <button type="button" class="reset-all" id="skillSetResetAll">필터 초기화</button>
+  </aside>
+
+  <main>
+    <div class="results-head">
+      <div class="result-count"><b id="skillSetShownCount"></b>개 인격 표시 중</div>
+      <div class="active-filters" id="skillSetActivePills"></div>
+    </div>
+    <div class="skillset-grid" id="skillSetGrid"></div>
+    <div class="empty-state" id="skillSetEmptyState" hidden>
+      <span class="display">일치하는 인격이 없습니다</span>
+      선택한 필터를 조정해 보세요.
+    </div>
+  </main>
+</div>
+
+<div class="deck-layout" id="deckView">
   <div class="deck-toolbar">
     <div class="deck-toolbar-text">
       <h2 class="deck-title">파티 편성</h2>
@@ -254,7 +281,7 @@
   </div>
 </div>
 
-<footer class="note" id="searchFooter">데이터 출처: 나무위키 각 수감자 인게임 정보 문서 원본 HTML(발동 조건 아이콘 포함)에서 직접 파싱. 밸런스 패치로 수치가 변경될 수 있습니다.</footer>
+<footer class="note" id="searchFooter" hidden>데이터 출처: 나무위키 각 수감자 인게임 정보 문서 원본 HTML(발동 조건 아이콘 포함)에서 직접 파싱. 밸런스 패치로 수치가 변경될 수 있습니다.</footer>
 
 <div id="kwTooltip" class="kw-tooltip" role="tooltip" hidden>
   <div class="kw-tooltip-term"></div>
