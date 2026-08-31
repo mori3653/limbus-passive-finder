@@ -404,6 +404,8 @@
 
   /* ---------- view tabs ---------- */
   .view-tabs{ display:flex; gap:4px; background:var(--surface-2); border:1px solid var(--border); border-radius:8px; padding:3px; }
+  .skill-sin-mode-tabs{ width:fit-content; margin-bottom:8px; }
+  .skill-sin-mode-tabs .view-tab{ padding:5px 12px; font-size:11.5px; }
   .view-tab{
     border:0; background:transparent; color:var(--text-muted);
     font-size:12.5px; font-weight:600; padding:6px 13px; border-radius:6px; cursor:pointer;
@@ -677,14 +679,13 @@
     </div>
     <div class="filter-group">
       <h2>보유 스킬 속성</h2>
-      <label class="ego-kw-toggle">
-        <input type="checkbox" id="skillSinModeToggle">
-        <span class="toggle-track"></span>
-        <span id="skillSinModeLabel">OR (하나라도 포함)</span>
-      </label>
-      <div class="chip-grid" id="skillSinChips"></div>
-      <div class="bundle-sep"></div>
       <div class="chip-grid" id="skillPositionChips"></div>
+      <div class="bundle-sep"></div>
+      <div class="view-tabs skill-sin-mode-tabs" role="tablist">
+        <button type="button" class="view-tab" id="skillSinModeOr" aria-pressed="true">OR</button>
+        <button type="button" class="view-tab" id="skillSinModeAnd" aria-pressed="false">AND</button>
+      </div>
+      <div class="chip-grid" id="skillSinChips"></div>
     </div>
     <div class="filter-group">
       <h2>발동 방식</h2>
@@ -4340,18 +4341,19 @@ function setIncludeEgoKw(val){
 }
 egoKwToggle.addEventListener("change", e => setIncludeEgoKw(e.target.checked));
 egoKwTogglePicker.addEventListener("change", e => setIncludeEgoKw(e.target.checked));
-document.getElementById("skillSinModeToggle").addEventListener("change", e => {
-  state.skillSinMode = e.target.checked ? "and" : "or";
-  document.getElementById("skillSinModeLabel").textContent = e.target.checked ? "AND (전부 포함)" : "OR (하나라도 포함)";
+function setSkillSinMode(mode){
+  state.skillSinMode = mode;
+  document.getElementById("skillSinModeOr").setAttribute("aria-pressed", String(mode === "or"));
+  document.getElementById("skillSinModeAnd").setAttribute("aria-pressed", String(mode === "and"));
   render();
-});
+}
+document.getElementById("skillSinModeOr").addEventListener("click", () => setSkillSinMode("or"));
+document.getElementById("skillSinModeAnd").addEventListener("click", () => setSkillSinMode("and"));
 document.getElementById("resetAll").addEventListener("click", () => {
   state.q=""; searchInput.value="";
   state.sinners.clear(); state.rarities.clear(); state.sins.clear(); state.activations.clear(); state.identityKw.clear(); state.cats.clear();
-  state.skillSins.clear(); state.skillPositions.clear(); state.skillSinMode = "or";
-  document.getElementById("skillSinModeToggle").checked = false;
-  document.getElementById("skillSinModeLabel").textContent = "OR (하나라도 포함)";
-  render();
+  state.skillSins.clear(); state.skillPositions.clear();
+  setSkillSinMode("or");
 });
 
 const kwTooltip = document.getElementById("kwTooltip");
