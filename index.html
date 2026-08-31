@@ -113,6 +113,8 @@
     display:flex; flex-direction:column; gap:14px;
   }
   .title-row{ display:flex; align-items:baseline; gap:12px; flex-wrap:wrap; }
+  .owned-controls{ display:flex; align-items:center; gap:14px; margin-left:auto; }
+  .owned-only-toggle{ margin-bottom:0; white-space:nowrap; }
   h1{
     font-family:"IBM Plex Sans KR","Noto Sans KR",system-ui,sans-serif;
     font-weight:700;
@@ -406,6 +408,9 @@
   .view-tabs{ display:flex; gap:4px; background:var(--surface-2); border:1px solid var(--border); border-radius:8px; padding:3px; }
   .mini-tabs{ width:fit-content; margin-bottom:8px; }
   .mini-tabs .view-tab{ padding:5px 12px; font-size:11.5px; }
+  .skill-filter-subhead{ display:flex; align-items:center; justify-content:space-between; gap:8px; margin-bottom:6px; }
+  .skill-filter-subhead .mini-tabs{ margin-bottom:0; }
+  .skill-filter-subhead-label{ font-size:10.5px; color:var(--text-faint); font-weight:600; }
   .view-tab{
     border:0; background:transparent; color:var(--text-muted);
     font-size:12.5px; font-weight:600; padding:6px 13px; border-radius:6px; cursor:pointer;
@@ -607,6 +612,49 @@
     color:#e05252; font-size:12.5px;
   }
 
+  /* ---------- 보유 설정 ---------- */
+  .owned-wrap{ max-width:1180px; margin:0 auto; padding:18px 24px 60px; }
+  .owned-sinner-sep{ border-top:1px dashed var(--border-strong); margin:18px 0; }
+  .owned-sinner-label{ display:flex; align-items:center; gap:6px; margin-bottom:9px; }
+  .owned-sinner-label img{ width:20px; height:20px; border-radius:50%; object-fit:cover; }
+  .owned-sinner-label span{ font-size:11px; color:var(--text-muted); font-weight:600; }
+  .owned-chip-grid{ display:flex; flex-wrap:wrap; gap:10px; }
+  .owned-card{
+    position:relative; flex:none; width:78px; border:0; background:transparent; padding:0; cursor:pointer;
+    display:flex; flex-direction:column; align-items:center; gap:4px;
+  }
+  .owned-card-img-wrap{
+    position:relative; width:78px; aspect-ratio:3/4; border-radius:8px; overflow:hidden;
+    border:2px solid var(--border-strong); transition:border-color .12s, opacity .12s;
+  }
+  .owned-card:not(.is-owned) .owned-card-img-wrap{ opacity:0.35; }
+  .owned-card.is-owned .owned-card-img-wrap{ border-color:var(--accent); }
+  .owned-card img{ width:100%; height:100%; object-fit:cover; display:block; }
+  .owned-card-check{
+    position:absolute; top:3px; right:3px; width:18px; height:18px; border-radius:50%;
+    background:var(--accent); color:var(--bg); display:flex; align-items:center; justify-content:center;
+    font-size:11px; font-weight:700; box-shadow:0 1px 4px rgba(0,0,0,0.4);
+  }
+  .owned-card-label{ font-size:9.5px; color:var(--text-muted); text-align:center; line-height:1.25; max-width:78px; }
+  .owned-ego-card{
+    position:relative; flex:none; width:64px; border:0; background:transparent; padding:0; cursor:pointer;
+    display:flex; flex-direction:column; align-items:center; gap:4px;
+  }
+  .owned-ego-card-img-wrap{
+    position:relative; width:64px; height:64px; border-radius:50%; overflow:hidden; border:3px solid var(--border-strong);
+    transition:border-color .12s, opacity .12s, box-shadow .12s;
+  }
+  .owned-ego-card:not(.is-owned) .owned-ego-card-img-wrap{ opacity:0.35; }
+  .owned-ego-card.is-owned .owned-ego-card-img-wrap{ box-shadow:0 0 0 2px var(--bg), 0 0 0 4px var(--accent); }
+  .owned-ego-card img{ width:100%; height:100%; object-fit:cover; display:block; }
+  .owned-ego-card-check{
+    position:absolute; top:-2px; right:-2px; width:16px; height:16px; border-radius:50%;
+    background:var(--accent); color:var(--bg); display:flex; align-items:center; justify-content:center;
+    font-size:10px; font-weight:700; box-shadow:0 1px 4px rgba(0,0,0,0.4);
+  }
+  .owned-ego-card-label{ font-size:9px; color:var(--text-muted); text-align:center; line-height:1.25; max-width:72px; }
+  .owned-ego-card-grade{ font-size:8px; color:var(--text-faint); letter-spacing:0.03em; }
+
   .picker-card-grid{
     display:grid; grid-template-columns:repeat(auto-fill, minmax(120px,1fr)); gap:10px;
   }
@@ -641,6 +689,14 @@
       <div class="view-tabs" role="tablist">
         <button class="view-tab" id="tabSearch" aria-pressed="true">검색</button>
         <button class="view-tab" id="tabDeck" aria-pressed="false">덱 빌더</button>
+      </div>
+      <div class="owned-controls">
+        <label class="ego-kw-toggle owned-only-toggle">
+          <input type="checkbox" id="ownedOnlyToggle">
+          <span class="toggle-track"></span>
+          <span>보유 인격만 보기</span>
+        </label>
+        <button type="button" class="reset-all" id="ownedSettingsBtn">보유 설정</button>
       </div>
     </div>
     <div class="search-row" id="searchRow">
@@ -683,12 +739,22 @@
     </div>
     <div class="filter-group">
       <h2>보유 스킬 속성</h2>
-      <div class="view-tabs mini-tabs" role="tablist">
-        <button type="button" class="view-tab" id="skillSinModeOr" aria-pressed="true">OR</button>
-        <button type="button" class="view-tab" id="skillSinModeAnd" aria-pressed="false">AND</button>
+      <div class="skill-filter-subhead">
+        <span class="skill-filter-subhead-label">스킬 범위</span>
+        <div class="view-tabs mini-tabs" role="tablist">
+          <button type="button" class="view-tab" id="skillPosModeOr" aria-pressed="true">OR</button>
+          <button type="button" class="view-tab" id="skillPosModeAnd" aria-pressed="false">AND</button>
+        </div>
       </div>
       <div class="chip-grid" id="skillPositionChips"></div>
       <div class="bundle-sep"></div>
+      <div class="skill-filter-subhead">
+        <span class="skill-filter-subhead-label">스킬 속성</span>
+        <div class="view-tabs mini-tabs" role="tablist">
+          <button type="button" class="view-tab" id="skillSinModeOr" aria-pressed="true">OR</button>
+          <button type="button" class="view-tab" id="skillSinModeAnd" aria-pressed="false">AND</button>
+        </div>
+      </div>
       <div class="chip-grid" id="skillSinChips"></div>
     </div>
     <div class="filter-group">
@@ -837,6 +903,26 @@
 
   <div id="pickerTabSkill" hidden>
     <div class="skill-picker-wrap" id="skillPickerWrap"></div>
+  </div>
+</div>
+
+<div id="ownedView" hidden>
+  <div class="picker-topbar">
+    <button class="picker-back" id="ownedBack">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M15 18l-6-6 6-6"/></svg>
+      돌아가기
+    </button>
+    <span class="picker-title">보유 설정</span>
+  </div>
+  <div class="picker-subtabs">
+    <button class="view-tab" id="ownedTabBtnIdentity" aria-pressed="true">보유 인격 설정</button>
+    <button class="view-tab" id="ownedTabBtnEgo" aria-pressed="false">보유 에고 설정</button>
+  </div>
+  <div id="ownedTabIdentity">
+    <div class="owned-wrap" id="ownedIdentityWrap"></div>
+  </div>
+  <div id="ownedTabEgo" hidden>
+    <div class="owned-wrap" id="ownedEgoWrap"></div>
   </div>
 </div>
 
@@ -4065,9 +4151,11 @@ const state = {
   cats: new Set(),
   skillSins: new Set(),
   skillPositions: new Set(),
-  skillSinMode: "or", // "or" | "and"
+  skillSinMode: "or", // "or" | "and" — 선택한 여러 속성 사이의 관계
+  skillPositionMode: "or", // "or" | "and" — 선택한 여러 스킬 범위 사이의 관계
   syncMode: "gacksung",
   includeEgoKw: false,
+  ownedOnly: false,
 };
 
 // 에고/기프트 조건부 죄악 판정을 포함한 "실질" 인격 키워드 목록
@@ -4166,20 +4254,26 @@ function passesFilters(d){
   if (state.activations.size && !state.activations.has(d.condLabel)) return false;
   if (state.identityKw.size && ![...state.identityKw].every(k => effectiveKeywords(d).includes(k))) return false;
   if (state.cats.size && ![...state.cats].some(c => d.cats.includes(c))) return false;
-  if (state.skillSins.size){
-    const pool = skillSinPool(d, state.skillPositions);
-    const selected = [...state.skillSins];
-    const ok = state.skillSinMode === "and" ? selected.every(s => pool.has(s)) : selected.some(s => pool.has(s));
-    if (!ok) return false;
-  }
+  if (state.skillSins.size && !skillFilterPasses(d, state.skillPositions, state.skillPositionMode, state.skillSins, state.skillSinMode)) return false;
+  if (state.ownedOnly && !isIdentityOwned(d.sinner, d.identity)) return false;
   return true;
 }
-// positions: Set of "1"/"2"/"3"/"def" (비어있으면 4개 전부) — 선택된 슬롯들의 속성 집합(합집합)을 반환
-function skillSinPool(d, positions){
+// positions: Set of "1"/"2"/"3"/"def" (비어있으면 4개 전부).
+// positionMode "or": 선택된 슬롯들의 속성을 합집합(pool)으로 모아 sinMode로 selectedSins와 비교.
+// positionMode "and": 선택된 슬롯 하나하나가 각각 selectedSins를 sinMode로 만족해야 함(전부 통과해야 함).
+function skillFilterPasses(d, positions, positionMode, selectedSinsSet, sinMode){
   const keys = positions.size ? [...positions] : ["1","2","3","def"];
+  const selected = [...selectedSinsSet];
+  const sinTest = pool => sinMode === "and" ? selected.every(s => pool.has(s)) : selected.some(s => pool.has(s));
+  if (positionMode === "and"){
+    return keys.every(k => {
+      const sin = d.skillSinsByPos[k];
+      return sin ? sinTest(new Set([sin])) : false;
+    });
+  }
   const pool = new Set();
   keys.forEach(k => { if (d.skillSinsByPos[k]) pool.add(d.skillSinsByPos[k]); });
-  return pool;
+  return sinTest(pool);
 }
 
 function renderActivePills(){
@@ -4355,6 +4449,14 @@ function setSkillSinMode(mode){
   document.getElementById("skillSinModeAnd").setAttribute("aria-pressed", String(mode === "and"));
   render();
 }
+function setSkillPositionMode(mode){
+  state.skillPositionMode = mode;
+  document.getElementById("skillPosModeOr").setAttribute("aria-pressed", String(mode === "or"));
+  document.getElementById("skillPosModeAnd").setAttribute("aria-pressed", String(mode === "and"));
+  render();
+}
+document.getElementById("skillPosModeOr").addEventListener("click", () => setSkillPositionMode("or"));
+document.getElementById("skillPosModeAnd").addEventListener("click", () => setSkillPositionMode("and"));
 document.getElementById("skillSinModeOr").addEventListener("click", () => setSkillSinMode("or"));
 document.getElementById("skillSinModeAnd").addEventListener("click", () => setSkillSinMode("and"));
 function setSinnerMode(mode){
@@ -4370,6 +4472,7 @@ document.getElementById("resetAll").addEventListener("click", () => {
   state.sinners.clear(); state.rarities.clear(); state.sins.clear(); state.activations.clear(); state.identityKw.clear(); state.cats.clear();
   state.skillSins.clear(); state.skillPositions.clear();
   setSkillSinMode("or");
+  setSkillPositionMode("or");
   setSinnerMode("include");
 });
 
@@ -4407,6 +4510,40 @@ document.body.addEventListener("click", e => {
 document.addEventListener("keydown", e => { if (e.key === "Escape") hideKwTooltip(); });
 window.addEventListener("scroll", hideKwTooltip, true);
 window.addEventListener("resize", hideKwTooltip);
+
+/* ---- 보유 인격/에고 관리 (localStorage) ---- */
+const OWNED_STORAGE_KEY = "limbus_owned_v1";
+function buildDefaultOwnedState(){
+  const identities = {};
+  DATA.forEach(d => { if (d.identity === "LCB 수감자") identities[`${d.sinner}|${d.identity}`] = true; });
+  const egos = {};
+  Object.values(EGO_DEFAULT).forEach(slug => { egos[slug] = true; });
+  return { identities, egos };
+}
+function loadOwnedState(){
+  try {
+    const raw = localStorage.getItem(OWNED_STORAGE_KEY);
+    if (raw) return JSON.parse(raw);
+  } catch(e){}
+  return buildDefaultOwnedState();
+}
+let ownedState = loadOwnedState();
+function saveOwnedState(){
+  try { localStorage.setItem(OWNED_STORAGE_KEY, JSON.stringify(ownedState)); } catch(e){}
+}
+function isIdentityOwned(sinner, identity){ return !!ownedState.identities[`${sinner}|${identity}`]; }
+function isEgoOwned(slug){ return !!ownedState.egos[slug]; }
+function toggleIdentityOwned(sinner, identity){
+  const key = `${sinner}|${identity}`;
+  if (ownedState.identities[key]) delete ownedState.identities[key];
+  else ownedState.identities[key] = true;
+  saveOwnedState();
+}
+function toggleEgoOwned(slug){
+  if (ownedState.egos[slug]) delete ownedState.egos[slug];
+  else ownedState.egos[slug] = true;
+  saveOwnedState();
+}
 
 render();
 
@@ -5170,6 +5307,117 @@ document.getElementById("pickerTabBtnSkill").addEventListener("click", () => set
 /* ---- view tab switching ---- */
 const tabSearch = document.getElementById("tabSearch");
 const tabDeck = document.getElementById("tabDeck");
+function renderOwnedIdentityTab(){
+  const wrap = document.getElementById("ownedIdentityWrap");
+  wrap.innerHTML = SINNER_ORDER.map((sinner, i) => {
+    const identities = DATA.filter(d => d.sinner === sinner);
+    const cardsHTML = identities.map(d => {
+      const owned = isIdentityOwned(sinner, d.identity);
+      return `<button type="button" class="owned-card${owned ? " is-owned" : ""}" data-sinner="${sinner}" data-identity="${d.identity.replace(/"/g,"&quot;")}" title="${d.identity}">
+        <div class="owned-card-img-wrap">
+          <img src="${portraitSrc(d)}" alt="${d.identity}" loading="lazy">
+          ${owned ? `<span class="owned-card-check">✓</span>` : ""}
+        </div>
+        <span class="owned-card-label">${d.identity}</span>
+      </button>`;
+    }).join("");
+    const sep = i > 0 ? `<div class="owned-sinner-sep"></div>` : "";
+    return `${sep}<div class="owned-sinner-label"><img src="${SINNER_ICON_DATA[sinner] || ""}" alt="${sinner}"><span>${sinner}</span></div>
+      <div class="owned-chip-grid">${cardsHTML}</div>`;
+  }).join("");
+  wrap.querySelectorAll(".owned-card").forEach(btn => {
+    btn.addEventListener("click", () => {
+      toggleIdentityOwned(btn.dataset.sinner, btn.dataset.identity);
+      btn.classList.toggle("is-owned");
+      const owned = btn.classList.contains("is-owned");
+      const imgWrap = btn.querySelector(".owned-card-img-wrap");
+      let check = imgWrap.querySelector(".owned-card-check");
+      if (owned && !check){
+        check = document.createElement("span");
+        check.className = "owned-card-check";
+        check.textContent = "✓";
+        imgWrap.appendChild(check);
+      } else if (!owned && check){
+        check.remove();
+      }
+    });
+  });
+}
+
+function renderOwnedEgoTab(){
+  const wrap = document.getElementById("ownedEgoWrap");
+  wrap.innerHTML = SINNER_ORDER.map((sinner, i) => {
+    const egos = Object.entries(EGO_DATA).filter(([,info]) => info.sinner === sinner);
+    const cardsHTML = egos.map(([slug, info]) => {
+      const owned = isEgoOwned(slug);
+      return `<button type="button" class="owned-ego-card${owned ? " is-owned" : ""}" data-slug="${slug}" title="${info.title}">
+        <div class="owned-ego-card-img-wrap" style="border-color:${SIN_COLOR[info.sin] || "var(--border-strong)"}">
+          <img src="${EGO_ICON_DATA[slug]}" alt="${info.title}" loading="lazy">
+          ${owned ? `<span class="owned-ego-card-check">✓</span>` : ""}
+        </div>
+        <span class="owned-ego-card-grade">${info.grade}</span>
+        <span class="owned-ego-card-label">${info.title}</span>
+      </button>`;
+    }).join("");
+    const sep = i > 0 ? `<div class="owned-sinner-sep"></div>` : "";
+    return `${sep}<div class="owned-sinner-label"><img src="${SINNER_ICON_DATA[sinner] || ""}" alt="${sinner}"><span>${sinner}</span></div>
+      <div class="owned-chip-grid">${cardsHTML}</div>`;
+  }).join("");
+  wrap.querySelectorAll(".owned-ego-card").forEach(btn => {
+    btn.addEventListener("click", () => {
+      toggleEgoOwned(btn.dataset.slug);
+      btn.classList.toggle("is-owned");
+      const owned = btn.classList.contains("is-owned");
+      const imgWrap = btn.querySelector(".owned-ego-card-img-wrap");
+      let check = imgWrap.querySelector(".owned-ego-card-check");
+      if (owned && !check){
+        check = document.createElement("span");
+        check.className = "owned-ego-card-check";
+        check.textContent = "✓";
+        imgWrap.appendChild(check);
+      } else if (!owned && check){
+        check.remove();
+      }
+    });
+  });
+}
+
+let ownedTab = "identity";
+function setOwnedTab(tab){
+  ownedTab = tab;
+  document.getElementById("ownedTabBtnIdentity").setAttribute("aria-pressed", String(tab === "identity"));
+  document.getElementById("ownedTabBtnEgo").setAttribute("aria-pressed", String(tab === "ego"));
+  document.getElementById("ownedTabIdentity").hidden = tab !== "identity";
+  document.getElementById("ownedTabEgo").hidden = tab !== "ego";
+  if (tab === "identity") renderOwnedIdentityTab();
+  else renderOwnedEgoTab();
+}
+document.getElementById("ownedTabBtnIdentity").addEventListener("click", () => setOwnedTab("identity"));
+document.getElementById("ownedTabBtnEgo").addEventListener("click", () => setOwnedTab("ego"));
+
+const ownedView = document.getElementById("ownedView");
+function openOwnedView(){
+  document.getElementById("searchView").hidden = true;
+  document.getElementById("searchRow").hidden = true;
+  document.getElementById("searchFooter").hidden = true;
+  document.getElementById("deckView").hidden = true;
+  pickerView.hidden = true;
+  ownedView.hidden = false;
+  setOwnedTab(ownedTab);
+}
+function closeOwnedView(){
+  ownedView.hidden = true;
+  if (tabDeck.getAttribute("aria-pressed") === "true") showDeckView(); else showSearchView();
+  render();
+}
+document.getElementById("ownedSettingsBtn").addEventListener("click", openOwnedView);
+document.getElementById("ownedBack").addEventListener("click", closeOwnedView);
+document.addEventListener("keydown", e => { if (e.key === "Escape" && !ownedView.hidden) closeOwnedView(); });
+document.getElementById("ownedOnlyToggle").addEventListener("change", e => {
+  state.ownedOnly = e.target.checked;
+  render();
+});
+
 function showSearchView(){
   tabSearch.setAttribute("aria-pressed","true");
   tabDeck.setAttribute("aria-pressed","false");
@@ -5178,6 +5426,7 @@ function showSearchView(){
   document.getElementById("searchFooter").hidden = false;
   document.getElementById("deckView").hidden = true;
   pickerView.hidden = true;
+  ownedView.hidden = true;
 }
 function showDeckView(){
   tabSearch.setAttribute("aria-pressed","false");
@@ -5187,6 +5436,7 @@ function showDeckView(){
   document.getElementById("searchFooter").hidden = true;
   document.getElementById("deckView").hidden = false;
   pickerView.hidden = true;
+  ownedView.hidden = true;
   renderDeck();
 }
 tabSearch.addEventListener("click", showSearchView);
