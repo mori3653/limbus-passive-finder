@@ -2603,8 +2603,12 @@ function renderBoth(){ render(); renderSkillSet(); }
 
 function skillSetCardHTML(d){
   const prof = IDENTITY_SKILL_PROFILE[`${d.sinner}|${d.identity}`];
+  const bannerKey = `${d.sinner}|${d.identity}`;
+  const bannerSrc = (state.syncMode === "gacksung" ? IDENTITY_BANNER_SYNCED_DATA[bannerKey] : IDENTITY_BANNER_NORMAL_DATA[bannerKey])
+    || IDENTITY_BANNER_SYNCED_DATA[bannerKey] || IDENTITY_BANNER_NORMAL_DATA[bannerKey];
   const iconSrc = SINNER_ICON_DATA[d.sinner];
   const iconHTML = iconSrc ? `<img class="sinner-icon-inline" src="${iconSrc}" alt="" loading="lazy">` : "";
+  const bannerHTML = bannerSrc ? `<img class="card-banner" src="${bannerSrc}" alt="" loading="lazy">` : "";
   const slots = [
     {label:"Skill 1", num:"1", info: prof && prof.skills[0]},
     {label:"Skill 2", num:"2", info: prof && prof.skills[1]},
@@ -2620,15 +2624,18 @@ function skillSetCardHTML(d){
     </button>`;
   }).join("");
   return `
-    <article class="skillset-card">
-      <div class="skillset-card-head">
-        <img class="skillset-card-portrait" src="${portraitSrc(d)}" alt="" loading="lazy">
-        <div class="skillset-card-names">
-          <span class="skillset-card-sinner">${iconHTML}${d.sinner}</span>
-          <span class="skillset-card-identity" title="${d.identity}">${d.identity}</span>
+    <article class="card">
+      ${bannerHTML}
+      <span class="rarity-badge">${d.rarity}</span>
+      <div class="card-body">
+        <div class="card-info">
+          <div class="card-sinner-row">
+            ${iconHTML}<span class="card-sinner">${d.sinner}</span>
+          </div>
+          <span class="card-identity">${d.identity}</span>
         </div>
+        <div class="skillset-skill-row">${slotsHTML}</div>
       </div>
-      <div class="skillset-skill-row">${slotsHTML}</div>
     </article>`;
 }
 
