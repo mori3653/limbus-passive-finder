@@ -2601,6 +2601,28 @@ function render(){
 
 function renderBoth(){ render(); renderSkillSet(); }
 
+function egoConditionalHTML(d){
+  if (!d.egoConditional.length) return "";
+  return d.egoConditional.map(e => {
+    const verb = e.type === "gift" ? "장착 시" : "사용 시";
+    const nameHTML = e.type === "gift"
+      ? `${GIFT_ICON_DATA[e.name] ? `<img class="gift-icon" src="${GIFT_ICON_DATA[e.name]}" alt="">` : ""}'${e.name}' 기프트`
+      : `'${e.name}' E.G.O`;
+    return `<span class="ego-cond-tag">(${nameHTML} ${verb} ${identityKwIcon(e.sin,12)}${e.sin} 판정)</span>`;
+  }).join("");
+}
+
+function identityKeywordsHTML(d){
+  const kwHTML = d.identityKeywords.length
+    ? `<div class="identity-kw-tags">${d.identityKeywords.map(k =>
+        `<span class="identity-kw-tag">${identityKwIcon(k, 12)}${k}</span>`
+      ).join(`<span class="identity-kw-sep">·</span>`)}</div>`
+    : "";
+  const egoHTML = egoConditionalHTML(d);
+  if (!kwHTML && !egoHTML) return "";
+  return `${kwHTML}${egoHTML}`;
+}
+
 function skillSetCardHTML(d){
   const prof = IDENTITY_SKILL_PROFILE[`${d.sinner}|${d.identity}`];
   const bannerKey = `${d.sinner}|${d.identity}`;
@@ -2633,6 +2655,7 @@ function skillSetCardHTML(d){
             ${iconHTML}<span class="card-sinner">${d.sinner}</span>
           </div>
           <span class="card-identity">${d.identity}</span>
+          ${identityKeywordsHTML(d)}
         </div>
         <div class="skillset-skill-row">${slotsHTML}</div>
       </div>
