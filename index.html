@@ -677,7 +677,14 @@
     </div>
     <div class="filter-group">
       <h2>보유 스킬 속성</h2>
+      <label class="ego-kw-toggle">
+        <input type="checkbox" id="skillSinModeToggle">
+        <span class="toggle-track"></span>
+        <span id="skillSinModeLabel">OR (하나라도 포함)</span>
+      </label>
       <div class="chip-grid" id="skillSinChips"></div>
+      <div class="bundle-sep"></div>
+      <div class="chip-grid" id="skillPositionChips"></div>
     </div>
     <div class="filter-group">
       <h2>발동 방식</h2>
@@ -2321,6 +2328,7 @@ const DATA = [
 ;
 const SINS = ["분노","색욕","나태","탐식","우울","오만","질투"];
 const ACTIVATIONS = ["공명","보유"];
+const SKILL_POSITIONS = [{key:"1", label:"스킬 1"}, {key:"2", label:"스킬 2"}, {key:"3", label:"스킬 3"}, {key:"def", label:"수비"}];
 const SIN_SET = new Set(SINS);
 
 const SIN_ICON_DATA = {
@@ -4019,14 +4027,17 @@ function computeMeta(entry){
   const t = entry.supportPassiveEffect;
   entry.cats = CATEGORY_DEFS.filter(([,re]) => re.test(t)).map(([label]) => label);
   entry.identityKeywords = IDENTITY_KEYWORDS_DATA[`${entry.sinner}|${entry.identity}`] || [];
-  entry.skillSins = (() => {
+  entry.skillSinsByPos = (() => {
     const prof = IDENTITY_SKILL_PROFILE[`${entry.sinner}|${entry.identity}`];
-    if (!prof) return [];
-    const set = new Set();
-    prof.skills.forEach(s => { if (s.sin) set.add(s.sin); });
-    prof.defense.forEach(s => { if (s.sin) set.add(s.sin); });
-    return [...set];
+    const byPos = {"1":null, "2":null, "3":null, "def":null};
+    if (!prof) return byPos;
+    if (prof.skills[0]) byPos["1"] = prof.skills[0].sin || null;
+    if (prof.skills[1]) byPos["2"] = prof.skills[1].sin || null;
+    if (prof.skills[2]) byPos["3"] = prof.skills[2].sin || null;
+    if (prof.defense[0]) byPos["def"] = prof.defense[0].sin || null;
+    return byPos;
   })();
+  entry.skillSins = [...new Set(Object.values(entry.skillSinsByPos).filter(Boolean))];
   entry.egoConditional = EGO_CONDITIONAL_DATA[`${entry.sinner}|${entry.identity}`] || [];
   entry.abbrevs = ABBREV_DATA[`${entry.sinner}|${entry.identity}`] || [];
   const searchFields = [entry.sinner, entry.identity, entry.supportPassiveName, entry.supportPassiveEffect, entry.condition, ...entry.abbrevs];
@@ -4047,6 +4058,8 @@ const state = {
   identityKw: new Set(),
   cats: new Set(),
   skillSins: new Set(),
+  skillPositions: new Set(),
+  skillSinMode: "or", // "or" | "and"
   syncMode: "gacksung",
   includeEgoKw: false,
 };
@@ -4144,8 +4157,20 @@ function passesFilters(d){
   if (state.activations.size && !state.activations.has(d.condLabel)) return false;
   if (state.identityKw.size && ![...state.identityKw].every(k => effectiveKeywords(d).includes(k))) return false;
   if (state.cats.size && ![...state.cats].some(c => d.cats.includes(c))) return false;
-  if (state.skillSins.size && ![...state.skillSins].some(s => d.skillSins.includes(s))) return false;
+  if (state.skillSins.size){
+    const pool = skillSinPool(d, state.skillPositions);
+    const selected = [...state.skillSins];
+    const ok = state.skillSinMode === "and" ? selected.every(s => pool.has(s)) : selected.some(s => pool.has(s));
+    if (!ok) return false;
+  }
   return true;
+}
+// positions: Set of "1"/"2"/"3"/"def" (비어있으면 4개 전부) — 선택된 슬롯들의 속성 집합(합집합)을 반환
+function skillSinPool(d, positions){
+  const keys = positions.size ? [...positions] : ["1","2","3","def"];
+  const pool = new Set();
+  keys.forEach(k => { if (d.skillSinsByPos[k]) pool.add(d.skillSinsByPos[k]); });
+  return pool;
 }
 
 function renderActivePills(){
@@ -4159,6 +4184,10 @@ function renderActivePills(){
   state.identityKw.forEach(v => pills.push({label:v, icon:identityKwIcon(v,14), clear:() => state.identityKw.delete(v)}));
   state.cats.forEach(v => pills.push({label:v, clear:() => state.cats.delete(v)}));
   state.skillSins.forEach(v => pills.push({label:`보유 스킬:${v}`, icon:sinBadgeSVG(v,14), clear:() => state.skillSins.delete(v)}));
+  state.skillPositions.forEach(v => {
+    const p = SKILL_POSITIONS.find(sp => sp.key === v);
+    pills.push({label:`보유 스킬 범위:${p ? p.label : v}`, clear:() => state.skillPositions.delete(v)});
+  });
   pills.forEach(p => {
     const el = document.createElement("span");
     el.className = "active-pill";
@@ -4270,6 +4299,9 @@ function render(){
     getKey:s=>s, getLabel:s=>s, getCount:s=>countFor(d=>d.skillSins.includes(s)), selectedSet: state.skillSins,
     iconFor: s => sinBadgeSVG(s, 18)
   });
+  buildChips(document.getElementById("skillPositionChips"), SKILL_POSITIONS, {
+    getKey:p=>p.key, getLabel:p=>p.label, getCount:p=>countFor(d=>!!d.skillSinsByPos[p.key]), selectedSet: state.skillPositions
+  });
   const activationsWithCount = ACTIVATIONS.filter(a => countFor(d=>d.condLabel===a) > 0);
   buildChips(document.getElementById("activationChips"), activationsWithCount, {
     getKey:a=>a, getLabel:a=>a, getCount:a=>countFor(d=>d.condLabel===a), selectedSet: state.activations
@@ -4308,9 +4340,17 @@ function setIncludeEgoKw(val){
 }
 egoKwToggle.addEventListener("change", e => setIncludeEgoKw(e.target.checked));
 egoKwTogglePicker.addEventListener("change", e => setIncludeEgoKw(e.target.checked));
+document.getElementById("skillSinModeToggle").addEventListener("change", e => {
+  state.skillSinMode = e.target.checked ? "and" : "or";
+  document.getElementById("skillSinModeLabel").textContent = e.target.checked ? "AND (전부 포함)" : "OR (하나라도 포함)";
+  render();
+});
 document.getElementById("resetAll").addEventListener("click", () => {
   state.q=""; searchInput.value="";
-  state.sinners.clear(); state.rarities.clear(); state.sins.clear(); state.activations.clear(); state.identityKw.clear(); state.cats.clear(); state.skillSins.clear();
+  state.sinners.clear(); state.rarities.clear(); state.sins.clear(); state.activations.clear(); state.identityKw.clear(); state.cats.clear();
+  state.skillSins.clear(); state.skillPositions.clear(); state.skillSinMode = "or";
+  document.getElementById("skillSinModeToggle").checked = false;
+  document.getElementById("skillSinModeLabel").textContent = "OR (하나라도 포함)";
   render();
 });
 
