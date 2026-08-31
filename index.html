@@ -698,7 +698,7 @@
         <label class="ego-kw-toggle owned-only-toggle">
           <input type="checkbox" id="ownedOnlyToggle">
           <span class="toggle-track"></span>
-          <span>보유 인격만 보기</span>
+          <span>보유 인격/에고만 보기</span>
         </label>
         <button type="button" class="reset-all" id="ownedSettingsBtn">보유 설정</button>
       </div>
@@ -5194,16 +5194,24 @@ function renderEgoPicker(){
   const sinner = deckState.picker.sinner;
   const wrap = document.getElementById("egoPickerWrap");
   const bySlugGrade = {};
-  EGO_GRADES.forEach(g => { bySlugGrade[g] = []; });
+  const allBySlugGrade = {};
+  EGO_GRADES.forEach(g => { bySlugGrade[g] = []; allBySlugGrade[g] = []; });
   Object.entries(EGO_DATA).forEach(([slug, info]) => {
-    if (info.sinner === sinner) bySlugGrade[info.grade].push({ slug, ...info });
+    if (info.sinner !== sinner) return;
+    allBySlugGrade[info.grade].push({ slug, ...info });
+    const selectedForGrade = (deckState.egoAssigned[sinner] || {})[info.grade];
+    if (state.ownedOnly && !isEgoOwned(slug) && selectedForGrade !== slug) return;
+    bySlugGrade[info.grade].push({ slug, ...info });
   });
 
   wrap.innerHTML = EGO_GRADES.map(grade => {
     const items = bySlugGrade[grade];
     const selected = (deckState.egoAssigned[sinner] || {})[grade];
     if (!items.length){
-      return `<div class="ego-grade-row"><h3>${grade}</h3><div class="ego-grade-empty">보유한 E.G.O 데이터가 없습니다${grade === "ALEPH" ? " (아직 출시되지 않음)" : ""}.</div></div>`;
+      const msg = allBySlugGrade[grade].length
+        ? "보유 중인 E.G.O가 없습니다."
+        : `보유한 E.G.O 데이터가 없습니다${grade === "ALEPH" ? " (아직 출시되지 않음)" : ""}.`;
+      return `<div class="ego-grade-row"><h3>${grade}</h3><div class="ego-grade-empty">${msg}</div></div>`;
     }
     const noneBtn = `<div class="ego-icon-item">
         <button type="button" class="ego-none-btn${selected ? "" : " is-selected"}" data-grade="${grade}" data-slug="">없음</button>
@@ -5357,7 +5365,12 @@ function renderOwnedEgoTab(){
   const wrap = document.getElementById("ownedEgoWrap");
   wrap.innerHTML = SINNER_ORDER.map((sinner, i) => {
     const egos = Object.entries(EGO_DATA).filter(([,info]) => info.sinner === sinner)
-      .sort((a,b) => EGO_GRADES.indexOf(a[1].grade) - EGO_GRADES.indexOf(b[1].grade));
+      .sort((a,b) => {
+        const aDef = a[0] === EGO_DEFAULT[sinner] ? 0 : 1;
+        const bDef = b[0] === EGO_DEFAULT[sinner] ? 0 : 1;
+        if (aDef !== bDef) return aDef - bDef;
+        return EGO_GRADES.indexOf(a[1].grade) - EGO_GRADES.indexOf(b[1].grade);
+      });
     const cardsHTML = egos.map(([slug, info]) => {
       const owned = isEgoOwned(slug);
       const shortTitle = egoShortTitle(info);
@@ -5433,6 +5446,10 @@ document.addEventListener("keydown", e => { if (e.key === "Escape" && !ownedView
 document.getElementById("ownedOnlyToggle").addEventListener("change", e => {
   state.ownedOnly = e.target.checked;
   render();
+  if (!pickerView.hidden){
+    if (deckState.picker.tab === "ego") renderEgoPicker();
+    else renderPicker();
+  }
 });
 
 function showSearchView(){
