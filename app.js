@@ -2866,9 +2866,9 @@ function passesFilters(d){
   if (state.ownedOnly && !isIdentityOwned(d.sinner, d.identity)) return false;
   return true;
 }
-function skillSetSearchBlob(d){
-  if (d._skillSetBlob) return d._skillSetBlob;
-  const parts = [d.sinner, d.identity, ...d.identityKeywords];
+function skillSetSearchParts(d){
+  if (d._skillSetParts) return d._skillSetParts;
+  const parts = [d.sinner, d.identity, ...d.identityKeywords, ...d.abbrevs];
   const detail = IDENTITY_SKILL_DETAIL[`${d.sinner}|${d.identity}`];
   if (detail){
     detail.skills.forEach(s => { if (s.name) parts.push(s.name); });
@@ -2878,15 +2878,16 @@ function skillSetSearchBlob(d){
   if (specials) specials.forEach(s => { if (s.name) parts.push(s.name); });
   const passives = IDENTITY_PASSIVE[`${d.sinner}|${d.identity}`];
   if (passives) passives.forEach(p => { if (p.name) parts.push(p.name); });
-  const blob = parts.join(" ").toLowerCase();
-  d._skillSetBlob = blob;
-  return blob;
+  d._skillSetParts = parts;
+  d._skillSetBlob = parts.join(" ").toLowerCase();
+  d._skillSetBlobNoSpace = parts.map(f => f.replace(/\s+/g, "")).join(" ").toLowerCase();
+  return parts;
 }
 function skillSetPassesFilters(d){
   if (state.skillSetQ){
+    skillSetSearchParts(d);
     const terms = state.skillSetQ.toLowerCase().split(/\s+/).filter(Boolean);
-    const blob = skillSetSearchBlob(d);
-    if (!terms.every(t => blob.includes(t))) return false;
+    if (!terms.every(t => d._skillSetBlob.includes(t) || d._skillSetBlobNoSpace.includes(t))) return false;
   }
   if (state.sinners.size){
     const inSet = state.sinners.has(d.sinner);
@@ -3269,7 +3270,7 @@ function skillTooltipHTML(sinner, identity, num){
   }
   if (detail && detail.coinEffects && Object.keys(detail.coinEffects).length){
     const effectRows = Object.keys(detail.coinEffects).sort((a,b) => Number(a)-Number(b)).map(n =>
-      `<div class="skill-tt-coin-effect"><span class="skill-tt-coin-num">${n}</span><span>${escapeHTML(detail.coinEffects[n])}</span></div>`
+      `<div class="skill-tt-coin-effect"><span class="skill-tt-coin-num">${n}</span><span>${linkifyKeywords(detail.coinEffects[n])}</span></div>`
     ).join("");
     rows.push(`<div class="skill-tt-effect-block">${effectRows}</div>`);
   }
@@ -3288,7 +3289,7 @@ function specialSkillHTML(s){
   if (coinCount) rows.push(`<div class="skill-tt-row"><span>코인 수</span><span>${coinCount}개</span></div>`);
   if (s.coinEffects && Object.keys(s.coinEffects).length){
     const effectRows = Object.keys(s.coinEffects).sort((a,b) => Number(a)-Number(b)).map(n =>
-      `<div class="skill-tt-coin-effect"><span class="skill-tt-coin-num">${n}</span><span>${escapeHTML(s.coinEffects[n])}</span></div>`
+      `<div class="skill-tt-coin-effect"><span class="skill-tt-coin-num">${n}</span><span>${linkifyKeywords(s.coinEffects[n])}</span></div>`
     ).join("");
     rows.push(`<div class="skill-tt-effect-block">${effectRows}</div>`);
   }
@@ -3302,7 +3303,7 @@ function passiveTooltipHTML(sinner, identity){
       rows.push(`<div class="skill-tt-row"><span>발동 조건</span><span>${sinBadgeSVG(p.sin,14)}${escapeHTML(p.sin)} × ${p.count} 공명</span></div>`);
     }
     if (p.effect){
-      rows.push(`<div class="skill-tt-effect-block"><div class="skill-tt-coin-effect"><span>${escapeHTML(p.effect)}</span></div></div>`);
+      rows.push(`<div class="skill-tt-effect-block"><div class="skill-tt-coin-effect"><span>${linkifyKeywords(p.effect)}</span></div></div>`);
     }
     return `<div class="skill-tt-passive-block">${rows.join("")}</div>`;
   }).join("");
@@ -4304,6 +4305,7 @@ function showSearchView(){
   document.getElementById("deckView").hidden = true;
   pickerView.hidden = true;
   ownedView.hidden = true;
+  updateHeaderHeightVar();
 }
 function showSkillSetView(){
   tabSearch.setAttribute("aria-pressed","false");
@@ -4316,6 +4318,7 @@ function showSkillSetView(){
   document.getElementById("deckView").hidden = true;
   pickerView.hidden = true;
   ownedView.hidden = true;
+  updateHeaderHeightVar();
   renderSkillSet();
 }
 function showDeckView(){
@@ -4329,6 +4332,7 @@ function showDeckView(){
   document.getElementById("deckView").hidden = false;
   pickerView.hidden = true;
   ownedView.hidden = true;
+  updateHeaderHeightVar();
   renderDeck();
 }
 tabSearch.addEventListener("click", showSearchView);
