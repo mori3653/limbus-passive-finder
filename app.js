@@ -3067,6 +3067,7 @@ function identityKeywordsHTML(d){
   return `${kwHTML}${egoHTML}`;
 }
 
+const SKILLSET_EXPANDED = new Set();
 function skillSetCardHTML(d){
   const prof = IDENTITY_SKILL_PROFILE[`${d.sinner}|${d.identity}`];
   const bannerKey = `${d.sinner}|${d.identity}`;
@@ -3095,6 +3096,21 @@ function skillSetCardHTML(d){
     </button>`;
   }).join("");
   const passiveSpecialBadge = specialBySlot.passive ? `<span class="skillset-special-badge" title="연계 특수 스킬 있음">+</span>` : "";
+  const key = `${d.sinner}|${d.identity}`;
+  const expanded = SKILLSET_EXPANDED.has(key);
+  const sAttr = d.sinner.replace(/"/g,"&quot;"), iAttr = d.identity.replace(/"/g,"&quot;");
+  const expandedHTML = expanded ? `
+    <div class="skillset-expand-area">
+      ${slots.map(s => `
+        <div class="skillset-expand-slot">
+          <div class="skillset-expand-slot-label">${s.label}</div>
+          ${skillTooltipHTML(d.sinner, d.identity, s.num)}
+        </div>`).join("")}
+      <div class="skillset-expand-slot skillset-expand-passive">
+        <div class="skillset-expand-slot-label">전투 패시브</div>
+        ${passiveTooltipHTML(d.sinner, d.identity)}
+      </div>
+    </div>` : "";
   return `
     <article class="card">
       ${bannerHTML}
@@ -3108,7 +3124,15 @@ function skillSetCardHTML(d){
           ${identityKeywordsHTML(d)}
         </div>
         <div class="skillset-skill-row">${slotsHTML}</div>
-        <button type="button" class="skillset-passive-btn" data-sinner="${d.sinner.replace(/"/g,"&quot;")}" data-identity="${d.identity.replace(/"/g,"&quot;")}">${passiveSpecialBadge}전투 패시브</button>
+        <div class="skillset-card-footer">
+          <button type="button" class="skillset-passive-btn" data-sinner="${sAttr}" data-identity="${iAttr}">${passiveSpecialBadge}전투 패시브</button>
+          <label class="skillset-expand-toggle">
+            <input type="checkbox" class="skillset-expand-checkbox" data-sinner="${sAttr}" data-identity="${iAttr}" ${expanded ? "checked" : ""}>
+            <span class="toggle-track"></span>
+            <span>상세 보기</span>
+          </label>
+        </div>
+        ${expandedHTML}
       </div>
     </article>`;
 }
@@ -3345,6 +3369,13 @@ document.body.addEventListener("click", e => {
     return;
   }
   if (!e.target.closest("#kwTooltip")) hideKwTooltip();
+});
+document.body.addEventListener("change", e => {
+  const cb = e.target.closest(".skillset-expand-checkbox");
+  if (!cb) return;
+  const key = `${cb.dataset.sinner}|${cb.dataset.identity}`;
+  if (cb.checked) SKILLSET_EXPANDED.add(key); else SKILLSET_EXPANDED.delete(key);
+  renderSkillSet();
 });
 document.addEventListener("keydown", e => { if (e.key === "Escape") hideKwTooltip(); });
 window.addEventListener("scroll", e => { if (!kwTooltip.contains(e.target)) hideKwTooltip(); }, true);
