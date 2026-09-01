@@ -2916,7 +2916,13 @@ function portraitSrc(entry){
 }
 
 // '상세' 모드에서 인격패 위에 표시할 스킬 보유수/E.G.O 편성 오버레이
-const NEUTRAL_HEX_COLOR = "#6f6155"; // 속성이 없을 때(수비 스킬 등) 쓰는 칙칙한 갈회색
+function skillFrameHTML(sin, size){
+  const s = size || 14;
+  const iconSrc = sin ? SIN_ICON_DATA[sin] : null;
+  const innerSize = Math.round(s * 0.56);
+  const iconHTML = iconSrc ? `<img class="skill-frame-sin" src="${iconSrc}" alt="${sin}" width="${innerSize}" height="${innerSize}">` : "";
+  return `<span class="skill-frame" style="width:${s}px;height:${s}px;"><img class="skill-frame-bg" src="${UI_ICON_DATA.skillFrame}" alt="" width="${s}" height="${s}">${iconHTML}</span>`;
+}
 function slotDetailHTML(sinner){
   if (deckState.detailTab === "skill"){
     const prof = IDENTITY_SKILL_PROFILE[`${sinner}|${deckState.assigned[sinner]}`];
@@ -2924,13 +2930,11 @@ function slotDetailHTML(sinner){
     const counts = deckState.skillCounts[sinner] || SKILL_RULE_DEFAULT.defaultSplit;
     const skillRows = [1,2,3].map(num => {
       const info = prof.skills[num-1];
-      const color = info && info.sin ? (SIN_COLOR[info.sin] || NEUTRAL_HEX_COLOR) : NEUTRAL_HEX_COLOR;
       const cur = counts[num] || 0;
-      return `<div class="slot-detail-row">${SKILL_HEX_SVG(color, 22)}<span>Skill ${num} x${cur}</span></div>`;
+      return `<div class="slot-detail-row">${skillFrameHTML(info && info.sin, 22)}<span>Skill ${num} x${cur}</span></div>`;
     }).join("");
     const defInfo = prof.defense && prof.defense[0];
-    const defColor = defInfo && defInfo.sin ? (SIN_COLOR[defInfo.sin] || NEUTRAL_HEX_COLOR) : NEUTRAL_HEX_COLOR;
-    const defRow = `<div class="slot-detail-row">${SKILL_HEX_SVG(defColor, 22)}<span>DEF</span></div>`;
+    const defRow = `<div class="slot-detail-row">${skillFrameHTML(defInfo && defInfo.sin, 22)}<span>DEF</span></div>`;
     return `<div class="slot-detail">${skillRows}${defRow}</div>`;
   }
   const eg = deckState.egoAssigned[sinner] || {};
@@ -3544,7 +3548,6 @@ function renderEgoPicker(){
 }
 
 /* ---- 스킬 보유수 설정 탭 ---- */
-const SKILL_HEX_SVG = (color, size) => `<svg class="skill-hex" width="${size||14}" height="${size||14}" viewBox="0 0 100 100"><polygon points="25,4 75,4 98,50 75,96 25,96 2,50" fill="none" stroke="${color}" stroke-width="10"/></svg>`;
 function renderSkillPicker(){
   const sinner = deckState.picker.sinner;
   const wrap = document.getElementById("skillPickerWrap");
@@ -3559,7 +3562,7 @@ function renderSkillPicker(){
   } else {
     rowsHTML = [1,2,3].map(num => {
       const info = prof.skills[num-1];
-      const hexHTML = info && info.sin ? SKILL_HEX_SVG(SIN_COLOR[info.sin] || "var(--text-faint)") : "";
+      const hexHTML = skillFrameHTML(info && info.sin, 16);
       const cur = counts[num] || 0;
       const cap = rule.caps[num];
       return `<div class="skill-row">

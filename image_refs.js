@@ -414,6 +414,10 @@ const GIFT_ICON_DATA = {
   "날개 모양 양초": "images/gifts/1.webp",
 };
 
+const UI_ICON_DATA = {
+  "skillFrame": "images/ui/1.webp",
+};
+
 const EGO_ICON_DATA = {
   "ill-go-fer-scissors-how-bout-you-don-quixote": "images/egos/1.webp",
   "solemn-lament-yi-sang": "images/egos/2.webp",
