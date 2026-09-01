@@ -363,7 +363,7 @@
   .kw-term img{ vertical-align:-3px; margin-right:2px; }
 
   .kw-tooltip{
-    position:fixed; z-index:50; max-width:260px;
+    position:fixed; z-index:50; max-width:280px;
     background:var(--surface); border:1px solid var(--border-strong);
     border-radius:8px; padding:10px 12px;
     box-shadow:var(--shadow);
@@ -376,6 +376,17 @@
     font-size:13.5px; color:var(--accent-strong); margin-bottom:4px;
   }
   .kw-tooltip-def{ color:var(--text); }
+  .skill-tt-name{ font-weight:700; font-size:13px; color:var(--text); margin-bottom:5px; }
+  .skill-tt-row{
+    display:flex; align-items:center; justify-content:space-between; gap:10px;
+    padding:2px 0; color:var(--text-muted);
+  }
+  .skill-tt-row span:first-child{ color:var(--text-faint); }
+  .skill-tt-row span:last-child{ display:inline-flex; align-items:center; gap:4px; color:var(--text); font-weight:600; }
+  .skill-tt-effect{
+    margin-top:6px; padding-top:6px; border-top:1px dashed var(--border-strong);
+    color:var(--text-muted); font-size:12px;
+  }
 
   .card-tags{
     margin-top:auto; padding-top:8px;
