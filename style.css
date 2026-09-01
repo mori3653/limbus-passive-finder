@@ -453,6 +453,7 @@
   #searchView[hidden], #deckView[hidden], #skillSetView[hidden], .search-row[hidden], footer.note[hidden]{ display:none !important; }
 
   /* ---------- 스킬셋 ---------- */
+  #skillSetView .search-row{ margin-bottom:16px; }
   .skillset-skill-row{ display:grid; grid-template-columns:repeat(4,1fr); gap:6px; }
   .skillset-slot-btn{
     position:relative;
