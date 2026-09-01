@@ -3067,7 +3067,6 @@ function identityKeywordsHTML(d){
   return `${kwHTML}${egoHTML}`;
 }
 
-const SKILLSET_EXPANDED = new Set();
 function skillSetCardHTML(d){
   const prof = IDENTITY_SKILL_PROFILE[`${d.sinner}|${d.identity}`];
   const bannerKey = `${d.sinner}|${d.identity}`;
@@ -3096,21 +3095,7 @@ function skillSetCardHTML(d){
     </button>`;
   }).join("");
   const passiveSpecialBadge = specialBySlot.passive ? `<span class="skillset-special-badge" title="연계 특수 스킬 있음">+</span>` : "";
-  const key = `${d.sinner}|${d.identity}`;
-  const expanded = SKILLSET_EXPANDED.has(key);
   const sAttr = d.sinner.replace(/"/g,"&quot;"), iAttr = d.identity.replace(/"/g,"&quot;");
-  const expandedHTML = expanded ? `
-    <div class="skillset-expand-area">
-      ${slots.map(s => `
-        <div class="skillset-expand-slot">
-          <div class="skillset-expand-slot-label">${s.label}</div>
-          ${skillTooltipHTML(d.sinner, d.identity, s.num)}
-        </div>`).join("")}
-      <div class="skillset-expand-slot skillset-expand-passive">
-        <div class="skillset-expand-slot-label">전투 패시브</div>
-        ${passiveTooltipHTML(d.sinner, d.identity)}
-      </div>
-    </div>` : "";
   return `
     <article class="card">
       ${bannerHTML}
@@ -3126,13 +3111,8 @@ function skillSetCardHTML(d){
         <div class="skillset-skill-row">${slotsHTML}</div>
         <div class="skillset-card-footer">
           <button type="button" class="skillset-passive-btn" data-sinner="${sAttr}" data-identity="${iAttr}">${passiveSpecialBadge}전투 패시브</button>
-          <label class="skillset-expand-toggle">
-            <input type="checkbox" class="skillset-expand-checkbox" data-sinner="${sAttr}" data-identity="${iAttr}" ${expanded ? "checked" : ""}>
-            <span class="toggle-track"></span>
-            <span>상세 보기</span>
-          </label>
+          <button type="button" class="skillset-detail-btn" data-sinner="${sAttr}" data-identity="${iAttr}">상세 보기</button>
         </div>
-        ${expandedHTML}
       </div>
     </article>`;
 }
@@ -3368,16 +3348,42 @@ document.body.addEventListener("click", e => {
     e.stopPropagation();
     return;
   }
+  const detailBtn = e.target.closest(".skillset-detail-btn");
+  if (detailBtn){
+    hideKwTooltip();
+    openSkillSetDetail(detailBtn.dataset.sinner, detailBtn.dataset.identity);
+    e.stopPropagation();
+    return;
+  }
   if (!e.target.closest("#kwTooltip")) hideKwTooltip();
 });
-document.body.addEventListener("change", e => {
-  const cb = e.target.closest(".skillset-expand-checkbox");
-  if (!cb) return;
-  const key = `${cb.dataset.sinner}|${cb.dataset.identity}`;
-  if (cb.checked) SKILLSET_EXPANDED.add(key); else SKILLSET_EXPANDED.delete(key);
-  renderSkillSet();
-});
 document.addEventListener("keydown", e => { if (e.key === "Escape") hideKwTooltip(); });
+const skillSetDetailModal = document.getElementById("skillSetDetailModal");
+function skillSetDetailColumnHTML(sinner, identity, num, label){
+  const info = skillSlotInfo(sinner, identity, num);
+  return `<div class="detail-col">
+    <div class="detail-col-label">${label}</div>
+    <div class="detail-col-icon">${skillFrameHTML(info && info.sin, 72)}</div>
+    <div class="detail-col-body">${skillTooltipHTML(sinner, identity, num)}</div>
+  </div>`;
+}
+function openSkillSetDetail(sinner, identity){
+  document.getElementById("skillSetDetailTitle").textContent = `${sinner} · ${identity}`;
+  const cols = [
+    {num:"1", label:"Skill 1"}, {num:"2", label:"Skill 2"},
+    {num:"3", label:"Skill 3"}, {num:"def", label:"DEF"},
+  ].map(c => skillSetDetailColumnHTML(sinner, identity, c.num, c.label)).join("");
+  const passiveHTML = `<div class="detail-passive-section">
+    <div class="detail-col-label">전투 패시브</div>
+    ${passiveTooltipHTML(sinner, identity)}
+  </div>`;
+  document.getElementById("skillSetDetailBody").innerHTML = `<div class="detail-col-row">${cols}</div>${passiveHTML}`;
+  skillSetDetailModal.hidden = false;
+}
+function closeSkillSetDetail(){ skillSetDetailModal.hidden = true; }
+document.getElementById("skillSetDetailClose").addEventListener("click", closeSkillSetDetail);
+document.getElementById("skillSetDetailBackdrop").addEventListener("click", closeSkillSetDetail);
+document.addEventListener("keydown", e => { if (e.key === "Escape" && !skillSetDetailModal.hidden) closeSkillSetDetail(); });
 window.addEventListener("scroll", e => { if (!kwTooltip.contains(e.target)) hideKwTooltip(); }, true);
 window.addEventListener("resize", hideKwTooltip);
 
