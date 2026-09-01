@@ -378,6 +378,12 @@
   .kw-tooltip-def{ color:var(--text); }
   .skill-tt-name{ font-weight:700; font-size:13px; color:var(--text); margin-bottom:5px; }
   .skill-tt-passive-block + .skill-tt-passive-block{ margin-top:10px; padding-top:10px; border-top:1px solid var(--border-strong); }
+  .skill-tt-special-block{ margin-top:10px; padding-top:10px; border-top:1px solid var(--border-strong); }
+  .skill-tt-special-tag{
+    display:inline-block; font-size:10px; font-weight:700; color:var(--accent-strong);
+    background:color-mix(in srgb, var(--accent) 15%, transparent);
+    border-radius:4px; padding:2px 6px; margin-bottom:5px;
+  }
   .skill-tt-row{
     display:flex; align-items:center; justify-content:space-between; gap:10px;
     padding:2px 0; color:var(--text-muted);
@@ -449,6 +455,7 @@
   /* ---------- 스킬셋 ---------- */
   .skillset-skill-row{ display:grid; grid-template-columns:repeat(4,1fr); gap:6px; }
   .skillset-slot-btn{
+    position:relative;
     display:flex; flex-direction:column; align-items:center; gap:5px;
     border:1px solid var(--border-strong); background:var(--surface-2);
     border-radius:8px; padding:6px 4px 7px; cursor:pointer;
@@ -456,6 +463,14 @@
   .skillset-slot-btn:hover{ border-color:var(--text-faint); }
   .skillset-slot-label{ font-size:9.5px; font-weight:700; color:var(--text-faint); letter-spacing:0.02em; }
   .skillset-slot-empty{ width:22px; height:22px; border-radius:50%; border:1.5px dashed var(--border-strong); }
+  .skillset-special-badge{
+    position:absolute; top:-5px; right:-5px; z-index:1;
+    width:14px; height:14px; border-radius:50%;
+    background:var(--accent); color:var(--bg);
+    font-size:10px; font-weight:800; line-height:14px; text-align:center;
+  }
+  .skillset-passive-btn{ position:relative; }
+  .skillset-passive-btn .skillset-special-badge{ position:static; display:inline-flex; align-items:center; justify-content:center; margin-right:4px; }
   .deck-toolbar{ display:flex; align-items:flex-start; justify-content:space-between; gap:16px; flex-wrap:wrap; }
   .deck-title{ font-size:16px; font-weight:700; margin:0 0 4px; }
   .deck-hint{ margin:0; font-size:12.5px; color:var(--text-muted); max-width:520px; word-break:keep-all; }
