@@ -418,6 +418,16 @@ const UI_ICON_DATA = {
   "skillFrame": "images/ui/1.webp",
 };
 
+const SIN_SKILL_FRAME_DATA = {
+  "분노": {1:"images/ui/sin_frames/wrath1.webp", 2:"images/ui/sin_frames/wrath2.webp", 3:"images/ui/sin_frames/wrath3.webp"},
+  "색욕": {1:"images/ui/sin_frames/lust1.webp", 2:"images/ui/sin_frames/lust2.webp", 3:"images/ui/sin_frames/lust3.webp"},
+  "나태": {1:"images/ui/sin_frames/sloth1.webp", 2:"images/ui/sin_frames/sloth2.webp", 3:"images/ui/sin_frames/sloth3.webp"},
+  "탐식": {1:"images/ui/sin_frames/gluttony1.webp", 2:"images/ui/sin_frames/gluttony2.webp", 3:"images/ui/sin_frames/gluttony3.webp"},
+  "우울": {1:"images/ui/sin_frames/gloom1.webp", 2:"images/ui/sin_frames/gloom2.webp", 3:"images/ui/sin_frames/gloom3.webp"},
+  "오만": {1:"images/ui/sin_frames/pride1.webp", 2:"images/ui/sin_frames/pride2.webp", 3:"images/ui/sin_frames/pride3.webp"},
+  "질투": {1:"images/ui/sin_frames/envy1.webp", 2:"images/ui/sin_frames/envy2.webp", 3:"images/ui/sin_frames/envy3.webp"},
+};
+
 const EGO_ICON_DATA = {
   "ill-go-fer-scissors-how-bout-you-don-quixote": "images/egos/1.webp",
   "solemn-lament-yi-sang": "images/egos/2.webp",
