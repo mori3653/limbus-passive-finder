@@ -3361,9 +3361,12 @@ document.addEventListener("keydown", e => { if (e.key === "Escape") hideKwToolti
 const skillSetDetailModal = document.getElementById("skillSetDetailModal");
 function skillSetDetailColumnHTML(sinner, identity, num, label){
   const info = skillSlotInfo(sinner, identity, num);
+  const slotKey = num === "def" ? "def" : `skill${num}`;
+  const iconData = IDENTITY_SKILL_ICON_DATA[`${sinner}|${identity}`];
+  const uniqueIcon = iconData && iconData[slotKey];
   return `<div class="detail-col">
     <div class="detail-col-label">${label}</div>
-    <div class="detail-col-icon">${skillFrameHTML(info && info.sin, 88, info && info.tier)}</div>
+    <div class="detail-col-icon">${skillFrameHTML(info && info.sin, 88, info && info.tier, uniqueIcon)}</div>
     <div class="detail-col-body">${skillTooltipHTML(sinner, identity, num)}</div>
   </div>`;
 }
@@ -3485,12 +3488,19 @@ function portraitSrc(entry){
 }
 
 // '상세' 모드에서 인격패 위에 표시할 스킬 보유수/E.G.O 편성 오버레이
-function skillFrameHTML(sin, size, tier){
+function skillFrameHTML(sin, size, tier, uniqueIconSrc){
   const s = size || 14;
-  const framePath = (sin && tier && SIN_SKILL_FRAME_DATA[sin] && SIN_SKILL_FRAME_DATA[sin][tier]) || UI_ICON_DATA.skillFrame;
-  const iconSrc = sin ? SIN_ICON_DATA[sin] : null;
-  const innerSize = Math.round(s * 0.56);
-  const iconHTML = iconSrc ? `<img class="skill-frame-sin" src="${iconSrc}" alt="${sin}" width="${innerSize}" height="${innerSize}">` : "";
+  const frameTier = tier === 4 ? 1 : tier;
+  const framePath = (sin && frameTier && SIN_SKILL_FRAME_DATA[sin] && SIN_SKILL_FRAME_DATA[sin][frameTier]) || UI_ICON_DATA.skillFrame;
+  let iconHTML;
+  if (uniqueIconSrc){
+    const artSize = Math.round(s * 0.66);
+    iconHTML = `<img class="skill-frame-art" src="${uniqueIconSrc}" alt="" width="${artSize}" height="${artSize}">`;
+  } else {
+    const sinIconSrc = sin ? SIN_ICON_DATA[sin] : null;
+    const innerSize = Math.round(s * 0.56);
+    iconHTML = sinIconSrc ? `<img class="skill-frame-sin" src="${sinIconSrc}" alt="${sin}" width="${innerSize}" height="${innerSize}">` : "";
+  }
   return `<span class="skill-frame" style="width:${s}px;height:${s}px;"><img class="skill-frame-bg" src="${framePath}" alt="" width="${s}" height="${s}">${iconHTML}</span>`;
 }
 function slotDetailHTML(sinner){

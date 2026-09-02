@@ -418,6 +418,22 @@ const UI_ICON_DATA = {
   "skillFrame": "images/ui/1.webp",
 };
 
+const IDENTITY_SKILL_ICON_DATA = {
+  "이상|LCB 수감자": {skill1:"images/ui/skill_icons/icon_0001.webp",skill2:"images/ui/skill_icons/icon_0002.webp",skill3:"images/ui/skill_icons/icon_0003.webp",def:"images/ui/skill_icons/icon_0004.webp"},
+  "이상|남부 세븐 협회 6과": {skill1:"images/ui/skill_icons/icon_0005.webp",skill2:"images/ui/skill_icons/icon_0006.webp",skill3:"images/ui/skill_icons/icon_0007.webp",def:"images/ui/skill_icons/icon_0008.webp"},
+  "이상|검계 살수": {skill1:"images/ui/skill_icons/icon_0009.webp",skill2:"images/ui/skill_icons/icon_0010.webp",skill3:"images/ui/skill_icons/icon_0011.webp",def:"images/ui/skill_icons/icon_0012.webp"},
+  "이상|어금니 사무소 해결사": {skill1:"images/ui/skill_icons/icon_0013.webp",skill2:"images/ui/skill_icons/icon_0014.webp",skill3:"images/ui/skill_icons/icon_0015.webp",def:"images/ui/skill_icons/icon_0016.webp"},
+  "이상|W사 3등급 정리 요원": {skill1:"images/ui/skill_icons/icon_0017.webp",skill2:"images/ui/skill_icons/icon_0018.webp",skill3:"images/ui/skill_icons/icon_0019.webp",def:"images/ui/skill_icons/icon_0020.webp"},
+  "이상|피쿼드호 일등 항해사": {skill1:"images/ui/skill_icons/icon_0021.webp",skill2:"images/ui/skill_icons/icon_0022.webp",skill3:"images/ui/skill_icons/icon_0023.webp",def:"images/ui/skill_icons/icon_0024.webp"},
+  "이상|남부 디에치 협회 4과": {skill1:"images/ui/skill_icons/icon_0025.webp",skill2:"images/ui/skill_icons/icon_0026.webp",skill3:"images/ui/skill_icons/icon_0027.webp",def:"images/ui/skill_icons/icon_0028.webp"},
+  "이상|로보토미 E.G.O::엄숙한 애도": {skill1:"images/ui/skill_icons/icon_0029.webp",skill2:"images/ui/skill_icons/icon_0030.webp",skill3:"images/ui/skill_icons/icon_0031.webp",def:"images/ui/skill_icons/icon_0032.webp"},
+  "이상|남부 리우 협회 3과": {skill1:"images/ui/skill_icons/icon_0033.webp",skill2:"images/ui/skill_icons/icon_0034.webp",skill3:"images/ui/skill_icons/icon_0035.webp",def:"images/ui/skill_icons/icon_0036.webp"},
+  "이상|N사 E.G.O::흉탄": {skill1:"images/ui/skill_icons/icon_0037.webp",skill2:"images/ui/skill_icons/icon_0038.webp",skill3:"images/ui/skill_icons/icon_0039.webp",def:"images/ui/skill_icons/icon_0040.webp"},
+  "이상|흑수 - 오 필두": {skill1:"images/ui/skill_icons/icon_0041.webp",skill2:"images/ui/skill_icons/icon_0042.webp",skill3:"images/ui/skill_icons/icon_0043.webp",def:"images/ui/skill_icons/icon_0044.webp"},
+  "이상|거미집 검지 아비": {skill1:"images/ui/skill_icons/icon_0045.webp",skill2:"images/ui/skill_icons/icon_0046.webp",skill3:"images/ui/skill_icons/icon_0047.webp",def:"images/ui/skill_icons/icon_0048.webp"},
+  "이상|LCE E.G.O::차원찢개": {skill1:"images/ui/skill_icons/icon_0049.webp",skill2:"images/ui/skill_icons/icon_0050.webp",skill3:"images/ui/skill_icons/icon_0051.webp",def:"images/ui/skill_icons/icon_0052.webp"},
+};
+
 const SIN_SKILL_FRAME_DATA = {
   "분노": {1:"images/ui/sin_frames/wrath1.webp", 2:"images/ui/sin_frames/wrath2.webp", 3:"images/ui/sin_frames/wrath3.webp"},
   "색욕": {1:"images/ui/sin_frames/lust1.webp", 2:"images/ui/sin_frames/lust2.webp", 3:"images/ui/sin_frames/lust3.webp"},
