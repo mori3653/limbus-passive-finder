@@ -3104,13 +3104,20 @@ function effectiveKeywords(d){
 }
 
 const IDENTITY_KW_LIST = ["화상","출혈","진동","파열","침잠","호흡","충전","탄환"];
-const KEYWORD_TERMS = Object.keys(KEYWORD_DEFS).sort((a,b) => b.length - a.length);
+// 한 글자짜리 키워드(예: "관")는 아무 단어에나 걸려 오탐이 심해 하이라이트 대상에서 제외.
+const KEYWORD_TERMS = Object.keys(KEYWORD_DEFS).filter(k => k.length >= 2).sort((a,b) => b.length - a.length);
 // 키워드 뒤에 특정 글자가 붙으면 무관한 고유명사(예: "광신도")로 취급해 하이라이트에서 제외.
 const KEYWORD_EXCLUDE_FOLLOW = { "광신": ["도"] };
+// 키워드 앞에 특정 글자가 붙으면 무관한 일반 표현(예: "소수점 버림")으로 취급해 하이라이트에서 제외.
+const KEYWORD_EXCLUDE_PRECEDE = { "버림": ["소수점 ", "소숫점 "] };
 const KEYWORD_RE = new RegExp(KEYWORD_TERMS.map(t => {
   const escaped = t.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-  const excludes = KEYWORD_EXCLUDE_FOLLOW[t];
-  return excludes ? `${escaped}(?!${excludes.join("|")})` : escaped;
+  const followEx = KEYWORD_EXCLUDE_FOLLOW[t];
+  const precedeEx = KEYWORD_EXCLUDE_PRECEDE[t];
+  let pattern = escaped;
+  if (precedeEx) pattern = `(?<!${precedeEx.map(p => p.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")).join("|")})${pattern}`;
+  if (followEx) pattern = `${pattern}(?!${followEx.join("|")})`;
+  return pattern;
 }).join("|"), "g");
 function linkifyKeywords(text){
   return text.replace(KEYWORD_RE, m => `<span class="kw-term" data-kw="${m}">${identityKwIcon(m, 14)}${m}</span>`);

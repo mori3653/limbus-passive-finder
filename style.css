@@ -363,7 +363,7 @@
   .kw-term img{ vertical-align:-3px; margin-right:2px; }
 
   .kw-tooltip{
-    position:fixed; z-index:50; max-width:280px; max-height:70vh; overflow-y:auto;
+    position:fixed; z-index:70; max-width:280px; max-height:70vh; overflow-y:auto;
     background:var(--surface); border:1px solid var(--border-strong);
     border-radius:8px; padding:10px 12px;
     box-shadow:var(--shadow);
