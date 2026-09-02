@@ -434,6 +434,12 @@ const IDENTITY_SKILL_ICON_DATA = {
   "이상|LCE E.G.O::차원찢개": {skill1:"images/ui/skill_icons/icon_0049.webp",skill2:"images/ui/skill_icons/icon_0050.webp",skill3:"images/ui/skill_icons/icon_0051.webp",def:"images/ui/skill_icons/icon_0052.webp"},
 };
 
+const IDENTITY_SPECIAL_SKILL_ICON_DATA = {
+  "이상|흑수 - 오 필두": "images/ui/skill_icons/icon_0053.webp",
+  "이상|거미집 검지 아비": "images/ui/skill_icons/icon_0054.webp",
+  "이상|LCE E.G.O::차원찢개": "images/ui/skill_icons/icon_0055.webp",
+};
+
 const SIN_SKILL_FRAME_DATA = {
   "분노": {1:"images/ui/sin_frames/wrath1.webp", 2:"images/ui/sin_frames/wrath2.webp", 3:"images/ui/sin_frames/wrath3.webp"},
   "색욕": {1:"images/ui/sin_frames/lust1.webp", 2:"images/ui/sin_frames/lust2.webp", 3:"images/ui/sin_frames/lust3.webp"},

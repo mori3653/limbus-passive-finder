@@ -3280,11 +3280,14 @@ function skillTooltipHTML(sinner, identity, num){
   }
   const slotKey = num === "def" ? "defense" : `skill${num}`;
   const specials = (IDENTITY_SPECIAL_SKILLS[`${sinner}|${identity}`] || []).filter(s => s.attachTo === slotKey);
-  specials.forEach(s => { rows.push(specialSkillHTML(s)); });
+  specials.forEach(s => { rows.push(specialSkillHTML(s, sinner, identity)); });
   return rows.join("");
 }
-function specialSkillHTML(s){
+function specialSkillHTML(s, sinner, identity){
+  const iconSrc = IDENTITY_SPECIAL_SKILL_ICON_DATA[`${sinner}|${identity}`];
+  const tier = {skill1:1, skill2:2, skill3:3}[s.attachTo] || null;
   const rows = [`<div class="skill-tt-special-tag">특수 발동 스킬 (${escapeHTML(s.refNote)})</div>`];
+  if (iconSrc) rows.push(`<div class="detail-col-icon">${skillFrameHTML(s.sin, 56, tier, iconSrc)}</div>`);
   if (s.name) rows.push(`<div class="skill-tt-name">${escapeHTML(s.name)}</div>`);
   rows.push(`<div class="skill-tt-row"><span>속성</span><span>${s.sin ? sinBadgeSVG(s.sin,14)+escapeHTML(s.sin) : "정보 없음"}</span></div>`);
   if (s.power) rows.push(`<div class="skill-tt-row"><span>기본 위력</span><span>${escapeHTML(s.power)}</span></div>`);
@@ -3312,7 +3315,7 @@ function passiveTooltipHTML(sinner, identity){
     return `<div class="skill-tt-passive-block">${rows.join("")}</div>`;
   }).join("");
   const specials = (IDENTITY_SPECIAL_SKILLS[`${sinner}|${identity}`] || []).filter(s => s.attachTo === "passive");
-  const specialsHTML = specials.map(specialSkillHTML).join("");
+  const specialsHTML = specials.map(s => specialSkillHTML(s, sinner, identity)).join("");
   return passiveHTML + specialsHTML;
 }
 document.body.addEventListener("click", e => {
