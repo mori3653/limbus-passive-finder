@@ -3638,8 +3638,15 @@ function specialSkillHTML(s, sinner, identity){
   }
   return `<div class="skill-tt-special-block">${rows.join("")}</div>`;
 }
+// 특수 발동 스킬 이름이 어느 전투 패시브 블록의 효과 설명에서 언급되는지 찾기 위한 핵심 이름 추출
+// (예: "섬궁【閃弓】" -> "섬궁" — 한자/괄호 표기가 붙은 스킬명도 본문의 "'섬궁'" 언급과 매칭되도록)
+function specialCoreName(name){
+  return name.split(/[【\[]/)[0].trim();
+}
 function passiveTooltipHTML(sinner, identity){
   const blocks = IDENTITY_PASSIVE[`${sinner}|${identity}`];
+  const specialsAll = (IDENTITY_SPECIAL_SKILLS[`${sinner}|${identity}`] || []).filter(s => s.attachTo === "passive");
+  const usedSpecials = new Set();
   const passiveHTML = (!blocks || !blocks.length) ? `<div class="skill-tt-row"><span>정보 없음</span></div>` : blocks.map(p => {
     const rows = [`<div class="skill-tt-name">${escapeHTML(p.name)}</div>`];
     if (p.conditions && p.conditions.length){
@@ -3651,11 +3658,19 @@ function passiveTooltipHTML(sinner, identity){
     if (p.effect){
       rows.push(`<div class="skill-tt-effect-block"><div class="skill-tt-coin-effect"><span>${linkifyKeywords(p.effect)}</span></div></div>`);
     }
+    // 나무위키 PC판처럼, 해당 블록의 효과 설명에서 실제로 언급되는 특수 발동 스킬은
+    // 맨 아래로 몰아넣지 않고 그 블록 바로 아래에 붙여서 표시.
+    specialsAll.forEach(s => {
+      if (usedSpecials.has(s)) return;
+      if (p.effect && p.effect.includes(specialCoreName(s.name))){
+        usedSpecials.add(s);
+        rows.push(specialSkillHTML(s, sinner, identity));
+      }
+    });
     return `<div class="skill-tt-passive-block">${rows.join("")}</div>`;
   }).join("");
-  const specials = (IDENTITY_SPECIAL_SKILLS[`${sinner}|${identity}`] || []).filter(s => s.attachTo === "passive");
-  const specialsHTML = specials.map(s => specialSkillHTML(s, sinner, identity)).join("");
-  return passiveHTML + specialsHTML;
+  const leftoverHTML = specialsAll.filter(s => !usedSpecials.has(s)).map(s => specialSkillHTML(s, sinner, identity)).join("");
+  return passiveHTML + leftoverHTML;
 }
 document.body.addEventListener("click", e => {
   const term = e.target.closest(".kw-term");
