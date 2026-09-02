@@ -3135,7 +3135,7 @@ function egoConditionalHTML(d){
 function identityKeywordsHTML(d){
   const kwHTML = d.identityKeywords.length
     ? `<div class="identity-kw-tags">${d.identityKeywords.map(k =>
-        `<span class="identity-kw-tag kw-term" data-kw="${k}">${identityKwIcon(k, 12)}${k}</span>`
+        `<span class="identity-kw-tag">${identityKwIcon(k, 12)}${k}</span>`
       ).join(`<span class="identity-kw-sep">·</span>`)}</div>`
     : "";
   const egoHTML = egoConditionalHTML(d);
@@ -4393,6 +4393,7 @@ window.addEventListener("resize", updateHeaderHeightVar);
 function openOwnedView(){
   document.getElementById("searchView").hidden = true;
   document.getElementById("searchRow").hidden = true;
+  document.getElementById("skillSetSearchRow").hidden = true;
   document.getElementById("searchFooter").hidden = true;
   document.getElementById("skillSetView").hidden = true;
   document.getElementById("deckView").hidden = true;
@@ -4427,6 +4428,7 @@ function showSearchView(){
   tabSkillSet.setAttribute("aria-pressed","false");
   document.getElementById("searchView").hidden = false;
   document.getElementById("searchRow").hidden = false;
+  document.getElementById("skillSetSearchRow").hidden = true;
   document.getElementById("searchFooter").hidden = false;
   document.getElementById("skillSetView").hidden = true;
   document.getElementById("deckView").hidden = true;
@@ -4440,6 +4442,7 @@ function showSkillSetView(){
   tabSkillSet.setAttribute("aria-pressed","true");
   document.getElementById("searchView").hidden = true;
   document.getElementById("searchRow").hidden = true;
+  document.getElementById("skillSetSearchRow").hidden = false;
   document.getElementById("searchFooter").hidden = true;
   document.getElementById("skillSetView").hidden = false;
   document.getElementById("deckView").hidden = true;
@@ -4454,6 +4457,7 @@ function showDeckView(){
   tabSkillSet.setAttribute("aria-pressed","false");
   document.getElementById("searchView").hidden = true;
   document.getElementById("searchRow").hidden = true;
+  document.getElementById("skillSetSearchRow").hidden = true;
   document.getElementById("searchFooter").hidden = true;
   document.getElementById("skillSetView").hidden = true;
   document.getElementById("deckView").hidden = false;

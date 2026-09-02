@@ -314,7 +314,7 @@
     display:inline-flex; align-items:center; gap:7px;
     background:var(--surface-2); border:1px solid var(--border);
     border-radius:5px; padding:2px 8px;
-    font-size:10.5px; color:var(--text-muted);
+    font-size:10.5px; color:var(--text);
   }
   .identity-kw-tag{ display:inline-flex; align-items:center; gap:3px; }
   .identity-kw-tag img{ width:12px; height:12px; flex:none; }
@@ -497,10 +497,6 @@
   #searchView[hidden], #deckView[hidden], #skillSetView[hidden], .search-row[hidden], footer.note[hidden]{ display:none !important; }
 
   /* ---------- 스킬셋 ---------- */
-  #skillSetView .search-row{
-    position:sticky; top:var(--header-h, 96px); z-index:5;
-    background:var(--bg); padding:10px 0; margin-bottom:6px;
-  }
   .skillset-skill-row{ display:grid; grid-template-columns:repeat(4,1fr); gap:6px; }
   .skillset-slot-btn{
     position:relative;
