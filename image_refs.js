@@ -948,8 +948,8 @@ const IDENTITY_PORTRAIT_NORMAL_DATA = {
   "그레고르|LCB 수감자": "images/portraits_normal/185.webp",
 };
 
-// wiki.gg 원본 크롭 없는 풀 일러스트. 라이트박스 전용. 현재는 이상(파일럿)만 있음.
-const IDENTITY_PORTRAIT_FULL_DATA = {
+// wiki.gg 원본 크롭 없는 풀 일러스트(동기화 전). 라이트박스 전용. 현재는 이상(파일럿)만 있음.
+const IDENTITY_PORTRAIT_FULL_NORMAL_DATA = {
   "이상|LCE E.G.O::차원찢개": "images/portraits_full/2.webp",
   "이상|거미집 검지 아비": "images/portraits_full/19.webp",
   "이상|흑수 - 오 필두": "images/portraits_full/36.webp",
@@ -965,4 +965,24 @@ const IDENTITY_PORTRAIT_FULL_DATA = {
   "이상|개화 E.G.O::동백": "images/portraits_full/132.webp",
   "이상|검계 살수": "images/portraits_full/148.webp",
   "이상|남부 세븐 협회 6과": "images/portraits_full/149.webp",
+  "이상|LCB 수감자": "images/portraits_full/150.webp",
+};
+
+// wiki.gg 원본 크롭 없는 풀 일러스트(동기화 후/Uptied). LCB 수감자는 동기화 상태가 없어서 없음.
+const IDENTITY_PORTRAIT_FULL_SYNCED_DATA = {
+  "이상|LCE E.G.O::차원찢개": "images/portraits_full_synced/2.webp",
+  "이상|거미집 검지 아비": "images/portraits_full_synced/19.webp",
+  "이상|흑수 - 오 필두": "images/portraits_full_synced/36.webp",
+  "이상|N사 E.G.O::흉탄": "images/portraits_full_synced/42.webp",
+  "이상|남부 리우 협회 3과": "images/portraits_full_synced/55.webp",
+  "이상|LCE E.G.O::초롱": "images/portraits_full_synced/58.webp",
+  "이상|로보토미 E.G.O::엄숙한 애도": "images/portraits_full_synced/72.webp",
+  "이상|약지 점묘파 스튜던트": "images/portraits_full_synced/83.webp",
+  "이상|남부 디에치 협회 4과": "images/portraits_full_synced/100.webp",
+  "이상|피쿼드호 일등 항해사": "images/portraits_full_synced/106.webp",
+  "이상|W사 3등급 정리 요원": "images/portraits_full_synced/112.webp",
+  "이상|어금니 사무소 해결사": "images/portraits_full_synced/116.webp",
+  "이상|개화 E.G.O::동백": "images/portraits_full_synced/132.webp",
+  "이상|검계 살수": "images/portraits_full_synced/148.webp",
+  "이상|남부 세븐 협회 6과": "images/portraits_full_synced/149.webp",
 };

@@ -3684,7 +3684,8 @@ function effectHTML(d){
 }
 
 function identityFullIllustSrc(bannerKey){
-  return IDENTITY_PORTRAIT_FULL_DATA[bannerKey]
+  return (state.syncMode === "gacksung" ? IDENTITY_PORTRAIT_FULL_SYNCED_DATA[bannerKey] : IDENTITY_PORTRAIT_FULL_NORMAL_DATA[bannerKey])
+    || IDENTITY_PORTRAIT_FULL_NORMAL_DATA[bannerKey] || IDENTITY_PORTRAIT_FULL_SYNCED_DATA[bannerKey]
     || (state.syncMode === "gacksung" ? IDENTITY_PORTRAIT_SYNCED_DATA[bannerKey] : IDENTITY_PORTRAIT_NORMAL_DATA[bannerKey])
     || IDENTITY_PORTRAIT_SYNCED_DATA[bannerKey] || IDENTITY_PORTRAIT_NORMAL_DATA[bannerKey];
 }
