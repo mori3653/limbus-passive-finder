@@ -3377,14 +3377,19 @@ function effectHTML(d){
   }).join("");
 }
 
+function identityFullIllustSrc(bannerKey){
+  return (state.syncMode === "gacksung" ? IDENTITY_PORTRAIT_SYNCED_DATA[bannerKey] : IDENTITY_PORTRAIT_NORMAL_DATA[bannerKey])
+    || IDENTITY_PORTRAIT_SYNCED_DATA[bannerKey] || IDENTITY_PORTRAIT_NORMAL_DATA[bannerKey];
+}
 function cardHTML(d){
   const tagsHTML = d.cats.slice(0,5).map(c => `<span class="tag">${c}</span>`).join("");
   const bannerKey = `${d.sinner}|${d.identity}`;
   const bannerSrc = (state.syncMode === "gacksung" ? IDENTITY_BANNER_SYNCED_DATA[bannerKey] : IDENTITY_BANNER_NORMAL_DATA[bannerKey])
     || IDENTITY_BANNER_SYNCED_DATA[bannerKey] || IDENTITY_BANNER_NORMAL_DATA[bannerKey];
+  const fullSrc = identityFullIllustSrc(bannerKey) || bannerSrc;
   const iconSrc = SINNER_ICON_DATA[d.sinner];
   const iconHTML = iconSrc ? `<img class="sinner-icon-inline" src="${iconSrc}" alt="" loading="lazy">` : "";
-  const bannerHTML = bannerSrc ? `<img class="card-banner" src="${bannerSrc}" alt="" loading="lazy">` : "";
+  const bannerHTML = bannerSrc ? `<img class="card-banner" src="${bannerSrc}" data-full="${fullSrc}" alt="" loading="lazy">` : "";
   return `
     <article class="card">
       ${bannerHTML}
@@ -3468,9 +3473,10 @@ function skillSetCardHTML(d){
   const bannerKey = `${d.sinner}|${d.identity}`;
   const bannerSrc = (state.syncMode === "gacksung" ? IDENTITY_BANNER_SYNCED_DATA[bannerKey] : IDENTITY_BANNER_NORMAL_DATA[bannerKey])
     || IDENTITY_BANNER_SYNCED_DATA[bannerKey] || IDENTITY_BANNER_NORMAL_DATA[bannerKey];
+  const fullSrc = identityFullIllustSrc(bannerKey) || bannerSrc;
   const iconSrc = SINNER_ICON_DATA[d.sinner];
   const iconHTML = iconSrc ? `<img class="sinner-icon-inline" src="${iconSrc}" alt="" loading="lazy">` : "";
-  const bannerHTML = bannerSrc ? `<img class="card-banner" src="${bannerSrc}" alt="" loading="lazy">` : "";
+  const bannerHTML = bannerSrc ? `<img class="card-banner" src="${bannerSrc}" data-full="${fullSrc}" alt="" loading="lazy">` : "";
   const slots = [
     {label:"Skill 1", num:"1", info: prof && prof.skills[0], key:"skill1", iconKey:"skill1"},
     {label:"Skill 2", num:"2", info: prof && prof.skills[1], key:"skill2", iconKey:"skill2"},
@@ -3547,7 +3553,7 @@ function egoCardHTML(slug){
           <div class="card-sinner-row">
             ${iconHTML}<span class="card-sinner">${info.sinner}</span>
           </div>
-          <span class="card-identity">${info.title}</span>
+          <span class="card-identity">${egoShortTitle(info)}</span>
         </div>
         <div class="ego-attr-row">
           <span class="ego-attr-left">${sinHTML}</span>
@@ -3617,6 +3623,7 @@ function setSkillSetSubTab(tab){
   document.getElementById("egoSkillSetGrid").hidden = tab !== "ego";
   document.getElementById("skillSetFiltersAside").hidden = tab !== "identity";
   document.getElementById("egoFiltersAside").hidden = tab !== "ego";
+  document.getElementById("skillSetSyncCol").hidden = tab !== "identity";
   document.getElementById("skillSetShownLabel").textContent = tab === "ego" ? "개 E.G.O. 표시 중" : "개 인격 표시 중";
   if (tab === "ego") renderEgoSkillSet();
   else renderSkillSet();
@@ -3666,11 +3673,19 @@ skillSetSearchInput.addEventListener("input", e => { state.skillSetQ = e.target.
 document.getElementById("skillSetClearSearch").addEventListener("click", () => { state.skillSetQ=""; skillSetSearchInput.value=""; renderActiveSkillSetSubTab(); });
 const syncToggle = document.getElementById("syncToggle");
 const syncToggleLabel = document.getElementById("syncToggleLabel");
-syncToggle.addEventListener("change", () => {
-  state.syncMode = syncToggle.checked ? "gacksung" : "normal";
-  syncToggleLabel.textContent = syncToggle.checked ? "동기화 후" : "동기화 전";
+const skillSetSyncToggle = document.getElementById("skillSetSyncToggle");
+const skillSetSyncToggleLabel = document.getElementById("skillSetSyncToggleLabel");
+function setSyncMode(mode){
+  state.syncMode = mode;
+  const checked = mode === "gacksung";
+  const label = checked ? "동기화 후" : "동기화 전";
+  syncToggle.checked = checked; syncToggleLabel.textContent = label;
+  skillSetSyncToggle.checked = checked; skillSetSyncToggleLabel.textContent = label;
   render();
-});
+  if (state.skillSetSubTab === "identity") renderSkillSet();
+}
+syncToggle.addEventListener("change", () => setSyncMode(syncToggle.checked ? "gacksung" : "normal"));
+skillSetSyncToggle.addEventListener("change", () => setSyncMode(skillSetSyncToggle.checked ? "gacksung" : "normal"));
 const egoKwToggle = document.getElementById("egoKwToggle");
 const egoKwTogglePicker = document.getElementById("egoKwTogglePicker");
 function setIncludeEgoKw(val){
@@ -3855,10 +3870,11 @@ function passiveTooltipHTML(sinner, identity){
 }
 const imageLightbox = document.getElementById("imageLightbox");
 const imageLightboxImg = document.getElementById("imageLightboxImg");
-function openImageLightbox(src, alt){
+function openImageLightbox(src, alt, upscale){
   if (!src) return;
   imageLightboxImg.src = src;
   imageLightboxImg.alt = alt || "";
+  imageLightboxImg.classList.toggle("is-upscaled", !!upscale);
   imageLightbox.hidden = false;
 }
 function closeImageLightbox(){ imageLightbox.hidden = true; imageLightboxImg.src = ""; }
@@ -3869,7 +3885,8 @@ document.addEventListener("keydown", e => { if (e.key === "Escape" && !imageLigh
 document.body.addEventListener("click", e => {
   const lightboxTrigger = e.target.closest(".card-banner, .ego-card-portrait");
   if (lightboxTrigger){
-    openImageLightbox(lightboxTrigger.src, lightboxTrigger.alt);
+    const fullSrc = lightboxTrigger.dataset.full || lightboxTrigger.src;
+    openImageLightbox(fullSrc, lightboxTrigger.alt, lightboxTrigger.classList.contains("ego-card-portrait"));
     e.stopPropagation();
     return;
   }

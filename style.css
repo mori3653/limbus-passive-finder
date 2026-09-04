@@ -447,6 +447,7 @@
   .image-lightbox[hidden]{ display:none; }
   .image-lightbox-backdrop{ position:absolute; inset:0; background:rgba(0,0,0,0.78); cursor:zoom-out; }
   .image-lightbox-img{ position:relative; z-index:1; max-width:100%; max-height:100%; border-radius:12px; box-shadow:var(--shadow); display:block; }
+  .image-lightbox-img.is-upscaled{ width:min(480px, 85vw); height:auto; image-rendering:-webkit-optimize-contrast; }
   .image-lightbox-close{
     position:absolute; top:20px; right:24px; z-index:2;
     border:0; background:rgba(0,0,0,0.45); color:#fff; cursor:pointer;
@@ -518,6 +519,7 @@
     background:var(--bg); box-shadow:var(--shadow);
   }
   #skillSetFiltersAside[hidden], #egoFiltersAside[hidden]{ display:none; }
+  #skillSetSyncCol[hidden]{ display:none; }
   .ego-card-header{ height:34px; background:var(--surface-2); border-bottom:1px solid var(--border); }
   .ego-card-portrait{
     position:absolute; left:50%; top:10px; transform:translateX(-50%);
