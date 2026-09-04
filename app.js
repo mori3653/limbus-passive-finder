@@ -3514,6 +3514,11 @@ function egoCostBadgesHTML(slug){
   if (!cost || !cost.length) return "";
   return cost.map(c => `<span class="ego-cost-badge">${sinBadgeSVG(c.sin, 16)}${c.count}</span>`).join("");
 }
+function egoDetailCostHTML(slug){
+  const badges = egoCostBadgesHTML(slug);
+  if (!badges) return "";
+  return `<span class="ego-detail-cost-label">장착 코스트</span>${badges}`;
+}
 function egoCardHTML(slug){
   const info = EGO_DATA[slug];
   if (!info) return "";
@@ -3936,6 +3941,10 @@ function openEgoDetail(slug){
   document.getElementById("egoDetailTitle").textContent = info.title;
   const subTabs = egoDetailModal.querySelector(".ego-skill-sub-tabs");
   if (subTabs) subTabs.hidden = !hasCorrosion;
+  const costRow = document.getElementById("egoDetailCostRow");
+  const costHTML = egoDetailCostHTML(slug);
+  costRow.innerHTML = costHTML;
+  costRow.hidden = !costHTML;
   setEgoDetailTab("awakening");
   egoDetailModal.hidden = false;
 }
