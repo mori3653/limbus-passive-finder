@@ -501,9 +501,12 @@
 
   /* ---------- 스킬셋 ---------- */
   .skillset-skill-row{ display:grid; grid-template-columns:repeat(4,1fr); gap:6px; }
-  .skillset-sub-tabs{ margin-bottom:10px; }
-  #skillSetFiltersAside[hidden]{ display:none; }
-  #skillSetView.ego-mode{ grid-template-columns:1fr; }
+  .skillset-sub-tabs{
+    margin-bottom:10px;
+    position:sticky; top:var(--header-h, 96px); z-index:8;
+    background:var(--bg); box-shadow:var(--shadow);
+  }
+  #skillSetFiltersAside[hidden], #egoFiltersAside[hidden]{ display:none; }
   .ego-attr-row{
     display:flex; align-items:center; justify-content:space-between;
     border:1px solid var(--border-strong); background:var(--surface-2);

@@ -3150,6 +3150,10 @@ const state = {
   syncMode: "gacksung",
   includeEgoKw: false,
   ownedOnly: false,
+  egoSinners: new Set(),
+  egoSins: new Set(),
+  egoGrades: new Set(),
+  egoAoeOnly: false,
 };
 
 // 에고/기프트 조건부 죄악 판정을 포함한 "실질" 인격 키워드 목록
@@ -3517,7 +3521,7 @@ function egoCostBadgesHTML(slug){
 function egoDetailCostHTML(slug){
   const badges = egoCostBadgesHTML(slug);
   if (!badges) return "";
-  return `<span class="ego-detail-cost-label">장착 코스트</span>${badges}`;
+  return `<span class="ego-detail-cost-label">코스트</span>${badges}`;
 }
 function egoCardHTML(slug){
   const info = EGO_DATA[slug];
@@ -3554,18 +3558,52 @@ function egoCardHTML(slug){
       </div>
     </article>`;
 }
+function egoRepSin(slug){
+  const skill = EGO_SKILL_DETAIL[slug];
+  return (skill && skill.awakening && skill.awakening.sin) || null;
+}
+function egoRepWeight(slug){
+  const skill = EGO_SKILL_DETAIL[slug];
+  const w = skill && skill.awakening && skill.awakening.weight;
+  return w ? Number(w) : 0;
+}
+function egoCountFor(filterFn){ return Object.keys(EGO_SKILL_DETAIL).filter(filterFn).length; }
+function egoPassesFilters(slug){
+  const info = EGO_DATA[slug];
+  if (!info) return false;
+  if (state.skillSetQ.trim()){
+    const q = state.skillSetQ.trim().toLowerCase();
+    if (!`${info.sinner} ${info.title}`.toLowerCase().includes(q)) return false;
+  }
+  if (state.egoSinners.size && !state.egoSinners.has(info.sinner)) return false;
+  if (state.egoSins.size && !state.egoSins.has(egoRepSin(slug))) return false;
+  if (state.egoGrades.size && !state.egoGrades.has(info.grade)) return false;
+  if (state.egoAoeOnly && egoRepWeight(slug) < 2) return false;
+  return true;
+}
 function renderEgoSkillSet(){
-  const q = state.skillSetQ.trim().toLowerCase();
-  const slugs = Object.keys(EGO_SKILL_DETAIL).filter(slug => {
-    if (!q) return true;
-    const info = EGO_DATA[slug];
-    if (!info) return false;
-    return `${info.sinner} ${info.title}`.toLowerCase().includes(q);
-  });
+  const slugs = Object.keys(EGO_SKILL_DETAIL).filter(egoPassesFilters);
   const grid = document.getElementById("egoSkillSetGrid");
   document.getElementById("skillSetShownCount").textContent = slugs.length;
   grid.innerHTML = slugs.map(egoCardHTML).join("");
   document.getElementById("skillSetActivePills").innerHTML = "";
+
+  const egoSinners = [...new Set(Object.keys(EGO_SKILL_DETAIL).map(s => EGO_DATA[s] && EGO_DATA[s].sinner).filter(Boolean))];
+  buildChips(document.getElementById("egoSinnerChips"), egoSinners, {
+    getKey:s=>s, getLabel:s=>s, getCount:s=>egoCountFor(slug => EGO_DATA[slug] && EGO_DATA[slug].sinner===s), selectedSet: state.egoSinners,
+    iconFor: s => SINNER_ICON_DATA[s] ? `<img class="sinner-icon" src="${SINNER_ICON_DATA[s]}" alt="" loading="lazy">` : "",
+    onChange: renderEgoSkillSet
+  });
+  const egoSins = SINS.filter(s => egoCountFor(slug => egoRepSin(slug) === s) > 0);
+  buildChips(document.getElementById("egoSinChips"), egoSins, {
+    getKey:s=>s, getLabel:s=>s, getCount:s=>egoCountFor(slug => egoRepSin(slug) === s), selectedSet: state.egoSins,
+    iconFor: s => sinBadgeSVG(s, 18), onChange: renderEgoSkillSet
+  });
+  const egoGrades = EGO_GRADES.filter(g => egoCountFor(slug => EGO_DATA[slug] && EGO_DATA[slug].grade===g) > 0);
+  buildChips(document.getElementById("egoGradeChips"), egoGrades, {
+    getKey:g=>g, getLabel:g=>g, getCount:g=>egoCountFor(slug => EGO_DATA[slug] && EGO_DATA[slug].grade===g), selectedSet: state.egoGrades,
+    onChange: renderEgoSkillSet
+  });
 }
 function setSkillSetSubTab(tab){
   state.skillSetSubTab = tab;
@@ -3576,7 +3614,7 @@ function setSkillSetSubTab(tab){
   document.getElementById("skillSetGrid").hidden = tab !== "identity";
   document.getElementById("egoSkillSetGrid").hidden = tab !== "ego";
   document.getElementById("skillSetFiltersAside").hidden = tab !== "identity";
-  document.getElementById("skillSetView").classList.toggle("ego-mode", tab === "ego");
+  document.getElementById("egoFiltersAside").hidden = tab !== "ego";
   document.getElementById("skillSetShownLabel").textContent = tab === "ego" ? "개 E.G.O. 표시 중" : "개 인격 표시 중";
   if (tab === "ego") renderEgoSkillSet();
   else renderSkillSet();
@@ -3682,6 +3720,17 @@ document.getElementById("skillSetResetAll").addEventListener("click", () => {
   setSkillSinMode("or");
   setSkillPositionMode("or");
   setSinnerMode("include");
+});
+document.getElementById("egoAoeToggle").addEventListener("change", e => {
+  state.egoAoeOnly = e.target.checked;
+  renderEgoSkillSet();
+});
+document.getElementById("egoFiltersResetAll").addEventListener("click", () => {
+  state.skillSetQ = ""; skillSetSearchInput.value = "";
+  state.egoSinners.clear(); state.egoSins.clear(); state.egoGrades.clear();
+  state.egoAoeOnly = false;
+  document.getElementById("egoAoeToggle").checked = false;
+  renderEgoSkillSet();
 });
 
 const kwTooltip = document.getElementById("kwTooltip");

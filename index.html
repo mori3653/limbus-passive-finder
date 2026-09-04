@@ -142,6 +142,30 @@
     <button type="button" class="reset-all" id="skillSetResetAll">필터 초기화</button>
   </aside>
 
+  <aside class="filters" id="egoFiltersAside" hidden>
+    <div class="filter-group">
+      <h2>수감자</h2>
+      <div class="chip-grid" id="egoSinnerChips"></div>
+    </div>
+    <div class="filter-group">
+      <h2>속성</h2>
+      <div class="chip-grid" id="egoSinChips"></div>
+    </div>
+    <div class="filter-group">
+      <h2>등급</h2>
+      <div class="chip-grid" id="egoGradeChips"></div>
+    </div>
+    <div class="filter-group">
+      <h2>공격 범위</h2>
+      <label class="ego-kw-toggle">
+        <input type="checkbox" id="egoAoeToggle">
+        <span class="toggle-track"></span>
+        <span>광역(가중치 2 이상)만 보기</span>
+      </label>
+    </div>
+    <button type="button" class="reset-all" id="egoFiltersResetAll">필터 초기화</button>
+  </aside>
+
   <main>
     <div class="view-tabs mini-tabs skillset-sub-tabs" role="tablist">
       <button type="button" class="view-tab" id="skillSetSubTabIdentity" aria-pressed="true">인격</button>
