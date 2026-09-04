@@ -374,7 +374,9 @@
     font-family:"IBM Plex Sans KR","Noto Sans KR",system-ui,sans-serif;
     font-weight:700;
     font-size:13.5px; color:var(--accent-strong); margin-bottom:4px;
+    display:flex; align-items:center; gap:5px;
   }
+  .kw-tooltip-term img{ flex:none; vertical-align:middle; }
   .kw-tooltip-def{ color:var(--text); }
   .skill-tt-name{ font-weight:700; font-size:13px; color:var(--text); margin-bottom:5px; }
   .skill-tt-passive-block + .skill-tt-passive-block{ margin-top:10px; padding-top:10px; border-top:1px solid var(--border-strong); }

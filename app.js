@@ -3577,7 +3577,8 @@ function escapeHTML(s){
   return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
 }
 function showTooltipAt(term, defHTML, anchorEl){
-  kwTooltipTerm.textContent = term;
+  const termIcon = identityKwIcon(term, 18);
+  kwTooltipTerm.innerHTML = termIcon ? `${termIcon}<span>${escapeHTML(term)}</span>` : escapeHTML(term);
   kwTooltipDef.innerHTML = defHTML;
   kwTooltip.hidden = false;
   const r = anchorEl.getBoundingClientRect();
