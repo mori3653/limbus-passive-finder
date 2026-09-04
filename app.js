@@ -3731,22 +3731,26 @@ document.getElementById("resetAll").addEventListener("click", () => {
   state.sinners.clear();
   setSinnerMode("include");
 });
-document.getElementById("skillSetResetAll").addEventListener("click", () => {
+function resetIdentitySkillSetFilters(){
   state.skillSetQ = ""; skillSetSearchInput.value = "";
   state.sinners.clear(); state.skillSins.clear(); state.skillPositions.clear(); state.identityKw.clear();
   setSkillSinMode("or");
   setSkillPositionMode("or");
   setSinnerMode("include");
-});
-document.getElementById("egoAoeToggle").addEventListener("change", e => {
-  state.egoAoeOnly = e.target.checked;
-  renderEgoSkillSet();
-});
-document.getElementById("egoFiltersResetAll").addEventListener("click", () => {
+}
+function resetEgoSkillSetFilters(){
   state.skillSetQ = ""; skillSetSearchInput.value = "";
   state.egoSinners.clear(); state.egoSins.clear(); state.egoGrades.clear();
   state.egoAoeOnly = false;
   document.getElementById("egoAoeToggle").checked = false;
+  renderEgoSkillSet();
+}
+document.getElementById("skillSetResetAllTop").addEventListener("click", () => {
+  if (state.skillSetSubTab === "ego") resetEgoSkillSetFilters();
+  else resetIdentitySkillSetFilters();
+});
+document.getElementById("egoAoeToggle").addEventListener("change", e => {
+  state.egoAoeOnly = e.target.checked;
   renderEgoSkillSet();
 });
 

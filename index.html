@@ -53,12 +53,13 @@
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
         </button>
       </div>
-      <div class="reset-col" id="skillSetSyncCol">
-        <label class="sync-toggle">
+      <div class="reset-col">
+        <label class="sync-toggle" id="skillSetSyncCol">
           <input type="checkbox" id="skillSetSyncToggle" checked>
           <span class="toggle-track"></span>
           <span id="skillSetSyncToggleLabel">동기화 후</span>
         </label>
+        <button class="reset-all" id="skillSetResetAllTop">필터 초기화</button>
       </div>
     </div>
   </div>
@@ -146,7 +147,6 @@
       </label>
       <div class="chip-grid" id="identityKwChips"></div>
     </div>
-    <button type="button" class="reset-all" id="skillSetResetAll">필터 초기화</button>
   </aside>
 
   <aside class="filters" id="egoFiltersAside" hidden>
@@ -170,7 +170,6 @@
         <span>광역(가중치 2 이상)만 보기</span>
       </label>
     </div>
-    <button type="button" class="reset-all" id="egoFiltersResetAll">필터 초기화</button>
   </aside>
 
   <main>
