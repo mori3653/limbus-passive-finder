@@ -3108,7 +3108,9 @@ const EGO_SKILL_DETAIL = {
   "solemn-lament-gregor": {awakening:{name:"엄숙한 애도",sin:"우울",power:"8",coin:"+2",weight:"3",coinEffects:{1:"[적중시] 무작위 나비 1 부여",2:"[적중시] 무작위 나비 1 부여",3:"[적중시] 무작위 나비 1 ~ 2 부여 [적중시] 정신력 2 ~ 6 감소 [적중시] 자신의 정신력이 0 이상이면, 이 코인 재사용 (스킬 당 최대 5회)"}},corrosion:{name:"엄숙한 애도",sin:"우울",power:"32",coin:"-8",weight:"5",coinEffects:{1:"[적중시] 나비 (산나비) 5 부여 [적중시] 나비 (죽은나비) 5 부여 [적중시] 침잠 횟수 3 증가 [적중시] 대상의 체력이 50% 이하면, 대상의 모든 나비 만큼 우울 피해 - 산나비와 죽은나비의 합으로 계산"}}},
   "christmas-nightmare-gregor": {awakening:{name:"크리스마스 악몽",sin:"나태",power:"12",coin:"+4",weight:"5",coinEffects:{1:"[적중시] 진동 5 부여 [적중시] 진동 폭발 . 대상의 진동 횟수 1 감소",2:"[적중시] 자신이 잃은 체력의 (3 + 최대 공명 수)%만큼 회복 (스킬 당 최대 30%) [적중시] 침잠 4 부여 [적중시] 대상이 흐트러짐, 사기 저하, 패닉 상태면 다음 턴에 공격 위력 감소 1, 가장 높은 공명 속성의 취약을 1 부여"}},corrosion:{name:"크리스마스 악몽",sin:"나태",power:"22",coin:"-6",weight:"5",coinEffects:{1:"[적중시] 진동 5 부여 [적중시] 진동 폭발 . 대상의 진동 횟수 1 감소",2:"[적중시] 자신이 잃은 체력의 (3 + 최대 공명 수)%만큼 회복 (스킬 당 최대 30%) [적중시] 침잠 4 부여 [적중시] 대상이 흐트러짐, 사기 저하, 패닉 상태면 다음 턴에 공격 위력 감소 1, 가장 높은 공명 속성의 취약을 2 부여"}}},
   "garden-of-thorns-gregor": {awakening:{name:"가시 화원",sin:"색욕",power:"20",coin:"+10",weight:"4",coinEffects:{1:"[공격 종료 시] 체력 비율이 가장 낮은 아군 4명의 체력을 최대 체력의 22%만큼 회복 - (가장 높은 공명 수 - 2)만큼 회복 대상 증가 (최대 3)"}},corrosion:{name:"가시 화원",sin:"색욕",power:"30",coin:"-10",weight:"4",coinEffects:{1:"[적중시] 피해량 감소 1 부여, 다음 턴에 속박 2 부여 [적중시] 가장 높은 공명 속성의 취약과 위력 감소를 1 부여 - 해당 공명이 4 이상이면, 해당 속성 취약을 1 추가 부여 - 해당 공명이 5 이상이면, 해당 속성 위력 감소를 1 추가 부여 - 해당 공명이 완전 공명 6 이상이면, 다음 턴에도 동일한 효과 부여"}}},
-  "unbrilliant-glory-gregor": {awakening:{name:"눈부시지 않은 영광 - 유수(流水)",sin:"나태",power:"5",coin:"+5",weight:"1",coinEffects:{}},corrosion:{name:"눈부시지 않은 영광 - 유수(流水)",sin:"나태",power:"20",coin:"-4",weight:"3",coinEffects:{1:"파괴 불가 코인",2:"파괴 불가 코인",3:"파괴 불가 코인",4:"파괴 불가 코인 [적중시] 화상 5 부여 [적중시] 진동 5 부여 [파괴되지 않고 적중시] 마지막에 사용하는 코인이고, 대상의 진동 위력이 15 이상이면, 진동 폭발 . 대상의 진동 횟수 1 감소"}}},
+  "unbrilliant-glory-gregor": {awakening:{name:"눈부시지 않은 영광 - 유수(流水)",sin:"나태",power:"5",coin:"+5",weight:"1",coinEffects:{},alt:{name:"눈부시지 않은 영광 - 광휘(光輝)",sin:"나태",power:"10",coin:"+5",weight:"3",coinEffects:{1:"파괴 불가 코인 (소모한 칼집 속 사람 수치 / 10) - 1 만큼 코인 재사용 (최대 3회) [코인 시작시] 이 코인이 파괴되지 않았고, 공격 대상이 일정 3명 이상이면, 마지막에 사용할 코인의 피해량 +20% (집중 전투인 경우, 부위를 대상 1명으로 취급) [적중시] 화상 1 부여 [적중시] 진동 1 부여 [파괴되지 않고 적중시] 마지막에 사용하는 코인이고, 대상의 진동 위력이 15 이상이면, 진동 폭발 . 대상의 진동 횟수 1 감소 [파괴되지 않고 적중시] 이 코인 4회 사용했다면, 대상의 진동 만큼 나태 피해를 줌 (최대 10)"}}},corrosion:{name:"눈부시지 않은 영광 - 유수(流水)",sin:"나태",power:"20",coin:"-4",weight:"3",coinEffects:{1:"파괴 불가 코인",2:"파괴 불가 코인",3:"파괴 불가 코인",4:"파괴 불가 코인 [적중시] 화상 5 부여 [적중시] 진동 5 부여 [파괴되지 않고 적중시] 마지막에 사용하는 코인이고, 대상의 진동 위력이 15 이상이면, 진동 폭발 . 대상의 진동 횟수 1 감소"}}},
+  "tears-of-the-tarnished-blood-[汚血泣淚]-hong-lu": {awakening:{name:"오혈읍루 - 시[始]",sin:"탐식",power:"20",coin:"-10",weight:"1",coinEffects:{1:"이 스킬의 최종 위력만큼 자신이 고정 피해를 받음 - 이 피해로 흐트러지거나 체력이 1 미만으로 감소하지 않음"},alt:{name:"오혈읍루 - 종[終]",sin:"탐식",power:"4",coin:"+5",weight:"7",coinEffects:{1:"[적중시] 파열 횟수 3 증가",2:"[적중시] 파열 2 부여",3:"[적중시] 파열 2 부여",4:"[적중시] 파열 2 부여"}}},corrosion:{name:"오혈읍루 - 시[始]",sin:"탐식",power:"12",coin:"-2",weight:"7",coinEffects:{1:"파괴 불가 코인 [적중시] 파열 횟수 2 증가",2:"파괴 불가 코인 [적중시] 파열 1 부여",3:"파괴 불가 코인 [적중시] 파열 1 부여",4:"파괴 불가 코인 [적중시] 파열 1 부여"}}},
+  "into-the-sunset-rodion": {awakening:{name:"노을 속으로",sin:"색욕",power:"16",coin:"+8",weight:"3",coinEffects:{1:"[적중시] 화상 3 부여 [적중시] 출혈 3 부여 [이 코인 공격 종료 시] 적중한 대상에게 다음 턴에 분노 취약 1, 색욕 취약 1 부여"}},corrosion:{name:"노을 속으로",sin:"색욕",power:"24",coin:"-5",weight:"3",coinEffects:{1:"파괴 불가 코인 [적중시] 화상 2 부여 [적중시] 화상 횟수 2 증가 [이 코인 공격 종료 시] 적중한 대상에게 분노 취약 1 부여 (턴당 1회)",2:"파괴 불가 코인 [적중시] 출혈 2 부여 [적중시] 출혈 횟수 2 증가 [이 코인 공격 종료 시] 적중한 대상에게 색욕 취약 1 부여 (턴당 1회)"}}},
 };
 
 const EGO_PASSIVE_DETAIL = {
@@ -3221,6 +3223,8 @@ const EGO_PASSIVE_DETAIL = {
   "christmas-nightmare-gregor": {name:"잠들지 못하는 밤",effect:"전투 시작 시 흐트러짐, 사기 저하, 패닉 상태인 적의 수만큼 모든 적에게 각각 공격 레벨 감소 1 또는 방어 레벨 감소 1 부여 (턴 당 최대 2회) 동일한 효과를 갖는 E.G.O 기프트와 중첩하여 발동되지 않음",atkLevel:"61(+1) / 62(+2)",sp:null},
   "garden-of-thorns-gregor": {name:"장미 면류관",effect:"턴 시작 시, 무작위 적 1명에게 파열 위력 2 부여 완전 공명을 발동하였다면 전투 시작 시, 모든 적에게 파열 위력 2 부여",atkLevel:"60(0)",sp:null},
   "unbrilliant-glory-gregor": {name:"협객",effect:"아래 조건 만족 시 칼집 속 사람 얻음 - 자신의 체력 피해 3 당 1 얻음 - 자신의 보호막 피해 5 당 1 얻음 - 본인을 제외한 아군이 흐트러지면, 한 명 당 10 얻음 - 본인을 제외한 아군이 사망하면, 한 명 당 20 얻음 턴 시작 시 피해로 인한 흐트러짐 상태일 때, 칼집 속 사람 이 40이면, 해당 턴 동안 모든 내성을 2로 고정하고 자신의 흐트러짐을 해제 (전투당 1회, 강제 흐트러짐 제외)",atkLevel:"60(0) / 63(+3) / 66(+6)",sp:null},
+  "tears-of-the-tarnished-blood-[汚血泣淚]-hong-lu": {name:"읍루",effect:"자신의 공격, 반격 스킬 종료 시 대상이 사망했으면 - 다음 턴에 신속 2 얻음 (턴 당 1회) - 다음 턴에 자신을 포함한 모든 아군에게 해당 스킬의 물리, 죄악 속성의 피해량 증가를 1 부여 (턴 당 1회) - 다음 턴에 모든 적에게 공격 위력 감소 1 부여 (턴 당 1회) 자신 사망시 - 다음 턴에 모든 아군에게 탐식 피해량 증가 , 관통 피해량 증가 1 부여 (턴 당 1회) - 다음 턴에 모든 적에게 공격 위력 감소 1 부여 (턴 당 1회)",atkLevel:"60(0) / 65(+5) / 65(+5)",sp:null},
+  "into-the-sunset-rodion": {name:"나방과 나비의 차이",effect:"조작 패널에서 가장 왼쪽에 장착한 자신의 기본 공격 스킬이 분노 또는 색욕 속성 스킬이면, 해당 스킬로 메인 타겟에게 입힌 피해량의 30%만큼 무작위 적 1명에게 공격 종료시 해당 스킬 죄악 속성 피해를 입힘 (최대 피해 30, 집중 전투의 경우, 부위로 판정) 위 효과로 최대 피해를 입혔으면 다음 턴에 해당 죄악 속성 피해량 증가 1 얻고 2턴 동안 위 효과가 발동되지 않음",atkLevel:"59(-1) / 60(0)",sp:null},
 };
 
 // E.G.O. 장착에 필요한 죄악 자원 코스트. 나무위키 원본에서 파싱.
@@ -3334,6 +3338,8 @@ const EGO_COST_DETAIL = {
   "christmas-nightmare-gregor": [{sin:"나태",count:2},{sin:"탐식",count:2},{sin:"우울",count:2},{sin:"오만",count:2}],
   "garden-of-thorns-gregor": [{sin:"분노",count:2},{sin:"색욕",count:2},{sin:"나태",count:2},{sin:"탐식",count:2},{sin:"우울",count:2},{sin:"오만",count:2},{sin:"질투",count:2}],
   "unbrilliant-glory-gregor": [{sin:"분노",count:2},{sin:"나태",count:3},{sin:"오만",count:2}],
+  "tears-of-the-tarnished-blood-[汚血泣淚]-hong-lu": [{sin:"탐식",count:5}],
+  "into-the-sunset-rodion": [{sin:"분노",count:2}],
 };
 
 const SIN_COLOR = {
@@ -4286,10 +4292,7 @@ document.getElementById("skillSetDetailBackdrop").addEventListener("click", clos
 /* ---- E.G.O. 스킬셋 상세 ---- */
 const egoDetailModal = document.getElementById("egoDetailModal");
 let egoDetailState = { slug: null, kind: "awakening" };
-function egoSkillBodyHTML(slug, kind){
-  const skill = EGO_SKILL_DETAIL[slug];
-  const s = skill && skill[kind];
-  if (!s) return `<div class="skill-tt-row"><span>정보 없음</span></div>`;
+function egoSkillFormRows(s){
   const rows = [`<div class="skill-tt-name">${escapeHTML(s.name)}</div>`];
   rows.push(`<div class="skill-tt-row"><span>속성</span><span>${sinBadgeSVG(s.sin,14)}${escapeHTML(s.sin)}</span></div>`);
   if (s.power) rows.push(`<div class="skill-tt-row"><span>기본 위력</span><span>${escapeHTML(s.power)}</span></div>`);
@@ -4303,7 +4306,17 @@ function egoSkillBodyHTML(slug, kind){
     ).join("");
     rows.push(`<div class="skill-tt-effect-block">${effectRows}</div>`);
   }
-  return rows.join("");
+  return rows;
+}
+function egoSkillBodyHTML(slug, kind){
+  const skill = EGO_SKILL_DETAIL[slug];
+  const s = skill && skill[kind];
+  if (!s) return `<div class="skill-tt-row"><span>정보 없음</span></div>`;
+  let html = egoSkillFormRows(s).join("");
+  if (s.alt){
+    html += `<div class="ego-alt-form-label">조건 미충족 시 대체 발동</div><div class="ego-alt-form-block">${egoSkillFormRows(s.alt).join("")}</div>`;
+  }
+  return html;
 }
 function egoPassiveBodyHTML(slug){
   const p = EGO_PASSIVE_DETAIL[slug];
@@ -4329,7 +4342,7 @@ function openEgoDetail(slug){
   const skill = EGO_SKILL_DETAIL[slug];
   const hasCorrosion = !!(skill && skill.corrosion);
   egoDetailState = { slug, kind: "awakening" };
-  document.getElementById("egoDetailTitle").textContent = info.title;
+  document.getElementById("egoDetailTitle").textContent = egoShortTitle(info);
   const subTabs = egoDetailModal.querySelector(".ego-skill-sub-tabs");
   if (subTabs) subTabs.hidden = !hasCorrosion;
   const costRow = document.getElementById("egoDetailCostRow");

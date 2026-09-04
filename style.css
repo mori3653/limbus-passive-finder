@@ -382,6 +382,12 @@
   .skill-tt-name{ font-weight:700; font-size:13px; color:var(--text); margin-bottom:5px; }
   .skill-tt-passive-block + .skill-tt-passive-block{ margin-top:10px; padding-top:10px; border-top:1px solid var(--border-strong); }
   .skill-tt-special-block{ margin-top:10px; padding-top:10px; border-top:1px solid var(--border-strong); }
+  .ego-alt-form-label{
+    display:inline-block; font-size:10px; font-weight:700; color:var(--accent-strong);
+    background:color-mix(in srgb, var(--accent) 15%, transparent);
+    border-radius:4px; padding:2px 6px; margin-top:10px; margin-bottom:5px;
+  }
+  .ego-alt-form-block{ padding-top:8px; border-top:1px solid var(--border-strong); }
   .skill-tt-special-tag{
     display:inline-block; font-size:10px; font-weight:700; color:var(--accent-strong);
     background:color-mix(in srgb, var(--accent) 15%, transparent);
