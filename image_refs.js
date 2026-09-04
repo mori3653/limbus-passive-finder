@@ -948,8 +948,9 @@ const IDENTITY_PORTRAIT_NORMAL_DATA = {
   "그레고르|LCB 수감자": "images/portraits_normal/185.webp",
 };
 
-// wiki.gg 원본 크롭 없는 풀 일러스트(동기화 전). 라이트박스 전용. 현재는 이상(파일럿)만 있음.
+// wiki.gg 원본 크롭 없는 풀 일러스트(동기화 전). 라이트박스 전용. 12명 전원.
 const IDENTITY_PORTRAIT_FULL_NORMAL_DATA = {
+  "오티스|거미집 중지 아비": "images/portraits_full/9.webp",
   "이상|LCE E.G.O::차원찢개": "images/portraits_full/2.webp",
   "이상|거미집 검지 아비": "images/portraits_full/19.webp",
   "이상|흑수 - 오 필두": "images/portraits_full/36.webp",
@@ -1138,6 +1139,7 @@ const IDENTITY_PORTRAIT_FULL_NORMAL_DATA = {
 
 // wiki.gg 원본 크롭 없는 풀 일러스트(동기화 후/Uptied). LCB 수감자는 동기화 상태가 없어서 없음.
 const IDENTITY_PORTRAIT_FULL_SYNCED_DATA = {
+  "오티스|거미집 중지 아비": "images/portraits_full_synced/9.webp",
   "이상|LCE E.G.O::차원찢개": "images/portraits_full_synced/2.webp",
   "이상|거미집 검지 아비": "images/portraits_full_synced/19.webp",
   "이상|흑수 - 오 필두": "images/portraits_full_synced/36.webp",
