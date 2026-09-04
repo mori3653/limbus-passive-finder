@@ -3055,6 +3055,7 @@ const EGO_SKILL_DETAIL = {
   "dimension-shredder-hong-lu": {awakening:{name:"차원찢개",sin:"오만",power:"22",coin:"+6",weight:"3",coinEffects:{1:"[적중시] 취약 1, 차원 균열 4 부여"}},corrosion:{name:"차원찢개",sin:"오만",power:"24",coin:"+10",weight:"3",coinEffects:{1:"[적중시] 취약 1, 차원 균열 4 부여"}}},
   "effervescent-corrosion-hong-lu": {awakening:{name:"들끓는 부식",sin:"탐식",power:"17",coin:"+15",weight:"2",coinEffects:{1:"[적중시] (탐식 공명 수/2)만큼 파열 부여 [적중시] 다음 턴에 탐식 취약 2 부여 [적중시] 다음 턴에 속박 2 부여"}},corrosion:{name:"들끓는 부식",sin:"탐식",power:"27",coin:"-12",weight:"3",coinEffects:{1:"[적중시] (탐식 공명 수/3)만큼 파열 횟수 증가 [적중시] 피해량의 50%만큼 자신의 체력 회복 [적중시] 다음 턴에 속박 2 부여"}}},
   "to-remain-oneself-[宁作吾]-hong-lu": {awakening:{name:"영작오",sin:"오만",power:"10",coin:"+6",weight:"4",coinEffects:{2:"시엔징 이 있으면, 크리티컬 피해량 +( 호흡 위력)% (최대 20%) 상급 시엔징 이 있으면, 크리티컬 피해량 +( 호흡 위력과 호흡 횟수의 합)% (최대 40%) [적중시] 침잠 3 부여"}},corrosion:{name:"영작오",sin:"오만",power:"4",coin:"+4",weight:"5",coinEffects:{1:"파괴 불가 코인 [적중시] 입힌 피해량의 10%만큼 오만 피해를 줌 (최대 10)",2:"파괴 불가 코인 [적중시] 입힌 피해량의 15%만큼 오만 피해를 줌 (최대 15)",3:"파괴 불가 코인 시엔징 이 있으면, 크리티컬 피해량 +( 호흡 위력)% (최대 30%) 상급 시엔징 이 있으면, 크리티컬 피해량 +( 호흡 위력과 호흡 횟수의 합)% (최대 60%) [적중시] 침잠 2 부여, 침잠 횟수 2 증가 [적중시] 입힌 피해량의 25%만큼 오만 피해를 줌 (최대 25)"}}},
+  "tears-of-the-tarnished-blood-[汚血泣淚]-hong-lu": {awakening:{name:"오혈읍루 - 시[始]",sin:"탐식",power:"20",coin:"-10",weight:"1",coinEffects:{1:"이 스킬의 최종 위력만큼 자신이 고정 피해를 받음 - 이 피해로 흐트러지거나 체력이 1 미만으로 감소하지 않음 매화첨 을 보유한 상태에서 체력이 0이 되는 피해를 받으면, 오혈읍루 - 종[終]으로 발동됨"},alt:{name:"오혈읍루 - 종[終]",sin:"탐식",power:"4",coin:"+5",weight:"7",coinEffects:{1:"[적중시] 파열 횟수 3 증가",2:"[적중시] 파열 2 부여",3:"[적중시] 파열 2 부여",4:"[적중시] 파열 2 부여"}}},corrosion:{name:"오혈읍루 - 시[始]",sin:"탐식",power:"12",coin:"-2",weight:"7",coinEffects:{1:"파괴 불가 코인 [적중시] 파열 횟수 2 증가",2:"파괴 불가 코인 [적중시] 파열 1 부여",3:"파괴 불가 코인 [적중시] 파열 1 부여",4:"파괴 불가 코인 [적중시] 파열 1 부여"}}},
   "bodysack-heathcliff": {awakening:{name:"시체자루",sin:"질투",power:"15",coin:"+9",weight:"1",coinEffects:{1:"[적중시] 다음 턴에 공격 위력 증가 1 얻음 [적중시] 다음 턴에 신속 3 얻음 [적 처치 시] 다음 턴에 공격 위력 증가 2 얻음"}},corrosion:null},
   "holiday-heathcliff": {awakening:{name:"홀리데이",sin:"탐식",power:"17",coin:"+8",weight:"2",coinEffects:{1:"[적중시] 다음 턴에 화상 , 출혈 , 진동 , 파열 , 침잠 중 무작위 1개 효과의 위력을 (2 + (최대 탐식 완전 공명의 수))회 부여 (최대 7) [적 처치 시] 무작위 아군 2명에게 다음 턴에 호흡 횟수 2, 충전 횟수 2, 신속 2, 공격 레벨 증가 2, 방어 레벨 증가 2 중 무작위 1개 효과를 부여"}},corrosion:{name:"홀리데이",sin:"탐식",power:"25",coin:"-10",weight:"2",coinEffects:{1:"[적중시] 다음 턴에 화상 , 출혈 , 진동 , 파열 , 침잠 중 무작위 1개 효과의 위력을 (2 + (최대 탐식 완전 공명의 수))회 부여 (최대 7)"}}},
   "aedd-heathcliff": {awakening:{name:"AEDD",sin:"우울",power:"22",coin:"+7",weight:"3",coinEffects:{1:"[적중시] 마비 3, 우울 취약 1 부여"}},corrosion:{name:"AEDD",sin:"우울",power:"29",coin:"-7",weight:"1",coinEffects:{1:"[적중시] 충전 횟수를 전부 소모하여 피해량의 (소모한 충전 횟수 x 2.5)%만큼 우울 속성 추가 피해를 줌 (최대 50%) [공격 종료시] 충전 횟수 전부 소모 [뒷면 공격 종료 시] 체력을 전체 체력의 10%만큼 소모하여 자신의 충전 횟수 10 증가"}}},
@@ -3082,6 +3083,7 @@ const EGO_SKILL_DETAIL = {
   "hex-nail-rodion": {awakening:{name:"저주못",sin:"질투",power:"8",coin:"+8",weight:"3",coinEffects:{1:"[적중시] 출혈 4 부여",2:"[적중시] 저주 3 부여 [앞면 적중시] 못 3 부여"}},corrosion:{name:"저주못",sin:"질투",power:"28",coin:"-6",weight:"3",coinEffects:{1:"[적중시] 출혈 4 부여 [적중시] 출혈 횟수 2 증가",2:"[적중시] 저주 3 부여 [뒷면 적중시] 못 3 부여"}}},
   "sanguine-desire-rodion": {awakening:{name:"핏빛욕망",sin:"색욕",power:"21",coin:"+12",weight:"1",coinEffects:{1:"[적중시] (대상의 출혈 위력 × 1.5)만큼 색욕 속성 피해를 줌 - 색욕 공명이 4 이상이면, ×1.8로 계산 - 최대 색욕 완전 공명 수가 4 이상이면, ×2로 계산 [적 처치시] 이 스킬의 피해 또는 코인 효과로 적의 남은 체력을 초과하여 피해를 준 경우, 초과한 피해량을 고정 피해로 적 전체에 나눠서 가함"}},corrosion:{name:"핏빛욕망",sin:"색욕",power:"30",coin:"-11",weight:"5",coinEffects:{1:"[적중시] (4 + 색욕 공명 수)만큼 출혈 부여 (공명 수 비례 최대 출혈 부여량 : 6) [적중시] 출혈 횟수 3 증가"}}},
   "indicants-trial-rodion": {awakening:{name:"지정 재판",sin:"분노",power:"8",coin:"+8",weight:"4",coinEffects:{1:"[적중시] 화상 8 부여 [적중시] 메인 타겟이면, 다음 턴에 달궈진 새장 (1 + (분노 공명 수 / 3))만큼 부여 (최대 3, 소수점 버림)"}},corrosion:{name:"지정 재판",sin:"분노",power:"8",coin:"+8",weight:"4",coinEffects:{1:"파괴 불가 코인 [파괴되지 않고 적중시] 화상 10 부여 [파괴되지 않고 적중시] 화상 횟수 1 증가 [파괴되지 않고 적중시] 메인 타겟이면, 달궈진 새장 (1 + 분노 공명 수)만큼 부여 (최대 5)",2:"파괴 불가 코인 메인 타겟의 화상 위력당 메인 타겟에게 가하는 피해량 +2% (최대 100%) [적 처치 시] 현재 체력 비율이 가장 낮은 아군 (1 + 최대 공명 수) 명에게 분노 위력 증가 1, 분노 피해량 증가 1 부여 (최대 6명, 스킬당 1회)"}}},
+  "into-the-sunset-rodion": {awakening:{name:"노을 속으로",sin:"색욕",power:"16",coin:"+8",weight:"3",coinEffects:{1:"[적중시] 화상 3 부여 [적중시] 출혈 3 부여 [이 코인 공격 종료 시] 적중한 대상에게 다음 턴에 분노 취약 1, 색욕 취약 1 부여"}},corrosion:{name:"노을 속으로",sin:"색욕",power:"24",coin:"-5",weight:"3",coinEffects:{1:"파괴 불가 코인 [적중시] 화상 2 부여 [적중시] 화상 횟수 2 증가 [이 코인 공격 종료 시] 적중한 대상에게 분노 취약 1 부여 (턴당 1회)",2:"파괴 불가 코인 [적중시] 출혈 2 부여 [적중시] 출혈 횟수 2 증가 [이 코인 공격 종료 시] 적중한 대상에게 색욕 취약 1 부여 (턴당 1회)"}}},
   "branch-of-knowledge-sinclair": {awakening:{name:"지식나무의 가지",sin:"탐식",power:"14",coin:"+15",weight:"1",coinEffects:{1:"[앞면 적중시] 파열 12 부여 [앞면 적중시] 정신력 10 감소. 다음 턴에 공격 위력 증가 1을 얻음 [뒷면 적중시] 정신력 10 회복. 다음 턴에 보호 1을 얻음"}},corrosion:null},
   "cavernous-wailing-sinclair": {awakening:{name:"낮은울음",sin:"우울",power:"16",coin:"+8",weight:"1",coinEffects:{1:"[공격 종료시] 자신과 현재 체력이 가장 적은 아군 1 + (최대 공명 수 - 2)명에게 자신의 최대 체력 20%만큼 보호막을 부여하고 울음 방울 2 부여 (자신 제외 최대 부여 대상 수 : 3) - 대상에게 이미 울음 방울 이 있으면, 울음 방울 수치를 2로 변경 - 최대 우울 완전 공명 수가 4 이상이면, 이 스킬의 울음 방울 수치가 3로 부여, 적용됨"}},corrosion:{name:"낮은울음",sin:"우울",power:"24",coin:"-8",weight:"1",coinEffects:{1:"[적중시] 침잠 2, 침잠 횟수 3 부여 [공격 종료시] 자신에게 자신의 최대 체력 (20 + 최대 공명 수 × 5)%만큼 보호막을 부여하고 울음 방울 2 부여 (최대 40%) - 자신에게 이미 울음 방울 이 있으면, 울음 방울 수치를 2로 변경 - 최대 우울 완전 공명 수가 4 이상이면, 이 스킬의 울음 방울 수치가 3로 부여, 적용됨 - 우울 공명이 4 이상이면, 자신에게 자신의 최대 체력 10%만큼 보호막 추가 부여"}}},
   "impending-day-sinclair": {awakening:{name:"다가올날",sin:"분노",power:"28",coin:"-8",weight:"1",coinEffects:{1:"[적 처치 시] 다음 턴에 공격 위력 증가 1 얻음 [적 처치 시] 아군 전체가 각자 최대 체력의 15%만큼 체력 회복"}},corrosion:{name:"다가올날",sin:"분노",power:"28",coin:"-8",weight:"1",coinEffects:{1:"[적 처치 실패 시] 다음 턴에 출혈 10 얻음 [적 처치 실패 시] 다음 턴에 공격 위력 증가 3 얻음"}}},
@@ -3109,8 +3111,6 @@ const EGO_SKILL_DETAIL = {
   "christmas-nightmare-gregor": {awakening:{name:"크리스마스 악몽",sin:"나태",power:"12",coin:"+4",weight:"5",coinEffects:{1:"[적중시] 진동 5 부여 [적중시] 진동 폭발 . 대상의 진동 횟수 1 감소",2:"[적중시] 자신이 잃은 체력의 (3 + 최대 공명 수)%만큼 회복 (스킬 당 최대 30%) [적중시] 침잠 4 부여 [적중시] 대상이 흐트러짐, 사기 저하, 패닉 상태면 다음 턴에 공격 위력 감소 1, 가장 높은 공명 속성의 취약을 1 부여"}},corrosion:{name:"크리스마스 악몽",sin:"나태",power:"22",coin:"-6",weight:"5",coinEffects:{1:"[적중시] 진동 5 부여 [적중시] 진동 폭발 . 대상의 진동 횟수 1 감소",2:"[적중시] 자신이 잃은 체력의 (3 + 최대 공명 수)%만큼 회복 (스킬 당 최대 30%) [적중시] 침잠 4 부여 [적중시] 대상이 흐트러짐, 사기 저하, 패닉 상태면 다음 턴에 공격 위력 감소 1, 가장 높은 공명 속성의 취약을 2 부여"}}},
   "garden-of-thorns-gregor": {awakening:{name:"가시 화원",sin:"색욕",power:"20",coin:"+10",weight:"4",coinEffects:{1:"[공격 종료 시] 체력 비율이 가장 낮은 아군 4명의 체력을 최대 체력의 22%만큼 회복 - (가장 높은 공명 수 - 2)만큼 회복 대상 증가 (최대 3)"}},corrosion:{name:"가시 화원",sin:"색욕",power:"30",coin:"-10",weight:"4",coinEffects:{1:"[적중시] 피해량 감소 1 부여, 다음 턴에 속박 2 부여 [적중시] 가장 높은 공명 속성의 취약과 위력 감소를 1 부여 - 해당 공명이 4 이상이면, 해당 속성 취약을 1 추가 부여 - 해당 공명이 5 이상이면, 해당 속성 위력 감소를 1 추가 부여 - 해당 공명이 완전 공명 6 이상이면, 다음 턴에도 동일한 효과 부여"}}},
   "unbrilliant-glory-gregor": {awakening:{name:"눈부시지 않은 영광 - 유수(流水)",sin:"나태",power:"5",coin:"+5",weight:"1",coinEffects:{1:"[합 불가능] 전투에서 처음 사용시 필요한 E.G.O 자원이 분노 1, 나태 2, 오만 1 감소 칼집 속 사람 이 1 이상이면, 눈부시지 않은 영광 - 광휘(光輝)로 발동됨 이 스킬은 적에게 적중하지 않고, 수비 스킬을 발동시키지 않으며, 외부 효과로 재사용이 불가능함 [공격 종료시] 칼집 속 사람 1 얻음 [공격 종료시] 정신력 25 회복 [공격 종료시] 다음 턴에 공격 레벨 증가 2, 피해량 증가 1 얻음"},alt:{name:"눈부시지 않은 영광 - 광휘(光輝)",sin:"나태",power:"10",coin:"+5",weight:"3",coinEffects:{1:"파괴 불가 코인 (소모한 칼집 속 사람 수치 / 10) - 1 만큼 코인 재사용 (최대 3회) [코인 시작시] 이 코인이 파괴되지 않았고, 공격 대상이 일정 3명 이상이면, 마지막에 사용할 코인의 피해량 +20% (집중 전투인 경우, 부위를 대상 1명으로 취급) [적중시] 화상 1 부여 [적중시] 진동 1 부여 [파괴되지 않고 적중시] 마지막에 사용하는 코인이고, 대상의 진동 위력이 15 이상이면, 진동 폭발 . 대상의 진동 횟수 1 감소 [파괴되지 않고 적중시] 이 코인 4회 사용했다면, 대상의 진동 만큼 나태 피해를 줌 (최대 10)"}}},corrosion:{name:"눈부시지 않은 영광 - 유수(流水)",sin:"나태",power:"20",coin:"-4",weight:"3",coinEffects:{1:"파괴 불가 코인",2:"파괴 불가 코인",3:"파괴 불가 코인",4:"파괴 불가 코인 [적중시] 화상 5 부여 [적중시] 진동 5 부여 [파괴되지 않고 적중시] 마지막에 사용하는 코인이고, 대상의 진동 위력이 15 이상이면, 진동 폭발 . 대상의 진동 횟수 1 감소"}}},
-  "tears-of-the-tarnished-blood-[汚血泣淚]-hong-lu": {awakening:{name:"오혈읍루 - 시[始]",sin:"탐식",power:"20",coin:"-10",weight:"1",coinEffects:{1:"이 스킬의 최종 위력만큼 자신이 고정 피해를 받음 - 이 피해로 흐트러지거나 체력이 1 미만으로 감소하지 않음 매화첨 을 보유한 상태에서 체력이 0이 되는 피해를 받으면, 오혈읍루 - 종[終]으로 발동됨"},alt:{name:"오혈읍루 - 종[終]",sin:"탐식",power:"4",coin:"+5",weight:"7",coinEffects:{1:"[적중시] 파열 횟수 3 증가",2:"[적중시] 파열 2 부여",3:"[적중시] 파열 2 부여",4:"[적중시] 파열 2 부여"}}},corrosion:{name:"오혈읍루 - 시[始]",sin:"탐식",power:"12",coin:"-2",weight:"7",coinEffects:{1:"파괴 불가 코인 [적중시] 파열 횟수 2 증가",2:"파괴 불가 코인 [적중시] 파열 1 부여",3:"파괴 불가 코인 [적중시] 파열 1 부여",4:"파괴 불가 코인 [적중시] 파열 1 부여"}}},
-  "into-the-sunset-rodion": {awakening:{name:"노을 속으로",sin:"색욕",power:"16",coin:"+8",weight:"3",coinEffects:{1:"[적중시] 화상 3 부여 [적중시] 출혈 3 부여 [이 코인 공격 종료 시] 적중한 대상에게 다음 턴에 분노 취약 1, 색욕 취약 1 부여"}},corrosion:{name:"노을 속으로",sin:"색욕",power:"24",coin:"-5",weight:"3",coinEffects:{1:"파괴 불가 코인 [적중시] 화상 2 부여 [적중시] 화상 횟수 2 증가 [이 코인 공격 종료 시] 적중한 대상에게 분노 취약 1 부여 (턴당 1회)",2:"파괴 불가 코인 [적중시] 출혈 2 부여 [적중시] 출혈 횟수 2 증가 [이 코인 공격 종료 시] 적중한 대상에게 색욕 취약 1 부여 (턴당 1회)"}}},
 };
 
 const EGO_PASSIVE_DETAIL = {
@@ -3169,6 +3169,7 @@ const EGO_PASSIVE_DETAIL = {
   "dimension-shredder-hong-lu": {name:"뒤얽힌 현상 복구",effect:"부정적인 효과를 가진 적에게 공격 적중 시 자신의 충전 횟수 1 증가 (턴 당 최대 4회) 체력이 0이 될 때 충전 횟수를 전부 소모하고, 소모한 값에 비례하여 체력 회복 (전투당 1회 발동, 회복량 최대값: 전체 체력의 25%)",atkLevel:"61(+1) / 65(+5)",sp:null},
   "effervescent-corrosion-hong-lu": {name:"녹색 진액",effect:"피격 시 현재 체력이 최대 체력의 50% 미만이면, 공격자에게 파열 1 부여. (턴 당 가장 많은 탐식 완전 공명 수만큼 발동)",atkLevel:"60(0) / 63(+3)",sp:null},
   "to-remain-oneself-[宁作吾]-hong-lu": {name:"시를 쓰고 술에 취하다",effect:"턴 종료 시, 영작오 홍루 사용 시 소모되는 E.G.O 자원(나태, 우울, 오만) 중 가장 적게 보유한 E.G.O 자원 1개를 얻음 이번 전투에서 시엔징 , 상급 시엔징 이 감소 또는 소모된 수치 1당 피해량 +1% (최대 15%)",atkLevel:"63(+3) / 65(+5)",sp:null},
+  "tears-of-the-tarnished-blood-[汚血泣淚]-hong-lu": {name:"읍루",effect:"자신의 공격, 반격 스킬 종료 시 대상이 사망했으면 - 다음 턴에 신속 2 얻음 (턴 당 1회) - 다음 턴에 자신을 포함한 모든 아군에게 해당 스킬의 물리, 죄악 속성의 피해량 증가를 1 부여 (턴 당 1회) - 다음 턴에 모든 적에게 공격 위력 감소 1 부여 (턴 당 1회) 자신 사망시 - 다음 턴에 모든 아군에게 탐식 피해량 증가 , 관통 피해량 증가 1 부여 (턴 당 1회) - 다음 턴에 모든 적에게 공격 위력 감소 1 부여 (턴 당 1회)",atkLevel:"60(0) / 65(+5) / 65(+5)",sp:null},
   "bodysack-heathcliff": {name:"오기",effect:"다른 아군이 적을 처치하면 다음 턴 시작 시 공격 위력 증가 1, 신속 1을 얻음 (최대 3)",atkLevel:"63(+3)",sp:null},
   "holiday-heathcliff": {name:"무한한 증오",effect:"자신에게 상태 이상 또는 부정적인 효과가 있을 때, 메인 공격 대상 또는 자신을 공격하는 대상에게 긍정적인 효과가 있으면, 스킬, 코인 효과로 자신과 적에게 부여하는 화상 , 출혈 , 진동 , 파열 , 침잠 의 위력 +1, 스킬, 코인 효과로 자신이 얻는 호흡 , 충전 횟수 +1",atkLevel:"60(0)",sp:null},
   "aedd-heathcliff": {name:"신경질적인 방전",effect:"피격 시 충전 횟수를 1 소모하여 최대 체력의 2.5%만큼 체력 회복 피격 시 체력이 40% 미만인 경우 충전 횟수가 1 증가한 뒤, 체력 회복 효과가 발동됨 ( 충전 횟수는 턴 당 최대 10까지 증가 가능)",atkLevel:"60(0) / 62(+2)",sp:null},
@@ -3196,6 +3197,7 @@ const EGO_PASSIVE_DETAIL = {
   "hex-nail-rodion": {name:"가슴에 박힌 쇠말뚝",effect:"기본 공격 스킬을 사용하여 적에게 출혈 또는 특수 출혈을 부여할 경우, 방어 레벨 감소 1 부여 (턴 당 1회) - 대상 적이 출혈 또는 특수 출혈을 보유하였다면 출혈 2 추가로 부여 (턴 당 1회) 자신을 포함한 아군이 적에게 스킬로 직접적인 체력 피해를 받은 경우, 대상 적에게 저주 1 부여 (턴 당 2회)",atkLevel:"57(-3) / 60(0)",sp:null},
   "sanguine-desire-rodion": {name:"집착",effect:"자신의 스킬 패널에서 가장 왼쪽에 위치한 스킬의 출혈 위력 부여량이 2배로 증가",atkLevel:"60(0)",sp:null},
   "indicants-trial-rodion": {name:"작열유희",effect:"화상 횟수가 10 이상인 대상 사망 시 모든 적에게 대상의 화상 횟수를 나누어 부여하고, 자신의 정신력 8 회복 (집중 전투인 경우, 모든 부위에 나누어 부여. 대상당 최대 부여량: 3, 턴 당 2회 발동) - 자신의 정신력이 최대치면, 대신 정신력이 가장 낮은 아군 1명 정신력 5 회복",atkLevel:"63(+3) / 65(+5)",sp:null},
+  "into-the-sunset-rodion": {name:"나방과 나비의 차이",effect:"조작 패널에서 가장 왼쪽에 장착한 자신의 기본 공격 스킬이 분노 또는 색욕 속성 스킬이면, 해당 스킬로 메인 타겟에게 입힌 피해량의 30%만큼 무작위 적 1명에게 공격 종료시 해당 스킬 죄악 속성 피해를 입힘 (최대 피해 30, 집중 전투의 경우, 부위로 판정) 위 효과로 최대 피해를 입혔으면 다음 턴에 해당 죄악 속성 피해량 증가 1 얻고 2턴 동안 위 효과가 발동되지 않음",atkLevel:"59(-1) / 60(0)",sp:null},
   "branch-of-knowledge-sinclair": {name:"불안정",effect:"한 스킬에서 공격 적중 시 이전에 판정한 코인과 다른 면의 코인 나오면 정신력 -5, 이번 턴에 피해량 증가 1을 얻음. (턴당 최대 3회)",atkLevel:"63(+3)",sp:null},
   "cavernous-wailing-sinclair": {name:"눈물막",effect:"턴 시작 시 자신에게 보호막이 적용 중일 때 보호 1 얻음 자신에게 울음 방울 이 적용 중일 때, 보호 1 추가로 얻음",atkLevel:"58(-2) / 60(0)",sp:null},
   "impending-day-sinclair": {name:"산제물 의식",effect:"공격, 반격 스킬로 적 처치 시 처치한 스킬 속성 자원을 5개 획득",atkLevel:"61(+1)",sp:null},
@@ -3223,8 +3225,6 @@ const EGO_PASSIVE_DETAIL = {
   "christmas-nightmare-gregor": {name:"잠들지 못하는 밤",effect:"전투 시작 시 흐트러짐, 사기 저하, 패닉 상태인 적의 수만큼 모든 적에게 각각 공격 레벨 감소 1 또는 방어 레벨 감소 1 부여 (턴 당 최대 2회) 동일한 효과를 갖는 E.G.O 기프트와 중첩하여 발동되지 않음",atkLevel:"61(+1) / 62(+2)",sp:null},
   "garden-of-thorns-gregor": {name:"장미 면류관",effect:"턴 시작 시, 무작위 적 1명에게 파열 위력 2 부여 완전 공명을 발동하였다면 전투 시작 시, 모든 적에게 파열 위력 2 부여",atkLevel:"60(0)",sp:null},
   "unbrilliant-glory-gregor": {name:"협객",effect:"아래 조건 만족 시 칼집 속 사람 얻음 - 자신의 체력 피해 3 당 1 얻음 - 자신의 보호막 피해 5 당 1 얻음 - 본인을 제외한 아군이 흐트러지면, 한 명 당 10 얻음 - 본인을 제외한 아군이 사망하면, 한 명 당 20 얻음 턴 시작 시 피해로 인한 흐트러짐 상태일 때, 칼집 속 사람 이 40이면, 해당 턴 동안 모든 내성을 2로 고정하고 자신의 흐트러짐을 해제 (전투당 1회, 강제 흐트러짐 제외)",atkLevel:"60(0) / 63(+3) / 66(+6)",sp:null},
-  "tears-of-the-tarnished-blood-[汚血泣淚]-hong-lu": {name:"읍루",effect:"자신의 공격, 반격 스킬 종료 시 대상이 사망했으면 - 다음 턴에 신속 2 얻음 (턴 당 1회) - 다음 턴에 자신을 포함한 모든 아군에게 해당 스킬의 물리, 죄악 속성의 피해량 증가를 1 부여 (턴 당 1회) - 다음 턴에 모든 적에게 공격 위력 감소 1 부여 (턴 당 1회) 자신 사망시 - 다음 턴에 모든 아군에게 탐식 피해량 증가 , 관통 피해량 증가 1 부여 (턴 당 1회) - 다음 턴에 모든 적에게 공격 위력 감소 1 부여 (턴 당 1회)",atkLevel:"60(0) / 65(+5) / 65(+5)",sp:null},
-  "into-the-sunset-rodion": {name:"나방과 나비의 차이",effect:"조작 패널에서 가장 왼쪽에 장착한 자신의 기본 공격 스킬이 분노 또는 색욕 속성 스킬이면, 해당 스킬로 메인 타겟에게 입힌 피해량의 30%만큼 무작위 적 1명에게 공격 종료시 해당 스킬 죄악 속성 피해를 입힘 (최대 피해 30, 집중 전투의 경우, 부위로 판정) 위 효과로 최대 피해를 입혔으면 다음 턴에 해당 죄악 속성 피해량 증가 1 얻고 2턴 동안 위 효과가 발동되지 않음",atkLevel:"59(-1) / 60(0)",sp:null},
 };
 
 // E.G.O. 장착에 필요한 죄악 자원 코스트. 나무위키 원본에서 파싱.
@@ -3284,6 +3284,7 @@ const EGO_COST_DETAIL = {
   "dimension-shredder-hong-lu": [{sin:"탐식",count:3},{sin:"오만",count:3}],
   "effervescent-corrosion-hong-lu": [{sin:"탐식",count:6},{sin:"우울",count:1}],
   "to-remain-oneself-[宁作吾]-hong-lu": [{sin:"나태",count:1},{sin:"우울",count:2},{sin:"오만",count:4}],
+  "tears-of-the-tarnished-blood-[汚血泣淚]-hong-lu": [{sin:"탐식",count:5}],
   "bodysack-heathcliff": [{sin:"색욕",count:2},{sin:"질투",count:2}],
   "holiday-heathcliff": [{sin:"탐식",count:3},{sin:"질투",count:2}],
   "aedd-heathcliff": [{sin:"우울",count:3},{sin:"질투",count:2}],
@@ -3311,6 +3312,7 @@ const EGO_COST_DETAIL = {
   "hex-nail-rodion": [{sin:"색욕",count:2},{sin:"오만",count:1},{sin:"질투",count:4}],
   "sanguine-desire-rodion": [{sin:"분노",count:1},{sin:"색욕",count:3},{sin:"오만",count:3},{sin:"질투",count:3}],
   "indicants-trial-rodion": [{sin:"분노",count:7},{sin:"오만",count:3}],
+  "into-the-sunset-rodion": [{sin:"분노",count:2}],
   "branch-of-knowledge-sinclair": [{sin:"분노",count:1},{sin:"탐식",count:3}],
   "cavernous-wailing-sinclair": [{sin:"색욕",count:1},{sin:"나태",count:2},{sin:"우울",count:3}],
   "impending-day-sinclair": [{sin:"분노",count:3},{sin:"색욕",count:2}],
@@ -3338,8 +3340,6 @@ const EGO_COST_DETAIL = {
   "christmas-nightmare-gregor": [{sin:"나태",count:2},{sin:"탐식",count:2},{sin:"우울",count:2},{sin:"오만",count:2}],
   "garden-of-thorns-gregor": [{sin:"분노",count:2},{sin:"색욕",count:2},{sin:"나태",count:2},{sin:"탐식",count:2},{sin:"우울",count:2},{sin:"오만",count:2},{sin:"질투",count:2}],
   "unbrilliant-glory-gregor": [{sin:"분노",count:2},{sin:"나태",count:3},{sin:"오만",count:2}],
-  "tears-of-the-tarnished-blood-[汚血泣淚]-hong-lu": [{sin:"탐식",count:5}],
-  "into-the-sunset-rodion": [{sin:"분노",count:2}],
 };
 
 const SIN_COLOR = {
@@ -3473,7 +3473,7 @@ const IDENTITY_KW_LIST = ["화상","출혈","진동","파열","침잠","호흡",
 // 한 글자짜리 키워드(예: "관")는 아무 단어에나 걸려 오탐이 심해 하이라이트 대상에서 제외.
 const KEYWORD_TERMS = Object.keys(KEYWORD_DEFS).filter(k => k.length >= 2).sort((a,b) => b.length - a.length);
 // 키워드 뒤에 특정 글자가 붙으면 무관한 고유명사(예: "광신도")로 취급해 하이라이트에서 제외.
-const KEYWORD_EXCLUDE_FOLLOW = { "광신": ["도"] };
+const KEYWORD_EXCLUDE_FOLLOW = { "광신": ["도"], "오혈": ["읍루"] };
 // 키워드 앞에 특정 글자가 붙으면 무관한 일반 표현(예: "소수점 버림")으로 취급해 하이라이트에서 제외.
 const KEYWORD_EXCLUDE_PRECEDE = { "버림": ["소수점 ", "소숫점 "] };
 const KEYWORD_RE = new RegExp(KEYWORD_TERMS.map(t => {
