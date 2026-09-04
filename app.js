@@ -3023,7 +3023,18 @@ const EGO_PASSIVE_DETAIL = {
   "great-trichiliocosm-[三千大世界]-yi-sang": {name:"하늘 엮기",effect:"대상이 깨어진 세계 를 보유 중이면, 자신의 기본 공격 스킬로 부여하는 화상 위력, 침잠 위력 부여량 +1 (턴당 최대 8 추가 부여) 화상 피해로 사망한 적 1명당 다음 턴에 무작위 물리 속성의 피해량 증가 1 얻음 (턴당 최대 3, 획득 시마다 무작위로 획득)",atkLevel:"63(+3)",sp:null},
 };
 
-
+// E.G.O. 장착에 필요한 죄악 자원 코스트. 나무위키 원본에서 파싱.
+const EGO_COST_DETAIL = {
+  "crows-eye-view-yi-sang": [{sin:"분노",count:1},{sin:"나태",count:3}],
+  "bygone-days-yi-sang": [{sin:"나태",count:3},{sin:"우울",count:3}],
+  "4th-match-flame-yi-sang": [{sin:"분노",count:5},{sin:"나태",count:1},{sin:"탐식",count:1}],
+  "wishing-cairn-yi-sang": [{sin:"나태",count:4},{sin:"우울",count:1}],
+  "dimension-shredder-yi-sang": [{sin:"나태",count:3},{sin:"탐식",count:3}],
+  "fell-bullet-yi-sang": [{sin:"분노",count:2},{sin:"오만",count:6}],
+  "solemn-lament-yi-sang": [{sin:"나태",count:1},{sin:"우울",count:4},{sin:"오만",count:2}],
+  "sunshower-yi-sang": [{sin:"나태",count:4},{sin:"탐식",count:2},{sin:"우울",count:2},{sin:"오만",count:2}],
+  "great-trichiliocosm-[三千大世界]-yi-sang": [{sin:"분노",count:4},{sin:"우울",count:2},{sin:"오만",count:2},{sin:"질투",count:4}],
+};
 
 const SIN_COLOR = {
   "분노":"#dc2626", "색욕":"#ea580c", "나태":"#ca8a04", "탐식":"#16a34a",
@@ -3498,6 +3509,11 @@ function skillSetCardHTML(d){
     </article>`;
 }
 
+function egoCostBadgesHTML(slug){
+  const cost = EGO_COST_DETAIL[slug];
+  if (!cost || !cost.length) return "";
+  return cost.map(c => `<span class="ego-cost-badge">${sinBadgeSVG(c.sin, 16)}${c.count}</span>`).join("");
+}
 function egoCardHTML(slug){
   const info = EGO_DATA[slug];
   if (!info) return "";
@@ -3507,18 +3523,10 @@ function egoCardHTML(slug){
   const bannerHTML = bannerSrc ? `<img class="card-banner" src="${bannerSrc}" alt="" loading="lazy">` : "";
   const iconSrc = SINNER_ICON_DATA[info.sinner];
   const iconHTML = iconSrc ? `<img class="sinner-icon-inline" src="${iconSrc}" alt="" loading="lazy">` : "";
-  const rows = [
-    {label:"각성", key:"awakening"},
-    {label:"침식", key:"corrosion"},
-  ].map(r => {
-    const s = skill && skill[r.key];
-    const sinHTML = s && s.sin ? sinBadgeSVG(s.sin, 22) : `<span class="skillset-slot-empty"></span>`;
-    return `<button type="button" class="skillset-slot-btn ego-slot-btn" data-slug="${slug}" data-kind="${r.key}">
-      <span class="skillset-slot-label">${r.label}</span>
-      ${sinHTML}
-      ${s ? `<span class="ego-slot-coin">${s.coin}</span>` : ""}
-    </button>`;
-  }).join("");
+  // 각성/침식 스킬은 항상 같은 죄악 속성을 공유하므로 대표 속성 하나만 표시.
+  const sin = (skill && skill.awakening && skill.awakening.sin) || null;
+  const sinHTML = sin ? `${sinBadgeSVG(sin, 20)}<span class="ego-attr-label">${sin}</span>` : "";
+  const costHTML = egoCostBadgesHTML(slug);
   return `
     <article class="card">
       ${bannerHTML}
@@ -3530,7 +3538,10 @@ function egoCardHTML(slug){
           </div>
           <span class="card-identity">${info.title}</span>
         </div>
-        <div class="skillset-skill-row ego-skill-row">${rows}</div>
+        <div class="ego-attr-row">
+          <span class="ego-attr-left">${sinHTML}</span>
+          <span class="ego-attr-right">${costHTML}</span>
+        </div>
         <div class="skillset-card-footer">
           <button type="button" class="skillset-passive-btn ego-passive-btn" data-slug="${slug}">E.G.O. 패시브</button>
           <button type="button" class="skillset-detail-btn ego-detail-btn" data-slug="${slug}">상세 보기</button>
@@ -3539,10 +3550,17 @@ function egoCardHTML(slug){
     </article>`;
 }
 function renderEgoSkillSet(){
-  const slugs = Object.keys(EGO_SKILL_DETAIL);
+  const q = state.skillSetQ.trim().toLowerCase();
+  const slugs = Object.keys(EGO_SKILL_DETAIL).filter(slug => {
+    if (!q) return true;
+    const info = EGO_DATA[slug];
+    if (!info) return false;
+    return `${info.sinner} ${info.title}`.toLowerCase().includes(q);
+  });
   const grid = document.getElementById("egoSkillSetGrid");
   document.getElementById("skillSetShownCount").textContent = slugs.length;
   grid.innerHTML = slugs.map(egoCardHTML).join("");
+  document.getElementById("skillSetActivePills").innerHTML = "";
 }
 function setSkillSetSubTab(tab){
   state.skillSetSubTab = tab;
@@ -3552,6 +3570,8 @@ function setSkillSetSubTab(tab){
   egoBtn.setAttribute("aria-pressed", tab === "ego" ? "true" : "false");
   document.getElementById("skillSetGrid").hidden = tab !== "identity";
   document.getElementById("egoSkillSetGrid").hidden = tab !== "ego";
+  document.getElementById("skillSetFiltersAside").hidden = tab !== "identity";
+  document.getElementById("skillSetView").classList.toggle("ego-mode", tab === "ego");
   document.getElementById("skillSetShownLabel").textContent = tab === "ego" ? "개 E.G.O. 표시 중" : "개 인격 표시 중";
   if (tab === "ego") renderEgoSkillSet();
   else renderSkillSet();
@@ -3596,8 +3616,9 @@ const searchInput = document.getElementById("searchInput");
 searchInput.addEventListener("input", e => { state.q = e.target.value; render(); });
 document.getElementById("clearSearch").addEventListener("click", () => { state.q=""; searchInput.value=""; render(); });
 const skillSetSearchInput = document.getElementById("skillSetSearchInput");
-skillSetSearchInput.addEventListener("input", e => { state.skillSetQ = e.target.value; renderSkillSet(); });
-document.getElementById("skillSetClearSearch").addEventListener("click", () => { state.skillSetQ=""; skillSetSearchInput.value=""; renderSkillSet(); });
+function renderActiveSkillSetSubTab(){ state.skillSetSubTab === "ego" ? renderEgoSkillSet() : renderSkillSet(); }
+skillSetSearchInput.addEventListener("input", e => { state.skillSetQ = e.target.value; renderActiveSkillSetSubTab(); });
+document.getElementById("skillSetClearSearch").addEventListener("click", () => { state.skillSetQ=""; skillSetSearchInput.value=""; renderActiveSkillSetSubTab(); });
 const syncToggle = document.getElementById("syncToggle");
 const syncToggleLabel = document.getElementById("syncToggleLabel");
 syncToggle.addEventListener("change", () => {
@@ -3786,18 +3807,6 @@ document.body.addEventListener("click", e => {
     e.stopPropagation();
     return;
   }
-  const egoSlotBtn = e.target.closest(".ego-slot-btn");
-  if (egoSlotBtn){
-    const { slug, kind } = egoSlotBtn.dataset;
-    const openKey = `egoslot:${slug}|${kind}`;
-    const isSame = kwTooltip.dataset.openFor === openKey && !kwTooltip.hidden;
-    if (isSame){ hideKwTooltip(); kwTooltip.dataset.openFor = ""; return; }
-    kwTooltip.dataset.openFor = openKey;
-    const label = kind === "awakening" ? "각성 스킬" : "침식 스킬";
-    showTooltipAt(label, egoSkillBodyHTML(slug, kind), egoSlotBtn);
-    e.stopPropagation();
-    return;
-  }
   const egoPassiveBtn = e.target.closest(".ego-passive-btn");
   if (egoPassiveBtn){
     const { slug } = egoPassiveBtn.dataset;
@@ -3890,6 +3899,8 @@ function egoSkillBodyHTML(slug, kind){
   if (s.power) rows.push(`<div class="skill-tt-row"><span>기본 위력</span><span>${escapeHTML(s.power)}</span></div>`);
   if (s.coin) rows.push(`<div class="skill-tt-row"><span>코인 위력</span><span>${escapeHTML(s.coin)}</span></div>`);
   if (s.weight) rows.push(`<div class="skill-tt-row"><span>공격 가중치</span><span>${escapeHTML(s.weight)}</span></div>`);
+  const coinCount = s.coinCount || Object.keys(s.coinEffects || {}).length;
+  if (coinCount) rows.push(`<div class="skill-tt-row"><span>코인 수</span><span>${coinCount}개</span></div>`);
   if (s.coinEffects && Object.keys(s.coinEffects).length){
     const effectRows = Object.keys(s.coinEffects).sort((a,b) => Number(a)-Number(b)).map(n =>
       `<div class="skill-tt-coin-effect"><span class="skill-tt-coin-num">${n}</span><span>${linkifyKeywords(s.coinEffects[n])}</span></div>`
@@ -3903,7 +3914,6 @@ function egoPassiveBodyHTML(slug){
   if (!p) return `<div class="skill-tt-row"><span>정보 없음</span></div>`;
   const rows = [`<div class="skill-tt-name">${escapeHTML(p.name)}</div>`];
   if (p.atkLevel) rows.push(`<div class="skill-tt-row"><span>공격 레벨</span><span>${escapeHTML(p.atkLevel)}</span></div>`);
-  if (p.sp) rows.push(`<div class="skill-tt-row"><span>코스트</span><span>${escapeHTML(p.sp)}</span></div>`);
   rows.push(`<div class="skill-tt-effect-block"><div class="skill-tt-coin-effect"><span>${linkifyKeywords(p.effect)}</span></div></div>`);
   return `<div class="skill-tt-passive-block">${rows.join("")}</div>`;
 }
@@ -3920,8 +3930,12 @@ function setEgoDetailTab(kind){
 function openEgoDetail(slug){
   const info = EGO_DATA[slug];
   if (!info) return;
+  const skill = EGO_SKILL_DETAIL[slug];
+  const hasCorrosion = !!(skill && skill.corrosion);
   egoDetailState = { slug, kind: "awakening" };
   document.getElementById("egoDetailTitle").textContent = info.title;
+  const subTabs = egoDetailModal.querySelector(".ego-skill-sub-tabs");
+  if (subTabs) subTabs.hidden = !hasCorrosion;
   setEgoDetailTab("awakening");
   egoDetailModal.hidden = false;
 }
