@@ -3484,7 +3484,7 @@ function skillSetCardHTML(d){
   const slotsHTML = slots.map(s => {
     const sin = s.info && s.info.sin;
     const uniqueIcon = iconData && iconData[s.iconKey];
-    const iconOrEmpty = sin ? skillFrameHTML(sin, 30, s.info && s.info.tier, uniqueIcon) : `<span class="skillset-slot-empty"></span>`;
+    const iconOrEmpty = sin ? skillFrameHTML(sin, 36, s.info && s.info.tier, uniqueIcon) : `<span class="skillset-slot-empty"></span>`;
     const specialBadge = specialBySlot[s.key] ? `<span class="skillset-special-badge" title="특수 발동 스킬 있음">+</span>` : "";
     return `<button type="button" class="skillset-slot-btn" data-sinner="${d.sinner.replace(/"/g,"&quot;")}" data-identity="${d.identity.replace(/"/g,"&quot;")}" data-num="${s.num}">
       ${specialBadge}
@@ -3529,9 +3529,8 @@ function egoCardHTML(slug){
   const info = EGO_DATA[slug];
   if (!info) return "";
   const skill = EGO_SKILL_DETAIL[slug];
-  const banner = EGO_BANNER_DATA[slug] || {};
-  const bannerSrc = banner.awaken || EGO_ICON_DATA[slug];
-  const bannerHTML = bannerSrc ? `<img class="card-banner" src="${bannerSrc}" alt="" loading="lazy">` : "";
+  const portraitSrc = EGO_ICON_DATA[slug];
+  const portraitHTML = portraitSrc ? `<img class="ego-card-portrait" src="${portraitSrc}" alt="" loading="lazy">` : "";
   const iconSrc = SINNER_ICON_DATA[info.sinner];
   const iconHTML = iconSrc ? `<img class="sinner-icon-inline" src="${iconSrc}" alt="" loading="lazy">` : "";
   // 각성/침식 스킬은 항상 같은 죄악 속성을 공유하므로 대표 속성 하나만 표시.
@@ -3539,10 +3538,11 @@ function egoCardHTML(slug){
   const sinHTML = sin ? `${sinBadgeSVG(sin, 20)}<span class="ego-attr-label">${sin}</span>` : "";
   const costHTML = egoCostBadgesHTML(slug);
   return `
-    <article class="card">
-      ${bannerHTML}
+    <article class="card ego-card">
+      <div class="ego-card-header"></div>
+      ${portraitHTML}
       <span class="rarity-badge">${info.grade}</span>
-      <div class="card-body">
+      <div class="card-body ego-card-body">
         <div class="card-info">
           <div class="card-sinner-row">
             ${iconHTML}<span class="card-sinner">${info.sinner}</span>
@@ -4126,16 +4126,20 @@ function skillFrameHTML(sin, size, tier, uniqueIconSrc){
 }
 function slotDetailHTML(sinner){
   if (deckState.detailTab === "skill"){
-    const prof = IDENTITY_SKILL_PROFILE[`${sinner}|${deckState.assigned[sinner]}`];
+    const identity = deckState.assigned[sinner];
+    const prof = IDENTITY_SKILL_PROFILE[`${sinner}|${identity}`];
     if (!prof) return `<div class="slot-detail"><span class="slot-detail-empty">데이터 없음</span></div>`;
+    const iconData = IDENTITY_SKILL_ICON_DATA[`${sinner}|${identity}`];
     const counts = deckState.skillCounts[sinner] || SKILL_RULE_DEFAULT.defaultSplit;
     const skillRows = [1,2,3].map(num => {
       const info = prof.skills[num-1];
       const cur = counts[num] || 0;
-      return `<div class="slot-detail-row">${skillFrameHTML(info && info.sin, 22)}<span>Skill ${num} x${cur}</span></div>`;
+      const uniqueIcon = iconData && iconData[`skill${num}`];
+      return `<div class="slot-detail-row">${skillFrameHTML(info && info.sin, 32, info && info.tier, uniqueIcon)}<span>Skill ${num} x${cur}</span></div>`;
     }).join("");
     const defInfo = prof.defense && prof.defense[0];
-    const defRow = `<div class="slot-detail-row">${skillFrameHTML(defInfo && defInfo.sin, 22)}<span>DEF</span></div>`;
+    const defUniqueIcon = iconData && iconData.def;
+    const defRow = `<div class="slot-detail-row">${skillFrameHTML(defInfo && defInfo.sin, 32, defInfo && defInfo.tier, defUniqueIcon)}<span>DEF</span></div>`;
     return `<div class="slot-detail">${skillRows}${defRow}</div>`;
   }
   const eg = deckState.egoAssigned[sinner] || {};

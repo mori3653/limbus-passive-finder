@@ -584,18 +584,6 @@ const EGO_ICON_DATA = {
   "shadow-vested-bladesinger-[着影揮刀]-meursault": "images/egos/111.webp",
 };
 
-// E.G.O. 카드/상세 창 배너용 각성·침식 일러스트. 현재는 이상(파일럿)만.
-const EGO_BANNER_DATA = {
-  "crows-eye-view-yi-sang": {awaken:"images/ego_banners/crows-eye-view-yi-sang_awaken.webp"},
-  "bygone-days-yi-sang": {awaken:"images/ego_banners/bygone-days-yi-sang_awaken.webp", erosion:"images/ego_banners/bygone-days-yi-sang_erosion.webp"},
-  "4th-match-flame-yi-sang": {awaken:"images/ego_banners/4th-match-flame-yi-sang_awaken.webp", erosion:"images/ego_banners/4th-match-flame-yi-sang_erosion.webp"},
-  "wishing-cairn-yi-sang": {awaken:"images/ego_banners/wishing-cairn-yi-sang_awaken.webp", erosion:"images/ego_banners/wishing-cairn-yi-sang_erosion.webp"},
-  "dimension-shredder-yi-sang": {awaken:"images/ego_banners/dimension-shredder-yi-sang_awaken.webp", erosion:"images/ego_banners/dimension-shredder-yi-sang_erosion.webp"},
-  "fell-bullet-yi-sang": {awaken:"images/ego_banners/fell-bullet-yi-sang_awaken.webp", erosion:"images/ego_banners/fell-bullet-yi-sang_erosion.webp"},
-  "sunshower-yi-sang": {awaken:"images/ego_banners/sunshower-yi-sang_awaken.webp", erosion:"images/ego_banners/sunshower-yi-sang_erosion.webp"},
-  "great-trichiliocosm-[三千大世界]-yi-sang": {awaken:"images/ego_banners/great-trichiliocosm-[三千大世界]-yi-sang_awaken.webp", erosion:"images/ego_banners/great-trichiliocosm-[三千大世界]-yi-sang_erosion.webp"},
-};
-
 const IDENTITY_PORTRAIT_SYNCED_DATA = {
   "홍루|동부 섕크 협회 3과": "images/portraits_synced/1.webp",
   "이상|LCE E.G.O::차원찢개": "images/portraits_synced/2.webp",

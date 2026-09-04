@@ -507,6 +507,14 @@
     background:var(--bg); box-shadow:var(--shadow);
   }
   #skillSetFiltersAside[hidden], #egoFiltersAside[hidden]{ display:none; }
+  .ego-card-header{ height:34px; background:var(--surface-2); border-bottom:1px solid var(--border); }
+  .ego-card-portrait{
+    position:absolute; left:50%; top:10px; transform:translateX(-50%);
+    width:84px; height:84px; border-radius:50%; object-fit:cover;
+    border:3px solid var(--surface); box-shadow:var(--shadow);
+    background:var(--surface-2); z-index:1;
+  }
+  .ego-card-body{ padding-top:58px; }
   .ego-attr-row{
     display:flex; align-items:center; justify-content:space-between;
     border:1px solid var(--border-strong); background:var(--surface-2);
@@ -535,7 +543,7 @@
   }
   .skillset-slot-btn:hover{ border-color:var(--text-faint); }
   .skillset-slot-label{ font-size:9.5px; font-weight:700; color:var(--text-faint); letter-spacing:0.02em; }
-  .skillset-slot-empty{ width:30px; height:30px; border-radius:50%; border:1.5px dashed var(--border-strong); }
+  .skillset-slot-empty{ width:36px; height:36px; border-radius:50%; border:1.5px dashed var(--border-strong); }
   .skillset-special-badge{
     position:absolute; top:-5px; right:-5px; z-index:1;
     width:14px; height:14px; border-radius:50%;
