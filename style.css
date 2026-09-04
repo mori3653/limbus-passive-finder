@@ -535,7 +535,7 @@
   }
   .skillset-slot-btn:hover{ border-color:var(--text-faint); }
   .skillset-slot-label{ font-size:9.5px; font-weight:700; color:var(--text-faint); letter-spacing:0.02em; }
-  .skillset-slot-empty{ width:22px; height:22px; border-radius:50%; border:1.5px dashed var(--border-strong); }
+  .skillset-slot-empty{ width:30px; height:30px; border-radius:50%; border:1.5px dashed var(--border-strong); }
   .skillset-special-badge{
     position:absolute; top:-5px; right:-5px; z-index:1;
     width:14px; height:14px; border-radius:50%;

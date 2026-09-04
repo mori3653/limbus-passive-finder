@@ -3472,17 +3472,19 @@ function skillSetCardHTML(d){
   const iconHTML = iconSrc ? `<img class="sinner-icon-inline" src="${iconSrc}" alt="" loading="lazy">` : "";
   const bannerHTML = bannerSrc ? `<img class="card-banner" src="${bannerSrc}" alt="" loading="lazy">` : "";
   const slots = [
-    {label:"Skill 1", num:"1", info: prof && prof.skills[0], key:"skill1"},
-    {label:"Skill 2", num:"2", info: prof && prof.skills[1], key:"skill2"},
-    {label:"Skill 3", num:"3", info: prof && prof.skills[2], key:"skill3"},
-    {label:"DEF", num:"def", info: prof && prof.defense && prof.defense[0], key:"defense"},
+    {label:"Skill 1", num:"1", info: prof && prof.skills[0], key:"skill1", iconKey:"skill1"},
+    {label:"Skill 2", num:"2", info: prof && prof.skills[1], key:"skill2", iconKey:"skill2"},
+    {label:"Skill 3", num:"3", info: prof && prof.skills[2], key:"skill3", iconKey:"skill3"},
+    {label:"DEF", num:"def", info: prof && prof.defense && prof.defense[0], key:"defense", iconKey:"def"},
   ];
   const specials = IDENTITY_SPECIAL_SKILLS[`${d.sinner}|${d.identity}`] || [];
   const specialBySlot = {};
   specials.forEach(s => { specialBySlot[s.attachTo] = (specialBySlot[s.attachTo] || 0) + 1; });
+  const iconData = IDENTITY_SKILL_ICON_DATA[`${d.sinner}|${d.identity}`];
   const slotsHTML = slots.map(s => {
     const sin = s.info && s.info.sin;
-    const iconOrEmpty = sin ? sinBadgeSVG(sin, 26) : `<span class="skillset-slot-empty"></span>`;
+    const uniqueIcon = iconData && iconData[s.iconKey];
+    const iconOrEmpty = sin ? skillFrameHTML(sin, 30, s.info && s.info.tier, uniqueIcon) : `<span class="skillset-slot-empty"></span>`;
     const specialBadge = specialBySlot[s.key] ? `<span class="skillset-special-badge" title="특수 발동 스킬 있음">+</span>` : "";
     return `<button type="button" class="skillset-slot-btn" data-sinner="${d.sinner.replace(/"/g,"&quot;")}" data-identity="${d.identity.replace(/"/g,"&quot;")}" data-num="${s.num}">
       ${specialBadge}
