@@ -3853,7 +3853,26 @@ function passiveTooltipHTML(sinner, identity){
   const leftoverHTML = specialsAll.filter(s => !usedSpecials.has(s)).map(s => specialSkillHTML(s, sinner, identity)).join("");
   return passiveHTML + leftoverHTML;
 }
+const imageLightbox = document.getElementById("imageLightbox");
+const imageLightboxImg = document.getElementById("imageLightboxImg");
+function openImageLightbox(src, alt){
+  if (!src) return;
+  imageLightboxImg.src = src;
+  imageLightboxImg.alt = alt || "";
+  imageLightbox.hidden = false;
+}
+function closeImageLightbox(){ imageLightbox.hidden = true; imageLightboxImg.src = ""; }
+document.getElementById("imageLightboxClose").addEventListener("click", closeImageLightbox);
+document.getElementById("imageLightboxBackdrop").addEventListener("click", closeImageLightbox);
+document.addEventListener("keydown", e => { if (e.key === "Escape" && !imageLightbox.hidden) closeImageLightbox(); });
+
 document.body.addEventListener("click", e => {
+  const lightboxTrigger = e.target.closest(".card-banner, .ego-card-portrait");
+  if (lightboxTrigger){
+    openImageLightbox(lightboxTrigger.src, lightboxTrigger.alt);
+    e.stopPropagation();
+    return;
+  }
   const term = e.target.closest(".kw-term");
   if (term){
     const isSame = kwTooltip.dataset.openFor === term.dataset.kw && !kwTooltip.hidden;
