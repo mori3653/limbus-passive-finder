@@ -500,6 +500,9 @@
 
   /* ---------- 스킬셋 ---------- */
   .skillset-skill-row{ display:grid; grid-template-columns:repeat(4,1fr); gap:6px; }
+  .ego-skill-row{ grid-template-columns:repeat(2,1fr); }
+  .ego-slot-coin{ font-size:10px; color:var(--text-muted); font-weight:600; }
+  .skillset-sub-tabs{ margin-bottom:10px; }
   .skillset-slot-btn{
     position:relative;
     display:flex; flex-direction:column; align-items:center; gap:5px;

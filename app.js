@@ -2997,6 +2997,32 @@ const EGO_DEFAULT = {
   "그레고르": "suddenly-one-day-gregor",
 };
 
+// E.G.O. 각성/침식 스킬 상세(코인 위력·효과) + 패시브. 나무위키 원본에서 파싱.
+// 현재는 이상(파일럿)만 있고, 나머지 수감자는 순차적으로 채울 예정.
+const EGO_SKILL_DETAIL = {
+  "crows-eye-view-yi-sang": {awakening:{name:"오감도",sin:"나태",power:"18",coin:"+6",weight:"1",coinEffects:{1:"[적중시] 공격 위력 감소 2 부여 [적중시] 모든 아군에게 다음 턴에 신속 3 부여 [적중시] 다음 턴에 속박 2 부여"}},corrosion:null},
+  "bygone-days-yi-sang": {awakening:{name:"지난 날",sin:"우울",power:"15",coin:"+8",weight:"3",coinEffects:{1:"[적중시] 대상에게 침잠 이 6 이상이면 다음 턴에 속박 2 부여"}},corrosion:{name:"지난 날",sin:"우울",power:"22",coin:"-6",weight:"3",coinEffects:{1:"[적중시] 침잠 2 부여. 다음 턴에 속박 2 부여 [적중시] 대상의 침잠 이 6 이상이면 다음 턴에 속박 2 부여"}}},
+  "4th-match-flame-yi-sang": {awakening:{name:"4번째 성냥불",sin:"분노",power:"14",coin:"+12",weight:"5",coinEffects:{1:"[적중시] 화상 4 부여 [앞면 적중시] 화상 6 부여"}},corrosion:{name:"4번째 성냥불",sin:"분노",power:"26",coin:"-12",weight:"5",coinEffects:{1:"파괴 불가 코인 [적중시] 화상 4 부여 [파괴되지 않고 적중시] 화상 6 부여"}}},
+  "wishing-cairn-yi-sang": {awakening:{name:"소망석",sin:"나태",power:"22",coin:"+4",weight:"3",coinEffects:{1:"[적중시] 나태 취약 2 부여 [앞면 적중시] 마비 3 부여"}},corrosion:{name:"소망석",sin:"나태",power:"29",coin:"-10",weight:"3",coinEffects:{1:"[적중시] 나태 취약 1 부여 [적중시] 마비 2 부여 [앞면 적중시] 다음 턴에 속박 3 부여"}}},
+  "dimension-shredder-yi-sang": {awakening:{name:"차원찢개",sin:"오만",power:"20",coin:"+18",weight:"1",coinEffects:{1:"[적중시] 충전 횟수를 소모한 경우, 차원 균열 5 부여. [적중시] 피해량의 (대상의 파열x10)%만큼 오만 추가 피해를 주고, 파열 횟수 5 소모 (최대 100%)"}},corrosion:{name:"차원찢개",sin:"오만",power:"42",coin:"-24",weight:"1",coinEffects:{1:"[적중시] 충전 횟수를 소모한 경우, 차원 균열 5 부여. [적중시] 파열 6 부여 [적중시] 피해량의 (대상의 파열x10)%만큼 오만 추가 피해를 주고, 파열 횟수 5 소모 (최대 100%)"}}},
+  "fell-bullet-yi-sang": {awakening:{name:"흉탄",sin:"오만",power:"18",coin:"+6",weight:"7",coinEffects:{1:"이 코인에는 메인 타겟만 피해를 입음. 메인 타겟이 아군이면, 찢어진 추억 당 피해량 +15% (최대 105%) [아군 처치 시] 자신과 무작위 아군 2명에게 호흡 3 부여 [아군 처치 시] 처치한 아군의 스킬 1, 2 속성의 E.G.O 자원 +1 [아군 처치 실패시] 호흡 3 얻음",2:"이 코인에는 서브 타겟만 피해를 입음. - 첫 번째 코인에서 아군을 처치하지 못했으면, 서브 타겟 중 무작위 1명이 피해를 입음 찢어진 추억 당 크리티컬 피해량 +9% (최대 63%) [크리티컬 적중 시] 출혈 3 부여"}},corrosion:{name:"흉탄",sin:"오만",power:"30",coin:"-8",weight:"7",coinEffects:{1:"이 코인에는 메인 타겟만 피해를 입음. 메인 타겟이 아군이면, 찢어진 추억 당 피해량 +15% (최대 105%) 메인 타겟이 아군이면, 자신의 호흡 당 피해량 +2% (최대 50%) 크리티컬 피해량 +30% [아군 처치시] 자신과 무작위 아군 3명에게 호흡 4 부여 [아군 처치시] 찢어진 추억 당 다음 코인의 피해량 +7% (최대 49%) [아군 처치시] 처치한 아군의 스킬 1, 2, 3 속성의 E.G.O 자원 +1 [아군 처치 실패시] 호흡 3 얻음",2:"이 코인에는 서브 타겟만 피해를 입음. - 첫 번째 코인에서 아군을 처치하지 못했으면, 서브 타겟 중 무작위 1명이 피해를 입음 찢어진 추억 당 크리티컬 피해량 +4% (최대 28%) [크리티컬 적중 시] 출혈 5 부여"}}},
+  "solemn-lament-yi-sang": {awakening:{name:"엄숙한 애도",sin:"우울",power:"6",coin:"+3",weight:"3",coinEffects:{1:"파괴 불가 코인 [적중시] 무작위 나비 1 부여 [적중시] 침잠 횟수 1 증가",2:"파괴 불가 코인 [적중시] 무작위 나비 2 부여 [적중시] 침잠 횟수 1 증가",3:"파괴 불가 코인 [적중시] 무작위 나비 2 부여 [적중시] 침잠 횟수 1 증가",4:"파괴 불가 코인 [적중시] 무작위 나비 3 부여 [적중시] 침잠 횟수 1 증가 [적중시] 이번 턴과 다음 턴에 우울 취약 1, 우울 내성 약화 1 부여",5:"파괴 불가 코인 보유한 산나비·죽은나비 전부 소모 [적중시] 침잠 3 부여 [적중시] 진동 3 부여 [적중시] 나비 (산나비) 2 부여 [적중시] 나비 (죽은나비) 2 부여 [적중시] 진동 폭발 . 진동 횟수 1 감소 [적중시] 대상의 모든 나비 만큼 우울 피해 [적중시] 이 코인 최종 피해량의 (이 코인에서 소모한 산나비·죽은나비 × 2)%만큼 우울 피해"}},corrosion:{name:"엄숙한 애도",sin:"우울",power:"16",coin:"-3",weight:"3",coinEffects:{1:"파괴 불가 코인 [적중시] 나비 (산나비) 3 부여",2:"파괴 불가 코인 [적중시] 나비 (죽은나비) 3 부여 [적중시] 이번 턴과 다음 턴에 우울 취약 1, 우울 내성 약화 1 부여",3:"파괴 불가 코인 [적중시] 침잠 5 부여 [적중시] 진동 5 부여 [적중시] 진동 폭발 . 진동 횟수 1 감소 [적중시] 대상의 모든 나비 만큼 우울 피해 [적중시] 대상의 침잠 위력만큼 우울 피해"}}},
+  "sunshower-yi-sang": {awakening:{name:"여우비",sin:"나태",power:"17",coin:"+15",weight:"7",coinEffects:{1:"[앞면 적중시] 자신의 정신력 15 회복"}},corrosion:{name:"여우비",sin:"나태",power:"35",coin:"-15",weight:"7",coinEffects:{1:"[적중시] 이번 턴, 다음 턴 동안 나태 취약 , 관통 취약 2 부여"}}},
+  "great-trichiliocosm-[三千大世界]-yi-sang": {awakening:{name:"삼천대세계",sin:"분노",power:"4",coin:"+3",weight:"7",coinEffects:{1:"파괴 불가 코인 [적중시] 화상 2 부여 [적중시] 침잠 횟수 3 증가",2:"파괴 불가 코인 [파괴되지 않고 적중시] 이번 턴과 다음 턴에 깨어진 세계 1 부여",3:"파괴 불가 코인 [적중시] 대상의 ( 침잠 /3)만큼 화상 부여 (최대 5, 소수점 버림) [크리티컬 적중 시] 화상 횟수 1 증가",4:"파괴 불가 코인 [파괴되지 않고 적중시] 화상 1회 발동. 화상 횟수 1 감소"}},corrosion:{name:"삼천대세계",sin:"분노",power:"12",coin:"-2",weight:"7",coinEffects:{1:"파괴 불가 코인 [적중시] 화상 2 부여 [적중시] 침잠 횟수 3 증가",2:"파괴 불가 코인 [적중시] 이번 턴과 다음 턴에 깨어진 세계 1 부여",3:"파괴 불가 코인 [적중시] 화상 4 부여 [크리티컬 적중 시] 화상 횟수 1 증가",4:"파괴 불가 코인 [코인 시작 시] (모든 대상의 화상 위력과 침잠 위력의 합) 10당 피해량 +10% (최대 60%) [파괴되지 않고 적중시] 화상 1회 발동. 화상 횟수 1 감소"}}},
+};
+
+const EGO_PASSIVE_DETAIL = {
+  "crows-eye-view-yi-sang": {name:"침묵",effect:"피격 시 다음 턴에 속박 3을 얻고, 대상을 약점, 취약인 속성으로 공격 시 피해량 +20% (턴당 1회 발동)",atkLevel:"56(-4)",sp:"끈 20개 필요"},
+  "bygone-days-yi-sang": {name:"조각난 어제",effect:"대상의 침잠 위력이 6 이상이면, 합 위력 +1 대상의 침잠 횟수가 4 이상이면, 합 위력 +1",atkLevel:"60(0)",sp:"끈 25개 필요"},
+  "4th-match-flame-yi-sang": {name:"불티",effect:"분노 속성 또는 화상 위력, 횟수를 부여하는 스킬 사용 시 모든 공격 대상의 화상 의 합이 6 이상이면, 합 위력 +1 합 승리 시 메인 타겟에게 (분노 공명 수 × 2)만큼 화상 부여 (스킬당 최대 8)",atkLevel:"63(+3)",sp:"끈 25개 필요"},
+  "wishing-cairn-yi-sang": {name:"돌하르방",effect:"매 턴마다 타격 보호 , 나태 보호 3을 얻음",atkLevel:"58(-2)",sp:"끈 30개 필요"},
+  "dimension-shredder-yi-sang": {name:"헤매이는 자",effect:"턴 시작 시 이전 턴에 피해를 받지 않았으면, 자신의 충전 횟수 4 증가 자신보다 속도가 느린 적에게 공격 적중 시 대상의 파열 횟수 1 증가 (턴 당 최대 3회)",atkLevel:"63(+3) / 65(+5)",sp:"끈 30개 필요"},
+  "fell-bullet-yi-sang": {name:"다음",effect:"공격 종료 시 대상이 사망했으면 호흡 횟수 2 증가",atkLevel:"65(+5)",sp:"끈 30개 필요"},
+  "solemn-lament-yi-sang": {name:"날개축처어진나비는입김에어리는가난한이슬을먹는다",effect:"대상이 나비 를 보유하고 있으면, 합 위력 +1 침잠 과 모든 나비 의 합이 15 이상인 대상에게 공격 적중 시, 나비 (산나비) 1, 나비 (죽은나비) 1 부여 (턴당 1회, 집중 전투인 경우, 부위로 판정) [로보토미 E.G.O::엄숙한 애도 이상 전용 상시 효과] 기본 스킬의 공격 적중 시, 대상에게 진동 2 부여 (스킬당 1회) 이 인격은 진동 , 침잠 을 부여하는 인격으로 취급됨 - 이 효과로 인해서 기본 스킬이 진동 , 침잠 을 부여하는 스킬로 취급됨 [로보토미 E.G.O::엄숙한 애도 이상 전용 사용 효과] - 자신의 산나비·죽은나비 (위력+횟수) 최댓값 +10 - 재장전 후, 정신력을 10 회복하고 자신의 모든 스킬 슬롯에서 '이상으로 장례는 이상이오'를 제외한 등급이 가장 낮은 기본 공격 스킬을 버림 (턴당 2회) - 수비 스킬을 장착한 턴 종료시, 정신력 10 회복 - 턴 종료시 흐트러짐 상태면, 흐트러짐을 해제하고 재장전 (전투당 1회, 강제 흐트러짐 제외)",atkLevel:"64(+4)",sp:"끈 35개 필요"},
+  "sunshower-yi-sang": {name:"비 갠 뒤 햇살",effect:"턴 시작 시 모든 아군의 정신력 3 회복",atkLevel:"59(-1) / 63(+3)",sp:null},
+  "great-trichiliocosm-[三千大世界]-yi-sang": {name:"하늘 엮기",effect:"대상이 깨어진 세계 를 보유 중이면, 자신의 기본 공격 스킬로 부여하는 화상 위력, 침잠 위력 부여량 +1 (턴당 최대 8 추가 부여) 화상 피해로 사망한 적 1명당 다음 턴에 무작위 물리 속성의 피해량 증가 1 얻음 (턴당 최대 3, 획득 시마다 무작위로 획득)",atkLevel:"63(+3)",sp:null},
+};
+
 
 
 const SIN_COLOR = {
@@ -3098,6 +3124,7 @@ const RARITIES = ["0","00","000","0000"].filter(r => DATA.some(d => d.rarity ===
 const state = {
   q: "",
   skillSetQ: "",
+  skillSetSubTab: "identity", // "identity" | "ego"
   sinners: new Set(),
   sinnerMode: "include", // "include" | "exclude"
   rarities: new Set(),
@@ -3471,6 +3498,64 @@ function skillSetCardHTML(d){
     </article>`;
 }
 
+function egoCardHTML(slug){
+  const info = EGO_DATA[slug];
+  if (!info) return "";
+  const skill = EGO_SKILL_DETAIL[slug];
+  const banner = EGO_BANNER_DATA[slug] || {};
+  const bannerSrc = banner.awaken || EGO_ICON_DATA[slug];
+  const bannerHTML = bannerSrc ? `<img class="card-banner" src="${bannerSrc}" alt="" loading="lazy">` : "";
+  const iconSrc = SINNER_ICON_DATA[info.sinner];
+  const iconHTML = iconSrc ? `<img class="sinner-icon-inline" src="${iconSrc}" alt="" loading="lazy">` : "";
+  const rows = [
+    {label:"각성", key:"awakening"},
+    {label:"침식", key:"corrosion"},
+  ].map(r => {
+    const s = skill && skill[r.key];
+    const sinHTML = s && s.sin ? sinBadgeSVG(s.sin, 22) : `<span class="skillset-slot-empty"></span>`;
+    return `<button type="button" class="skillset-slot-btn ego-slot-btn" data-slug="${slug}" data-kind="${r.key}">
+      <span class="skillset-slot-label">${r.label}</span>
+      ${sinHTML}
+      ${s ? `<span class="ego-slot-coin">${s.coin}</span>` : ""}
+    </button>`;
+  }).join("");
+  return `
+    <article class="card">
+      ${bannerHTML}
+      <span class="rarity-badge">${info.grade}</span>
+      <div class="card-body">
+        <div class="card-info">
+          <div class="card-sinner-row">
+            ${iconHTML}<span class="card-sinner">${info.sinner}</span>
+          </div>
+          <span class="card-identity">${info.title}</span>
+        </div>
+        <div class="skillset-skill-row ego-skill-row">${rows}</div>
+        <div class="skillset-card-footer">
+          <button type="button" class="skillset-passive-btn ego-passive-btn" data-slug="${slug}">E.G.O. 패시브</button>
+          <button type="button" class="skillset-detail-btn ego-detail-btn" data-slug="${slug}">상세 보기</button>
+        </div>
+      </div>
+    </article>`;
+}
+function renderEgoSkillSet(){
+  const slugs = Object.keys(EGO_SKILL_DETAIL);
+  const grid = document.getElementById("egoSkillSetGrid");
+  document.getElementById("skillSetShownCount").textContent = slugs.length;
+  grid.innerHTML = slugs.map(egoCardHTML).join("");
+}
+function setSkillSetSubTab(tab){
+  state.skillSetSubTab = tab;
+  const idBtn = document.getElementById("skillSetSubTabIdentity");
+  const egoBtn = document.getElementById("skillSetSubTabEgo");
+  idBtn.setAttribute("aria-pressed", tab === "identity" ? "true" : "false");
+  egoBtn.setAttribute("aria-pressed", tab === "ego" ? "true" : "false");
+  document.getElementById("skillSetGrid").hidden = tab !== "identity";
+  document.getElementById("egoSkillSetGrid").hidden = tab !== "ego";
+  document.getElementById("skillSetShownLabel").textContent = tab === "ego" ? "개 E.G.O. 표시 중" : "개 인격 표시 중";
+  if (tab === "ego") renderEgoSkillSet();
+  else renderSkillSet();
+}
 function renderSkillSet(){
   const filtered = DATA.filter(skillSetPassesFilters);
   document.getElementById("skillSetShownCount").textContent = filtered.length;
@@ -3701,6 +3786,36 @@ document.body.addEventListener("click", e => {
     e.stopPropagation();
     return;
   }
+  const egoSlotBtn = e.target.closest(".ego-slot-btn");
+  if (egoSlotBtn){
+    const { slug, kind } = egoSlotBtn.dataset;
+    const openKey = `egoslot:${slug}|${kind}`;
+    const isSame = kwTooltip.dataset.openFor === openKey && !kwTooltip.hidden;
+    if (isSame){ hideKwTooltip(); kwTooltip.dataset.openFor = ""; return; }
+    kwTooltip.dataset.openFor = openKey;
+    const label = kind === "awakening" ? "각성 스킬" : "침식 스킬";
+    showTooltipAt(label, egoSkillBodyHTML(slug, kind), egoSlotBtn);
+    e.stopPropagation();
+    return;
+  }
+  const egoPassiveBtn = e.target.closest(".ego-passive-btn");
+  if (egoPassiveBtn){
+    const { slug } = egoPassiveBtn.dataset;
+    const openKey = `egopassive:${slug}`;
+    const isSame = kwTooltip.dataset.openFor === openKey && !kwTooltip.hidden;
+    if (isSame){ hideKwTooltip(); kwTooltip.dataset.openFor = ""; return; }
+    kwTooltip.dataset.openFor = openKey;
+    showTooltipAt("E.G.O. 패시브", egoPassiveBodyHTML(slug), egoPassiveBtn);
+    e.stopPropagation();
+    return;
+  }
+  const egoDetailBtn = e.target.closest(".ego-detail-btn");
+  if (egoDetailBtn){
+    hideKwTooltip();
+    openEgoDetail(egoDetailBtn.dataset.slug);
+    e.stopPropagation();
+    return;
+  }
   const slotBtn = e.target.closest(".skillset-slot-btn");
   if (slotBtn){
     const { sinner, identity, num } = slotBtn.dataset;
@@ -3762,6 +3877,62 @@ function openSkillSetDetail(sinner, identity){
 function closeSkillSetDetail(){ skillSetDetailModal.hidden = true; }
 document.getElementById("skillSetDetailClose").addEventListener("click", closeSkillSetDetail);
 document.getElementById("skillSetDetailBackdrop").addEventListener("click", closeSkillSetDetail);
+
+/* ---- E.G.O. 스킬셋 상세 ---- */
+const egoDetailModal = document.getElementById("egoDetailModal");
+let egoDetailState = { slug: null, kind: "awakening" };
+function egoSkillBodyHTML(slug, kind){
+  const skill = EGO_SKILL_DETAIL[slug];
+  const s = skill && skill[kind];
+  if (!s) return `<div class="skill-tt-row"><span>정보 없음</span></div>`;
+  const rows = [`<div class="skill-tt-name">${escapeHTML(s.name)}</div>`];
+  rows.push(`<div class="skill-tt-row"><span>속성</span><span>${sinBadgeSVG(s.sin,14)}${escapeHTML(s.sin)}</span></div>`);
+  if (s.power) rows.push(`<div class="skill-tt-row"><span>기본 위력</span><span>${escapeHTML(s.power)}</span></div>`);
+  if (s.coin) rows.push(`<div class="skill-tt-row"><span>코인 위력</span><span>${escapeHTML(s.coin)}</span></div>`);
+  if (s.weight) rows.push(`<div class="skill-tt-row"><span>공격 가중치</span><span>${escapeHTML(s.weight)}</span></div>`);
+  if (s.coinEffects && Object.keys(s.coinEffects).length){
+    const effectRows = Object.keys(s.coinEffects).sort((a,b) => Number(a)-Number(b)).map(n =>
+      `<div class="skill-tt-coin-effect"><span class="skill-tt-coin-num">${n}</span><span>${linkifyKeywords(s.coinEffects[n])}</span></div>`
+    ).join("");
+    rows.push(`<div class="skill-tt-effect-block">${effectRows}</div>`);
+  }
+  return rows.join("");
+}
+function egoPassiveBodyHTML(slug){
+  const p = EGO_PASSIVE_DETAIL[slug];
+  if (!p) return `<div class="skill-tt-row"><span>정보 없음</span></div>`;
+  const rows = [`<div class="skill-tt-name">${escapeHTML(p.name)}</div>`];
+  if (p.atkLevel) rows.push(`<div class="skill-tt-row"><span>공격 레벨</span><span>${escapeHTML(p.atkLevel)}</span></div>`);
+  if (p.sp) rows.push(`<div class="skill-tt-row"><span>코스트</span><span>${escapeHTML(p.sp)}</span></div>`);
+  rows.push(`<div class="skill-tt-effect-block"><div class="skill-tt-coin-effect"><span>${linkifyKeywords(p.effect)}</span></div></div>`);
+  return `<div class="skill-tt-passive-block">${rows.join("")}</div>`;
+}
+function renderEgoDetailBody(){
+  document.getElementById("egoDetailSkillBody").innerHTML = egoSkillBodyHTML(egoDetailState.slug, egoDetailState.kind);
+  document.getElementById("egoDetailPassiveBody").innerHTML = egoPassiveBodyHTML(egoDetailState.slug);
+}
+function setEgoDetailTab(kind){
+  egoDetailState.kind = kind;
+  document.getElementById("egoDetailTabAwaken").setAttribute("aria-pressed", kind === "awakening" ? "true" : "false");
+  document.getElementById("egoDetailTabCorrosion").setAttribute("aria-pressed", kind === "corrosion" ? "true" : "false");
+  renderEgoDetailBody();
+}
+function openEgoDetail(slug){
+  const info = EGO_DATA[slug];
+  if (!info) return;
+  egoDetailState = { slug, kind: "awakening" };
+  document.getElementById("egoDetailTitle").textContent = info.title;
+  setEgoDetailTab("awakening");
+  egoDetailModal.hidden = false;
+}
+function closeEgoDetail(){ egoDetailModal.hidden = true; }
+document.getElementById("egoDetailClose").addEventListener("click", closeEgoDetail);
+document.getElementById("egoDetailBackdrop").addEventListener("click", closeEgoDetail);
+document.getElementById("egoDetailTabAwaken").addEventListener("click", () => setEgoDetailTab("awakening"));
+document.getElementById("egoDetailTabCorrosion").addEventListener("click", () => setEgoDetailTab("corrosion"));
+document.addEventListener("keydown", e => { if (e.key === "Escape" && !egoDetailModal.hidden) closeEgoDetail(); });
+document.getElementById("skillSetSubTabIdentity").addEventListener("click", () => setSkillSetSubTab("identity"));
+document.getElementById("skillSetSubTabEgo").addEventListener("click", () => setSkillSetSubTab("ego"));
 document.addEventListener("keydown", e => { if (e.key === "Escape" && !skillSetDetailModal.hidden) closeSkillSetDetail(); });
 window.addEventListener("scroll", e => { if (!kwTooltip.contains(e.target)) hideKwTooltip(); }, true);
 window.addEventListener("resize", hideKwTooltip);
@@ -4746,7 +4917,7 @@ function showSkillSetView(){
   pickerView.hidden = true;
   ownedView.hidden = true;
   updateHeaderHeightVar();
-  renderSkillSet();
+  setSkillSetSubTab(state.skillSetSubTab);
 }
 function showDeckView(){
   tabSearch.setAttribute("aria-pressed","false");

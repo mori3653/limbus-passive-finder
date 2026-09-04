@@ -143,11 +143,16 @@
   </aside>
 
   <main>
+    <div class="view-tabs mini-tabs skillset-sub-tabs" role="tablist">
+      <button type="button" class="view-tab" id="skillSetSubTabIdentity" aria-pressed="true">인격</button>
+      <button type="button" class="view-tab" id="skillSetSubTabEgo" aria-pressed="false">E.G.O.</button>
+    </div>
     <div class="results-head">
-      <div class="result-count"><b id="skillSetShownCount"></b>개 인격 표시 중</div>
+      <div class="result-count"><b id="skillSetShownCount"></b><span id="skillSetShownLabel">개 인격 표시 중</span></div>
       <div class="active-filters" id="skillSetActivePills"></div>
     </div>
     <div class="card-grid" id="skillSetGrid"></div>
+    <div class="card-grid" id="egoSkillSetGrid" hidden></div>
     <div class="empty-state" id="skillSetEmptyState" hidden>
       <span class="display">일치하는 인격이 없습니다</span>
       선택한 필터를 조정해 보세요.
@@ -306,6 +311,28 @@
       </button>
     </div>
     <div class="detail-modal-body" id="skillSetDetailBody"></div>
+  </div>
+</div>
+<div id="egoDetailModal" class="detail-modal" hidden>
+  <div class="detail-modal-backdrop" id="egoDetailBackdrop"></div>
+  <div class="detail-modal-panel">
+    <div class="detail-modal-header">
+      <span class="detail-modal-title" id="egoDetailTitle"></span>
+      <button type="button" class="detail-modal-close" id="egoDetailClose" aria-label="닫기">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6 6 18M6 6l12 12"/></svg>
+      </button>
+    </div>
+    <div class="detail-modal-body">
+      <div class="view-tabs mini-tabs ego-skill-sub-tabs" role="tablist">
+        <button type="button" class="view-tab" id="egoDetailTabAwaken" aria-pressed="true">각성 스킬</button>
+        <button type="button" class="view-tab" id="egoDetailTabCorrosion" aria-pressed="false">침식 스킬</button>
+      </div>
+      <div id="egoDetailSkillBody"></div>
+      <div class="detail-passive-section">
+        <div class="detail-col-label">E.G.O. 패시브</div>
+        <div id="egoDetailPassiveBody"></div>
+      </div>
+    </div>
   </div>
 </div>
 <script src="image_refs.js"></script>
