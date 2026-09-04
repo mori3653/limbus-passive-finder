@@ -3747,7 +3747,7 @@ function skillSetDetailColumnHTML(sinner, identity, num, label){
   </div>`;
 }
 function openSkillSetDetail(sinner, identity){
-  document.getElementById("skillSetDetailTitle").textContent = `${sinner} · ${identity}`;
+  document.getElementById("skillSetDetailTitle").textContent = `${identity} ${sinner}`;
   const cols = [
     {num:"1", label:"Skill 1"}, {num:"2", label:"Skill 2"},
     {num:"3", label:"Skill 3"}, {num:"def", label:"DEF"},
