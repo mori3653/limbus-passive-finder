@@ -3684,7 +3684,8 @@ function effectHTML(d){
 }
 
 function identityFullIllustSrc(bannerKey){
-  return (state.syncMode === "gacksung" ? IDENTITY_PORTRAIT_SYNCED_DATA[bannerKey] : IDENTITY_PORTRAIT_NORMAL_DATA[bannerKey])
+  return IDENTITY_PORTRAIT_FULL_DATA[bannerKey]
+    || (state.syncMode === "gacksung" ? IDENTITY_PORTRAIT_SYNCED_DATA[bannerKey] : IDENTITY_PORTRAIT_NORMAL_DATA[bannerKey])
     || IDENTITY_PORTRAIT_SYNCED_DATA[bannerKey] || IDENTITY_PORTRAIT_NORMAL_DATA[bannerKey];
 }
 function cardHTML(d){
